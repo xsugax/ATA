@@ -9,7 +9,8 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <div className="mx-auto min-h-screen max-w-[1600px] px-4 py-4 md:px-10 md:py-6">{children}</div>
+        <div style={{ maxWidth: "1600px", margin: "0 auto", padding: "16px" }}
+             className="md:px-10 md:py-6 min-h-screen">{children}</div>
       </body>
     </html>
   );

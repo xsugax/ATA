@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import clsx from "clsx";
 
 const links = [
   { href: "/explorer", label: "Explorer" },
@@ -14,27 +13,61 @@ export default function NavBar() {
   const pathname = usePathname();
 
   return (
-    <header className="glass mb-5 flex items-center justify-between rounded-2xl px-5 py-4">
-      <Link href="/" className="shrink-0 flex flex-col justify-center">
-        <p className="text-base font-semibold tracking-[0.25em] text-sovereign leading-snug">AURELUX</p>
-        <p className="text-[10px] tracking-[0.3em] text-platinum/35 uppercase">Sovereign</p>
+    <header style={{
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      padding: "14px 20px",
+      marginBottom: "20px",
+      background: "rgba(255,255,255,0.04)",
+      border: "1px solid rgba(255,255,255,0.08)",
+      borderRadius: "16px",
+      backdropFilter: "blur(20px)",
+    }}>
+      <Link href="/" style={{ textDecoration: "none", flexShrink: 0 }}>
+        <div style={{
+          fontSize: "15px",
+          fontWeight: 600,
+          letterSpacing: "0.22em",
+          color: "#94B4D8",
+          lineHeight: 1.2,
+        }}>AURELUX</div>
+        <div style={{
+          fontSize: "9px",
+          letterSpacing: "0.35em",
+          color: "rgba(230,236,244,0.3)",
+          textTransform: "uppercase",
+          marginTop: "1px",
+        }}>Sovereign</div>
       </Link>
-      <nav className="flex items-center gap-2">
-        {links.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={clsx(
-              "rounded-lg px-4 py-2 text-xs uppercase tracking-widest transition whitespace-nowrap",
-              pathname === item.href
-                ? "bg-sovereign text-black font-semibold"
-                : "text-platinum/50 hover:text-platinum"
-            )}
-          >
-            {item.label}
-          </Link>
-        ))}
+
+      <nav style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+        {links.map((item) => {
+          const active = pathname === item.href;
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              style={{
+                textDecoration: "none",
+                fontSize: "11px",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                padding: "7px 14px",
+                borderRadius: "8px",
+                whiteSpace: "nowrap",
+                transition: "all 0.2s",
+                background: active ? "#94B4D8" : "transparent",
+                color: active ? "#070A14" : "rgba(230,236,244,0.5)",
+                fontWeight: active ? 600 : 400,
+              }}
+            >
+              {item.label}
+            </Link>
+          );
+        })}
       </nav>
     </header>
   );
 }
+
