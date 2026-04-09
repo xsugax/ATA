@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AURELUX Sovereign - Explorer</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <div class="container" id="app"></div>
+  <script type="module">
+    import { request, nav } from './assets/api.js';
+
+    const filters = {
+      search: '', category: 'All', region: 'All', minPrice: 0, maxPrice: 2000000,
+      minPopularity: 60, minDemand: 55, maxAvailabilityDays: 60, netWorthTier: 'All', eventType: 'All'
+    };
+
+    const app = document.getElementById('app');
+    app.innerHTML = `${nav('explorer')}
+      <section class="glass section card">
+        <h2>Elite Celebrity Intelligence Explorer</h2>
+        <p class="muted">Real filtering across all 100 verified profiles.</p>
+        <div class="grid grid-4 top-space">
+          <input id="search" placeholder="Search name" />
+          <select id="category"><option>All</option><option>Film</option><option>Music</option><option>Sports</option><option>Fashion</option><option>Business</option><option>Influencer</option></select>
+          <select id="region"><option>All</option><option>North America</option><option>Europe</option><option>Middle East</option><option>Asia</option><option>Latin America</option><option>Africa</option></select>
+          <select id="eventType"><option>All</option><option>Summit</option><option>Gala</option><option>Launch</option><option>Private Dinner</option><option>Festival</option></select>
+          <input id="minPrice" type="number" value="0" placeholder="Min price" />
+          <input id="maxPrice" type="number" value="2000000" placeholder="Max price" />
+          <input id="minPopularity" type="number" value="60" placeholder="Min popularity" />
+          <select id="netWorthTier"><option>All</option><option>$50M+</option><option>$100M+</option><option>$500M+</option><option>$1B+</option></select>
+          <input id="availabilityDate" type="date" placeholder="Check availability date" />
+        </div>
+      </section>
+      <section class="grid grid-3 section" id="results"></section>`;
+
+    const ids = ['search','category','region','eventType','minPrice','maxPrice','minPopularity','netWorthTier'];
+    ids.forEach(id => document.getElementById(id).addEventListener('input', async () => {
+      filters[id] = document.getElementById(id).value;
+      await load();
+    }));
+
+    async function load() {
+      const q = new URLSearchParams(filters).toString();
+      const res = await request('/celebrities?' + q);
+      document.getElementById('results').innerHTML = res.data.map(c => `
+        <article class="card">
+          <div class="row between"><h3>${c.name}</h3><span class="badge">Verified</span></div>
+          <img src="${c.portrait}" alt="${c.name}" />
+          <p class="muted">${c.category} · ${c.region}</p>
+          <p>Booking tiers: ${c.bookingTiers.map(t => t.type).join(', ')}</p>
+          <p>Starting: $${c.startingPrice.toLocaleString()}</p>
+          <p>Demand ${c.demandIndex}% · Reach ${c.socialReachMillions}M</p>
+          <p>Agency: ${c.agencyRepresentation}</p>
+          <p>Awards: ${c.awards.join(', ')}</p>
+          <p>Risk: ${c.riskIndex.toUpperCase()} · NDA: ${c.ndaDefault ? 'Required':'Optional'}</p>
+          <p>Security: ${c.securityTiers.join(' / ')}</p>
+          <button class="top-space" data-action="check-availability" data-id="${c.id}" data-name="${c.name}">Check Availability</button>
+          <button data-action="message-rep" data-id="${c.id}" data-name="${c.name}">Message Representative</button>
+          <div class="small muted" id="status-${c.id}"></div>
+          <a class="primary" style="display:block;text-align:center;padding:10px;border-radius:10px;margin-top:10px;" href="booking.html?id=${c.id}">Initiate Sovereign Booking</a>
+        </article>`).join('');
+
+      document.querySelectorAll('[data-action="check-availability"]').forEach((button) => {
+        button.onclick = async () => {
+          const celebrityId = button.getAttribute('data-id');
+          const selectedDate = document.getElementById('availabilityDate').value;
+          const statusEl = document.getElementById(`status-${celebrityId}`);
+
+          if (!selectedDate) {
+            statusEl.textContent = 'Select a date first.';
+            return;
+          }
+
+          try {
+            const result = await request(`/celebrities/${celebrityId}/availability?date=${selectedDate}`);
+            statusEl.textContent = result.available ? `Available on ${result.date}` : `Unavailable: ${result.reason}`;
+          } catch (error) {
+            statusEl.textContent = error.message;
+          }
+        };
+      });
+
+      document.querySelectorAll('[data-action="message-rep"]').forEach((button) => {
+        button.onclick = async () => {
+          const celebrityId = button.getAttribute('data-id');
+          const celebrityName = button.getAttribute('data-name');
+          const statusEl = document.getElementById(`status-${celebrityId}`);
+
+          try {
+            const result = await request('/messages/send', {
+              method: 'POST',
+              body: JSON.stringify({
+                celebrityId,
+                priority: 'Priority',
+                body: `Requesting representative callback regarding ${celebrityName} for strategic event alignment.`,
+              }),
+            });
+            statusEl.textContent = result.acknowledgement.body;
+          } catch (error) {
+            statusEl.textContent = `${error.message}. Login from Access first.`;
+          }
+        };
+      });
+    }
+
+    await load();
+  </script>
+</body>
+</html>

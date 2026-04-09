@@ -1,0 +1,99 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String    @id @default(uuid())
+  email          String    @unique
+  name           String
+  role           String
+  passwordHash   String
+  membershipTier String
+  bookings       Booking[]
+  messages       Message[] @relation("ToUser")
+  createdAt      DateTime  @default(now())
+}
+
+model Celebrity {
+  id                   String    @id @default(uuid())
+  name                 String
+  category             String
+  region               String
+  portrait             String
+  startingPrice        Float
+  demandIndex          Int
+  popularityScore      Int
+  netWorthTier         String
+  availability         String
+  availabilityWindowDays Int
+  socialReachMillions  Float
+  agencyRepresentation String
+  riskIndex            String
+  ndaDefault           Boolean
+  bookings             Booking[]
+  createdAt            DateTime  @default(now())
+}
+
+model Booking {
+  id                     String    @id @default(uuid())
+  userId                 String
+  celebrityId            String
+  eventType              String
+  date                   DateTime
+  location               String
+  ndaRequired            Boolean
+  securityLevel          String
+  riderRequirements      String
+  pricingAdjustmentPercent Float
+  finalQuote             Float
+  escrow                 Float
+  status                 String
+  contractId             String?
+  user                   User      @relation(fields: [userId], references: [id])
+  celebrity              Celebrity @relation(fields: [celebrityId], references: [id])
+  contract               Contract?
+  payments               Payment[]
+  createdAt              DateTime  @default(now())
+}
+
+model Contract {
+  id        String   @id @default(uuid())
+  bookingId String   @unique
+  title     String
+  pdfUrl    String
+  signed    Boolean  @default(false)
+  booking   Booking  @relation(fields: [bookingId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model Payment {
+  id        String   @id @default(uuid())
+  bookingId String
+  amount    Float
+  currency  String
+  status    String
+  booking   Booking  @relation(fields: [bookingId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  toUserId  String
+  from      String
+  body      String
+  user      User     @relation("ToUser", fields: [toUserId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model Analytics {
+  id          String   @id @default(uuid())
+  metric      String
+  metricValue Float
+  dimension   String
+  createdAt   DateTime @default(now())
+}

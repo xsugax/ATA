@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AURELUX Sovereign - Portal</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <div class="container" id="app"></div>
+  <script type="module">
+    import { request, nav } from './assets/api.js';
+
+    const app = document.getElementById('app');
+    app.innerHTML = `${nav('portal')}<section class="section" id="portal"></section>`;
+
+    try {
+      const data = await request('/portal/overview');
+      document.getElementById('portal').innerHTML = `
+        <div class="card"><h2>Sovereign Client Portal</h2><p class="muted">Membership: <span style="color:var(--gold)">${data.membershipTier}</span></p></div>
+        <div class="grid grid-3 top-space">
+          <div class="card"><div class="small muted">Active Bookings</div><div class="kpi">${data.bookings.length}</div></div>
+          <div class="card"><div class="small muted">Contract Vault</div><div class="kpi">${data.contracts.length}</div></div>
+          <div class="card"><div class="small muted">Payment Dashboard</div><div class="kpi">${data.payments.length}</div></div>
+        </div>
+        <div class="card top-space">
+          <h3>Private AI Concierge Assistant</h3>
+          <p class="muted">${data.concierge.suggestion}</p>
+          <div class="top-space small">VIP Upgrades: ${data.vipUpgradeOptions.join(' · ')}</div>
+        </div>
+        <div class="card top-space">
+          <h3>Messaging with Representatives</h3>
+          ${data.messages.map(m => `<p class="small"><strong>${m.from}:</strong> ${m.body}</p>`).join('') || '<p class="small muted">No messages</p>'}
+        </div>`;
+    } catch (e) {
+      document.getElementById('portal').innerHTML = `<div class="card">${e.message}. Login in Access first.</div>`;
+    }
+  </script>
+</body>
+</html>

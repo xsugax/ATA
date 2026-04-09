@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AURELUX Sovereign - Dashboard</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <div class="container" id="app"></div>
+  <script type="module">
+    import { request, nav } from './assets/api.js';
+
+    const app = document.getElementById('app');
+    app.innerHTML = `${nav('home')}
+      <section class="glass hero section" id="hero"></section>
+      <section class="grid grid-4 section" id="kpis"></section>
+      <section class="grid grid-3 section">
+        <div class="card"><h3>Invite-Only Black Card</h3><p class="muted">Private wealth onboarding with discretion and compliance orchestration.</p></div>
+        <div class="card"><h3>Auction-style Bidding</h3><p class="muted">Escalation windows for unavailable icons through sovereign bid ladders.</p></div>
+        <div class="card"><h3>Request an Unlisted Icon</h3><p class="muted">Private representation channel for off-market talent access.</p></div>
+      </section>`;
+
+    const payload = await request('/celebrities/featured');
+    let index = 0;
+    const hero = document.getElementById('hero');
+
+    function renderHero() {
+      const c = payload.data[index];
+      hero.innerHTML = `<div class="small" style="letter-spacing:.3em;color:var(--gold);text-transform:uppercase">Global Featured Profile</div>
+        <h1>${c.name}</h1>
+        <div class="grid grid-2 top-space">
+          <div>Booking tier: ${c.bookingTiers[2].type}</div>
+          <div>Availability: ${c.availability}</div>
+          <div>Demand Index: ${c.demandIndex}%</div>
+          <div>Average Event Rate: $${c.averageEventRate.toLocaleString()}</div>
+          <div>Recent brand alignment: ${c.recentBrandAlignment}</div>
+        </div>`;
+    }
+
+    const kpi = document.getElementById('kpis');
+    const cards = [
+      ['Total Global Bookings', payload.metrics.totalGlobalBookings],
+      ['Managed Portfolio Value', `$${(payload.metrics.managedPortfolioValue/1000000).toFixed(0)}M`],
+      ['Active Negotiations', payload.metrics.activeNegotiations],
+      ['Verified Celebrities', payload.metrics.verifiedCelebrities]
+    ];
+    kpi.innerHTML = cards.map(([n,v]) => `<article class="card"><div class="small muted">${n}</div><div class="kpi">${v}</div></article>`).join('');
+
+    renderHero();
+    setInterval(() => { index = (index + 1) % payload.data.length; renderHero(); }, 3500);
+  </script>
+</body>
+</html>

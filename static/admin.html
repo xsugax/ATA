@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AURELUX Sovereign - Admin</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <div class="container" id="app"></div>
+  <script type="module">
+    import { request, nav } from './assets/api.js';
+
+    const app = document.getElementById('app');
+    app.innerHTML = `${nav('admin')}<section class="section" id="admin"></section>`;
+
+    try {
+      const d = await request('/admin/dashboard');
+      document.getElementById('admin').innerHTML = `
+        <div class="grid grid-4">
+          <div class="card"><div class="small muted">Revenue YTD</div><div class="kpi">$${(d.kpis.revenueYTD/1000000).toFixed(1)}M</div></div>
+          <div class="card"><div class="small muted">Active Bookings</div><div class="kpi">${d.kpis.activeBookings}</div></div>
+          <div class="card"><div class="small muted">Avg Escrow %</div><div class="kpi">${d.kpis.avgEscrowPercent}%</div></div>
+          <div class="card"><div class="small muted">Suspended Users</div><div class="kpi">${d.kpis.suspendedUsers}</div></div>
+        </div>
+        <div class="grid grid-2 top-space">
+          <div class="card"><h3>Revenue over time</h3><table class="table"><tr><th>Month</th><th>Revenue</th></tr>${d.charts.revenueSeries.map(x=>`<tr><td>${x.month}</td><td>$${x.revenue.toLocaleString()}</td></tr>`).join('')}</table></div>
+          <div class="card"><h3>Regional demand intensity</h3><table class="table"><tr><th>Region</th><th>Intensity</th></tr>${d.charts.regional.map(x=>`<tr><td>${x.region}</td><td>${x.intensity}</td></tr>`).join('')}</table></div>
+        </div>
+        <div class="card top-space"><h3>Audit Logs</h3>${(d.auditLogs || []).map(l => `<p class='small'>${l.timestamp} · ${l.action} · ${l.actor}</p>`).join('') || '<p class="small muted">No logs yet</p>'}</div>`;
+    } catch (e) {
+      document.getElementById('admin').innerHTML = `<div class="card">${e.message}. Login as admin first.</div>`;
+    }
+  </script>
+</body>
+</html>

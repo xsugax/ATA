@@ -1,0 +1,26 @@
+{
+  "name": "aurelux-sovereign",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "npm run website",
+    "website": "concurrently \"npm run dev --prefix backend\" \"npm run static\"",
+    "website:static": "npm run static",
+    "app:dev": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
+    "app:build": "npm run build --prefix frontend",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "dev:backend": "npm run dev --prefix backend",
+    "demo": "npm run website",
+    "build": "npm run app:build",
+    "start": "concurrently \"npm run start --prefix backend\" \"npm run start --prefix frontend\"",
+    "static": "http-server static -p 5500 -c-1",
+    "smoke": "node scripts/smoke-test.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "AURELUX Sovereign monorepo",
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "http-server": "^14.1.1"
+  }
+}
