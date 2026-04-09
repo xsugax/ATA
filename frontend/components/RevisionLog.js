@@ -14,10 +14,10 @@ export default function RevisionLog() {
   }, []);
 
   return (
-    <section className="glass mt-6 rounded-2xl p-4">
+    <section className="glass mt-3 rounded-xl p-3">
       <div className="mb-2 flex items-center justify-between">
-        <h3 className="text-sm uppercase tracking-[0.25em] text-sovereign">Revision Log</h3>
-        <span className="text-xs text-platinum/60">Latest {entries.length} actions</span>
+        <h3 className="text-[11px] uppercase tracking-[0.25em] text-sovereign">Revision Log</h3>
+        <span className="text-[10px] text-platinum/40">{entries.length} actions</span>
       </div>
       <div className="space-y-2">
         {entries.length === 0 ? (
