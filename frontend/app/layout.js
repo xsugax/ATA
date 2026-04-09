@@ -9,7 +9,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <div className="mx-auto min-h-screen max-w-[1600px] px-6 py-6 md:px-10">{children}</div>
+        <div className="mx-auto min-h-screen max-w-[1600px] px-3 py-3 md:px-10 md:py-6">{children}</div>
       </body>
     </html>
   );
