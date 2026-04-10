@@ -7,7 +7,6 @@ import bookingRoutes from "./routes/bookings.js";
 import portalRoutes from "./routes/portal.js";
 import adminRoutes from "./routes/admin.js";
 import messagesRoutes from "./routes/messages.js";
-import crowdfundingRoutes from "./routes/crowdfunding.js";
 import { authenticate, requireRole } from "./middleware/auth.js";
 
 const app = express();
@@ -35,7 +34,6 @@ app.use("/api/bookings", authenticate, bookingRoutes);
 app.use("/api/portal", authenticate, portalRoutes);
 app.use("/api/messages", authenticate, messagesRoutes);
 app.use("/api/admin", authenticate, requireRole("admin"), adminRoutes);
-app.use("/api/crowdfunding", crowdfundingRoutes);
 
 app.use((err, _req, res, _next) => {
   console.error(err);
