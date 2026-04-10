@@ -21,13 +21,16 @@ const initialFilters = {
 export default function ExplorerPage() {
   const [filters, setFilters] = useState(initialFilters);
   const [celebrities, setCelebrities] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [availabilityDate, setAvailabilityDate] = useState("");
 
   useEffect(() => {
+    setLoading(true);
     const query = new URLSearchParams(Object.entries(filters)).toString();
-    fetchJson(`/celebrities?${query}`)
-      .then((res) => setCelebrities(res.data))
-      .catch(console.error);
+    const load = () => fetchJson(`/celebrities?${query}`)
+      .then((res) => { setCelebrities(res.data); setLoading(false); })
+      .catch(() => setTimeout(load, 4000));
+    load();
   }, [filters]);
 
   const meta = useMemo(
@@ -59,9 +62,20 @@ export default function ExplorerPage() {
         </div>
       </section>
       <section className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {celebrities.map((celeb) => (
-          <CelebrityCard key={celeb.id} celebrity={celeb} availabilityDate={availabilityDate} />
-        ))}
+        {loading ? (
+          Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "16px", padding: "16px", animation: "pulse 1.8s ease-in-out infinite" }}>
+              <div style={{ height: "176px", background: "rgba(255,255,255,0.06)", borderRadius: "10px", marginBottom: "12px" }} />
+              <div style={{ height: "16px", width: "70%", background: "rgba(148,180,216,0.15)", borderRadius: "4px", marginBottom: "8px" }} />
+              <div style={{ height: "11px", width: "50%", background: "rgba(255,255,255,0.05)", borderRadius: "4px" }} />
+              <style>{`@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.45}}`}</style>
+            </div>
+          ))
+        ) : (
+          celebrities.map((celeb) => (
+            <CelebrityCard key={celeb.id} celebrity={celeb} availabilityDate={availabilityDate} />
+          ))
+        )}
       </section>
     </main>
   );
