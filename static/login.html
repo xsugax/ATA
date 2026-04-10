@@ -1,31 +1,124 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AURELUX Sovereign - Access</title>
+  <title>ALL TALENTS / Agency — Access</title>
   <link rel="stylesheet" href="assets/styles.css" />
+  <style>
+    .login-gate {
+      max-width: 480px;
+      margin: 60px auto 40px;
+    }
+    .login-gate .eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.45em;
+      color: var(--gold);
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+    .login-gate h2 { text-align: center; margin-bottom: 6px; }
+    .login-gate .sub { text-align: center; font-size: 13px; color: var(--plat-dim); margin-bottom: 28px; }
+    .role-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 14px;
+      border-radius: 10px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      cursor: pointer;
+      transition: border-color 0.18s;
+      font-size: 12px;
+    }
+    .role-pill:hover { border-color: var(--line-gold); }
+    .role-pill .role-name { font-weight: 700; color: var(--plat); }
+    .role-pill .role-cred { color: var(--plat-dim); }
+    .status-area { min-height: 40px; display: flex; align-items: center; justify-content: center; }
+    #status-msg.success { color: var(--green); font-weight: 600; }
+    #status-msg.error { color: var(--red); }
+    .admin-link {
+      text-align: center;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+    }
+    .admin-link a {
+      font-size: 11px;
+      color: var(--plat-dim);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .admin-link a:hover { color: var(--gold); }
+  </style>
 </head>
 <body>
-  <div class="container" id="app"></div>
+  <div id="app"></div>
+
   <script type="module">
     import { request, nav } from './assets/api.js';
+    import { token, user } from './assets/api.js';
 
-    const app = document.getElementById('app');
-    app.innerHTML = `${nav('login')}
-      <section class="glass section card" style="max-width:720px;margin:20px auto;">
-        <h2>Sovereign Access Gateway</h2>
-        <p class="muted">Use seeded credentials to unlock role-based layers.</p>
-        <div class="grid top-space">
-          <input id="email" value="admin@aurelux.com" />
-          <input id="password" type="password" value="Admin@123" />
-          <button class="primary" id="login">Authenticate</button>
-          <div id="status" class="small"></div>
-          <div class="small muted">client@aurelux.com / Client@123 · manager@aurelux.com / Manager@123 · admin@aurelux.com / Admin@123</div>
+    document.getElementById('app').innerHTML = `
+      ${nav('login')}
+      <div class="container">
+        <div class="login-gate">
+          <div class="glass card" style="padding:32px;">
+            <div class="eyebrow">Sovereign Access Gateway</div>
+            <h2>Sign In</h2>
+            <p class="sub">Role-based access across the talent ecosystem.</p>
+            <div class="grid" style="gap:12px;">
+              <label>Email Address
+                <input id="email" type="email" value="client@aurelux.com" autocomplete="email" />
+              </label>
+              <label>Password
+                <input id="password" type="password" value="Client@123" autocomplete="current-password" />
+              </label>
+              <button class="primary" id="loginBtn">Authenticate</button>
+              <div class="status-area">
+                <span id="status-msg" class="small"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="padding:20px;margin-top:14px;">
+            <div class="small muted" style="margin-bottom:12px;text-transform:uppercase;letter-spacing:.12em;">Quick Access — click to fill</div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div class="role-pill" data-email="client@aurelux.com" data-pass="Client@123">
+                <span>👤</span>
+                <span class="role-name">Client</span>
+                <span class="role-cred">client@aurelux.com · Client@123</span>
+              </div>
+              <div class="role-pill" data-email="manager@aurelux.com" data-pass="Manager@123">
+                <span>🎯</span>
+                <span class="role-name">Manager</span>
+                <span class="role-cred">manager@aurelux.com · Manager@123</span>
+              </div>
+            </div>
+            <div class="admin-link">
+              <a href="admin.html">⚙ Admin Panel →</a>
+            </div>
+          </div>
         </div>
-      </section>`;
+      </div>`;
 
-    document.getElementById('login').onclick = async () => {
+    // Quick-fill role pills
+    document.querySelectorAll('.role-pill').forEach(pill => {
+      pill.onclick = () => {
+        document.getElementById('email').value = pill.dataset.email;
+        document.getElementById('password').value = pill.dataset.pass;
+      };
+    });
+
+    document.getElementById('loginBtn').onclick = async () => {
+      const btn = document.getElementById('loginBtn');
+      const msg = document.getElementById('status-msg');
+      btn.textContent = 'Authenticating…';
+      btn.disabled = true;
+      msg.className = 'small';
+      msg.textContent = '';
       try {
         const payload = await request('/auth/login', {
           method: 'POST',
@@ -36,9 +129,16 @@
         });
         localStorage.setItem('aurelux_token', payload.token);
         localStorage.setItem('aurelux_user', JSON.stringify(payload.user));
-        document.getElementById('status').textContent = `Authenticated as ${payload.user.role}`;
-      } catch (e) {
-        document.getElementById('status').textContent = e.message;
+        msg.className = 'small success';
+        msg.textContent = `✓ Authenticated as ${payload.user.role} — redirecting…`;
+        setTimeout(() => {
+          location.href = payload.user.role === 'admin' ? 'admin.html' : 'portal.html';
+        }, 900);
+      } catch(e) {
+        msg.className = 'small error';
+        msg.textContent = '✗ ' + e.message;
+        btn.textContent = 'Authenticate';
+        btn.disabled = false;
       }
     };
   </script>

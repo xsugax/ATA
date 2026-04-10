@@ -22,17 +22,18 @@ export async function request(path, options = {}) {
 
 export function nav(active) {
   return `
-  <header class="glass nav">
-    <div>
-      <div class="brand">ALL TALENTS</div>
-      <div class="small muted">Agency</div>
-    </div>
-    <nav class="menu">
-      <a href="index.html" class="${active==='home'?'active':''}">Dashboard</a>
-      <a href="explorer.html" class="${active==='explorer'?'active':''}">Explorer</a>
-      <a href="portal.html" class="${active==='portal'?'active':''}">Portal</a>
-      <a href="admin.html" class="${active==='admin'?'active':''}">Admin</a>
-      <a href="login.html" class="${active==='login'?'active':''}">Access</a>
-    </nav>
-  </header>`;
+  <div class="nav-wrap">
+    <header class="nav">
+      <a href="index.html" class="brand-block">
+        <div class="brand">ALL TALENTS</div>
+        <div class="brand-sub">Agency</div>
+      </a>
+      <nav class="menu">
+        <a href="index.html" class="${active==='home'?'active':''}">Dashboard</a>
+        <a href="explorer.html" class="${active==='explorer'?'active':''}">Explorer</a>
+        <a href="portal.html" class="${active==='portal'?'active':''}">Portal</a>
+        <a href="login.html" class="${active==='login'?'active':''}">Access</a>
+      </nav>
+    </header>
+  </div>`;
 }

@@ -1,75 +1,193 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AURELUX Sovereign - Booking Engine</title>
+  <title>ALL TALENTS / Agency — Booking Engine</title>
   <link rel="stylesheet" href="assets/styles.css" />
+  <style>
+    .slider-track {
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .slider-labels {
+      display: flex; justify-content: space-between;
+      font-size: 11px; color: var(--plat-dim);
+    }
+    .quote-value {
+      font-size: 2rem; font-weight:800; color:var(--gold); letter-spacing:-0.02em;
+    }
+    .quote-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--plat-dim); }
+    .celeb-thumb {
+      width: 100%; height: 200px;
+      object-fit: cover; object-position: top;
+      border-radius: var(--radius-sm);
+      background: #111;
+    }
+    .contract-id {
+      font-family: monospace;
+      background: rgba(212,175,55,0.08);
+      border: 1px solid var(--line-gold);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: var(--gold);
+      word-break: break-all;
+    }
+    .msg-success { color: var(--green); }
+    .msg-error { color: var(--red); }
+  </style>
 </head>
 <body>
-  <div class="container" id="app"></div>
+  <div id="app"></div>
+
   <script type="module">
     import { request, nav } from './assets/api.js';
 
     const params = new URLSearchParams(location.search);
     const id = params.get('id');
-    const stages = ['Inquiry Received','Under Representation Review','Terms Negotiation','Contract Finalized','Escrow Secured','Confirmed'];
+    const stages = [
+      'Inquiry Received',
+      'Under Representation Review',
+      'Terms Negotiation',
+      'Contract Finalized',
+      'Escrow Secured',
+      'Confirmed'
+    ];
 
-    const app = document.getElementById('app');
-    app.innerHTML = `${nav('explorer')}
-      <section class="grid grid-2 section">
-        <article class="card" id="left"></article>
-        <article class="card" id="right"></article>
-      </section>`;
+    document.getElementById('app').innerHTML = `
+      ${nav('explorer')}
+      <div class="container">
+        <div class="grid grid-2 section" id="layout">
+          <div class="card" id="left">
+            <div class="skeleton" style="height:320px;"></div>
+          </div>
+          <div class="card" id="right">
+            <div class="skeleton" style="height:320px;"></div>
+          </div>
+        </div>
+      </div>`;
 
     if (!id) {
-      document.getElementById('left').innerHTML = '<h3>No celebrity selected</h3><p>Open booking from Explorer.</p>';
+      document.getElementById('left').innerHTML = `
+        <h3>No talent selected</h3>
+        <p class="muted top-space">Open a booking from the <a href="explorer.html" style="color:var(--gold)">Explorer</a>.</p>`;
       throw new Error('missing id');
     }
 
-    const celeb = await request('/celebrities/' + id);
-
-    const left = document.getElementById('left');
-    left.innerHTML = `
-      <h2>Initiate Sovereign Booking · ${celeb.name}</h2>
-      <div class="grid top-space">
-        <input id="eventType" value="Gala" placeholder="Event type" />
-        <input id="date" type="date" />
-        <input id="location" value="Dubai" placeholder="Location" />
-        <select id="securityLevel">${celeb.securityTiers.map(s => `<option>${s}</option>`).join('')}</select>
-        <label class="row"><input id="ndaRequired" type="checkbox" checked style="width:auto" /> NDA required</label>
-        <label>Dynamic pricing <input id="adjust" type="range" min="-15" max="50" value="0" /></label>
-        <textarea id="rider" rows="3">Private lounge + fortified arrival corridor</textarea>
-      </div>
-      <div class="grid grid-3 top-space">
-        <div class="card"><div class="small muted">Live Quote</div><div class="kpi" id="quote">-</div></div>
-        <div class="card"><div class="small muted">Escrow (30%)</div><div class="kpi" id="escrow">-</div></div>
-        <div class="card"><div class="small muted">Contract PDF</div><div class="kpi">Ready</div></div>
-      </div>
-      <button class="primary top-space" id="submit">Confirm Booking Workflow</button>
-      <div class="small top-space" id="msg"></div>`;
-
-    const right = document.getElementById('right');
-    function renderStatus(active = stages[0]) {
-      right.innerHTML = `<h3>Booking Status Tracker</h3>${stages.map(s => `<div class="status-step ${s===active?'active':''}">${s}</div>`).join('')}`;
+    let celeb;
+    try {
+      celeb = await request('/celebrities/' + id);
+    } catch(e) {
+      document.getElementById('left').innerHTML = `<p class="muted">${e.message} — <a href="explorer.html" style="color:var(--gold);">Back to Explorer</a></p>`;
+      throw e;
     }
+
+    // LEFT panel
+    document.getElementById('left').innerHTML = `
+      <img class="celeb-thumb" src="${celeb.portrait}" alt="${celeb.name}"
+        onerror="this.style.display='none'" />
+      <h2 style="margin-top:16px;">${celeb.name}</h2>
+      <div class="row wrap" style="gap:6px;margin-top:8px;margin-bottom:16px;">
+        <span class="badge">${celeb.category}</span>
+        <span class="badge-blue badge">${celeb.region}</span>
+        <span class="badge-green badge">${celeb.availability}</span>
+      </div>
+      <hr class="divider" />
+      <div class="grid" style="gap:12px;">
+        <label>Event Type
+          <input id="eventType" value="Gala" placeholder="e.g. Private Gala, Summit…" />
+        </label>
+        <label>Date
+          <input id="date" type="date" />
+        </label>
+        <label>Location
+          <input id="location" value="Dubai" placeholder="City, venue…" />
+        </label>
+        <label>Security Level
+          <select id="securityLevel">${celeb.securityTiers.map(s=>`<option>${s}</option>`).join('')}</select>
+        </label>
+        <label class="row-label">
+          <input id="ndaRequired" type="checkbox" checked style="width:auto;accent-color:var(--gold);" />
+          NDA Required
+        </label>
+        <label>Rider Requirements
+          <textarea id="rider" rows="3">Private lounge + fortified arrival corridor</textarea>
+        </label>
+        <div class="slider-track">
+          <div class="slider-labels">
+            <span>Dynamic Pricing</span>
+            <span id="adjustLabel" style="color:var(--gold);font-weight:700;">±0%</span>
+          </div>
+          <input id="adjust" type="range" min="-15" max="50" value="0" />
+          <div class="slider-labels">
+            <span>−15%</span><span>+50%</span>
+          </div>
+        </div>
+      </div>
+      <hr class="divider" />
+      <div class="grid grid-3" style="gap:12px;margin-bottom:16px;">
+        <div class="card" style="text-align:center;padding:14px;">
+          <div class="quote-label">Live Quote</div>
+          <div class="quote-value" id="quote">—</div>
+        </div>
+        <div class="card" style="text-align:center;padding:14px;">
+          <div class="quote-label">Escrow (30%)</div>
+          <div class="quote-value" id="escrow">—</div>
+        </div>
+        <div class="card" style="text-align:center;padding:14px;">
+          <div class="quote-label">Contract PDF</div>
+          <div class="quote-value" style="font-size:1.1rem;">Ready</div>
+        </div>
+      </div>
+      <button class="primary" id="submit">Confirm Booking Workflow</button>
+      <div style="margin-top:12px;min-height:20px;" id="msg"></div>`;
+
+    // RIGHT panel — status tracker
+    function renderStatus(activeStage, doneUpTo = -1) {
+      document.getElementById('right').innerHTML = `
+        <h3 style="margin-bottom:16px;">Booking Status Tracker</h3>
+        ${stages.map((s, i) => {
+          const isDone = i < doneUpTo;
+          const isActive = s === activeStage;
+          return `<div class="status-step ${isDone?'done':''} ${isActive?'active':''}">${isDone?'✓ ':isActive?'● ':'○ '}${s}</div>`;
+        }).join('')}
+        <hr class="divider" />
+        <div class="card" style="padding:14px;margin-top:0;">
+          <div class="quote-label">Starting Price</div>
+          <div style="font-size:1.4rem;font-weight:700;color:var(--gold);margin-top:4px;">$${celeb.startingPrice.toLocaleString()}</div>
+        </div>
+        <div class="card" style="padding:14px;margin-top:12px;">
+          <div class="quote-label">Security Tiers</div>
+          <div class="row wrap" style="gap:6px;margin-top:8px;">
+            ${celeb.securityTiers.map(s=>`<span class="badge">${s}</span>`).join('')}
+          </div>
+        </div>
+        <div class="card" style="padding:14px;margin-top:12px;">
+          <div class="quote-label">Awards</div>
+          <p class="small" style="margin-top:6px;line-height:1.7;">${celeb.awards.join(' · ')}</p>
+        </div>`;
+    }
+
+    renderStatus(stages[0]);
 
     function renderQuote() {
-      const percent = Number(document.getElementById('adjust').value);
-      const quote = Math.round(celeb.startingPrice * (1 + percent/100));
-      const escrow = Math.round(quote * 0.3);
-      document.getElementById('quote').textContent = '$' + quote.toLocaleString();
-      document.getElementById('escrow').textContent = '$' + escrow.toLocaleString();
-      return percent;
+      const pct = Number(document.getElementById('adjust').value);
+      const q = Math.round(celeb.startingPrice * (1 + pct / 100));
+      document.getElementById('quote').textContent = '$' + q.toLocaleString();
+      document.getElementById('escrow').textContent = '$' + Math.round(q * 0.3).toLocaleString();
+      document.getElementById('adjustLabel').textContent = (pct >= 0 ? '+' : '') + pct + '%';
+      return pct;
     }
-
-    renderStatus();
     renderQuote();
     document.getElementById('adjust').oninput = renderQuote;
 
     document.getElementById('submit').onclick = async () => {
+      const btn = document.getElementById('submit');
+      const msgEl = document.getElementById('msg');
+      btn.textContent = 'Processing…';
+      btn.disabled = true;
       try {
-        const pricingAdjustmentPercent = renderQuote();
+        const pct = renderQuote();
         const booking = await request('/bookings/initiate', {
           method: 'POST',
           body: JSON.stringify({
@@ -80,13 +198,26 @@
             ndaRequired: document.getElementById('ndaRequired').checked,
             securityLevel: document.getElementById('securityLevel').value,
             riderRequirements: document.getElementById('rider').value,
-            pricingAdjustmentPercent
+            pricingAdjustmentPercent: pct
           })
         });
-        renderStatus(booking.booking.status);
-        document.getElementById('msg').textContent = `Booking created: ${booking.booking.id} | Contract: ${booking.booking.contractId}`;
-      } catch (e) {
-        document.getElementById('msg').textContent = e.message + ' (login first)';
+        const activeIdx = stages.indexOf(booking.booking.status);
+        renderStatus(booking.booking.status, activeIdx);
+        msgEl.className = 'msg-success small';
+        msgEl.innerHTML = `
+          <p>✓ Booking created successfully</p>
+          <div class="contract-id" style="margin-top:10px;">
+            <div class="quote-label">Contract ID</div>
+            <div style="margin-top:4px;">${booking.booking.contractId}</div>
+            <div class="quote-label" style="margin-top:8px;">Booking ID</div>
+            <div style="margin-top:4px;">${booking.booking.id}</div>
+          </div>`;
+        btn.textContent = 'Booking Submitted';
+      } catch(e) {
+        msgEl.className = 'msg-error small';
+        msgEl.textContent = e.message + ' — login first from Access.';
+        btn.textContent = 'Confirm Booking Workflow';
+        btn.disabled = false;
       }
     };
   </script>

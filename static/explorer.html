@@ -1,13 +1,46 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AURELUX Sovereign - Explorer</title>
+  <title>ALL TALENTS / Agency — Celebrity Explorer</title>
   <link rel="stylesheet" href="assets/styles.css" />
+  <style>
+    .celeb-card { display: flex; flex-direction: column; }
+    .celeb-card .card-body { flex: 1; display: flex; flex-direction: column; gap: 8px; padding-top: 12px; }
+    .celeb-actions { display: flex; flex-direction: column; gap: 8px; margin-top: auto; padding-top: 12px; }
+    .filter-panel { padding: 22px; }
+    .filter-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--plat-dim); margin-bottom: 14px; }
+    .count-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--plat-dim);
+      padding: 4px 10px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+    }
+    .count-chip strong { color: var(--gold); }
+    .celeb-name { font-size: 1rem; font-weight: 700; margin: 0; }
+    .celeb-sub { font-size: 12px; color: var(--plat-dim); }
+    .img-wrap { position: relative; }
+    .img-fallback {
+      width: 100%;
+      height: 220px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, var(--deep), rgba(212,175,55,0.06));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+    }
+  </style>
 </head>
 <body>
-  <div class="container" id="app"></div>
+  <div id="app"></div>
+
   <script type="module">
     import { request, nav } from './assets/api.js';
 
@@ -16,91 +49,158 @@
       minPopularity: 60, minDemand: 55, maxAvailabilityDays: 60, netWorthTier: 'All', eventType: 'All'
     };
 
-    const app = document.getElementById('app');
-    app.innerHTML = `${nav('explorer')}
-      <section class="glass section card">
-        <h2>Elite Celebrity Intelligence Explorer</h2>
-        <p class="muted">Real filtering across all 100 verified profiles.</p>
-        <div class="grid grid-4 top-space">
-          <input id="search" placeholder="Search name" />
-          <select id="category"><option>All</option><option>Film</option><option>Music</option><option>Sports</option><option>Fashion</option><option>Business</option><option>Influencer</option></select>
-          <select id="region"><option>All</option><option>North America</option><option>Europe</option><option>Middle East</option><option>Asia</option><option>Latin America</option><option>Africa</option></select>
-          <select id="eventType"><option>All</option><option>Summit</option><option>Gala</option><option>Launch</option><option>Private Dinner</option><option>Festival</option></select>
-          <input id="minPrice" type="number" value="0" placeholder="Min price" />
-          <input id="maxPrice" type="number" value="2000000" placeholder="Max price" />
-          <input id="minPopularity" type="number" value="60" placeholder="Min popularity" />
-          <select id="netWorthTier"><option>All</option><option>$50M+</option><option>$100M+</option><option>$500M+</option><option>$1B+</option></select>
-          <input id="availabilityDate" type="date" placeholder="Check availability date" />
-        </div>
-      </section>
-      <section class="grid grid-3 section" id="results"></section>`;
+    const riskBadge = r => r === 'low' ? 'badge-green' : r === 'medium' ? 'badge-amber' : 'badge-red';
+    const availBadge = a => a === 'Open' ? 'badge-green' : a === 'Limited' ? 'badge-amber' : 'badge-red';
+    const catEmoji = { Film: '🎬', Music: '🎵', Sports: '⚽', Fashion: '👗', Business: '💼', Influencer: '📱' };
 
-    const ids = ['search','category','region','eventType','minPrice','maxPrice','minPopularity','netWorthTier'];
-    ids.forEach(id => document.getElementById(id).addEventListener('input', async () => {
-      filters[id] = document.getElementById(id).value;
-      await load();
-    }));
+    document.getElementById('app').innerHTML = `
+      ${nav('explorer')}
+      <div class="container">
+        <div class="glass filter-panel section">
+          <div class="row between" style="margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+            <div>
+              <h2 style="margin-bottom:4px;">Celebrity Explorer</h2>
+              <p class="muted small">Pinpoint talent across 100 verified elite profiles.</p>
+            </div>
+            <div class="count-chip"><strong id="result-count">—</strong> profiles match</div>
+          </div>
+          <div class="grid grid-4">
+            <input id="search" placeholder="Search by name…" />
+            <select id="category">
+              <option>All</option><option>Film</option><option>Music</option>
+              <option>Sports</option><option>Fashion</option><option>Business</option><option>Influencer</option>
+            </select>
+            <select id="region">
+              <option>All</option><option>North America</option><option>Europe</option>
+              <option>Middle East</option><option>Asia</option><option>Latin America</option><option>Africa</option>
+            </select>
+            <select id="eventType">
+              <option>All</option><option>Summit</option><option>Gala</option>
+              <option>Launch</option><option>Private Dinner</option><option>Festival</option>
+            </select>
+            <label>Min Price
+              <input id="minPrice" type="number" value="0" placeholder="0" />
+            </label>
+            <label>Max Price
+              <input id="maxPrice" type="number" value="2000000" placeholder="2000000" />
+            </label>
+            <label>Min Popularity
+              <input id="minPopularity" type="number" value="60" placeholder="60" />
+            </label>
+            <label>Net Worth Tier
+              <select id="netWorthTier">
+                <option>All</option><option>$50M+</option><option>$100M+</option><option>$500M+</option><option>$1B+</option>
+              </select>
+            </label>
+          </div>
+          <div class="top-space" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <label style="text-transform:uppercase;font-size:10px;letter-spacing:.15em;color:var(--plat-dim);flex-direction:row;gap:8px;align-items:center;">
+              Check date:
+              <input id="availabilityDate" type="date" style="width:auto;" />
+            </label>
+          </div>
+        </div>
+        <div class="grid grid-3 section" id="results">
+          ${[0,1,2,3,4,5].map(()=>`<div class="card skeleton" style="height:420px;"></div>`).join('')}
+        </div>
+      </div>`;
+
+    ['search','category','region','eventType','minPrice','maxPrice','minPopularity','netWorthTier']
+      .forEach(id => document.getElementById(id).addEventListener('input', async e => {
+        filters[id] = e.target.value;
+        await load();
+      }));
 
     async function load() {
       const q = new URLSearchParams(filters).toString();
       const res = await request('/celebrities?' + q);
+      document.getElementById('result-count').textContent = res.data.length;
+
       document.getElementById('results').innerHTML = res.data.map(c => `
-        <article class="card">
-          <div class="row between"><h3>${c.name}</h3><span class="badge">Verified</span></div>
-          <img src="${c.portrait}" alt="${c.name}" />
-          <p class="muted">${c.category} · ${c.region}</p>
-          <p>Booking tiers: ${c.bookingTiers.map(t => t.type).join(', ')}</p>
-          <p>Starting: $${c.startingPrice.toLocaleString()}</p>
-          <p>Demand ${c.demandIndex}% · Reach ${c.socialReachMillions}M</p>
-          <p>Agency: ${c.agencyRepresentation}</p>
-          <p>Awards: ${c.awards.join(', ')}</p>
-          <p>Risk: ${c.riskIndex.toUpperCase()} · NDA: ${c.ndaDefault ? 'Required':'Optional'}</p>
-          <p>Security: ${c.securityTiers.join(' / ')}</p>
-          <button class="top-space" data-action="check-availability" data-id="${c.id}" data-name="${c.name}">Check Availability</button>
-          <button data-action="message-rep" data-id="${c.id}" data-name="${c.name}">Message Representative</button>
-          <div class="small muted" id="status-${c.id}"></div>
-          <a class="primary" style="display:block;text-align:center;padding:10px;border-radius:10px;margin-top:10px;" href="booking.html?id=${c.id}">Initiate Sovereign Booking</a>
+        <article class="card celeb-card">
+          <div class="img-wrap">
+            <img src="${c.portrait}" alt="${c.name}"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+              style="width:100%;height:220px;object-fit:cover;object-position:top;border-radius:var(--radius-sm);background:#111;" />
+            <div class="img-fallback" style="display:none;">${catEmoji[c.category]||'🌟'}</div>
+          </div>
+          <div class="card-body">
+            <div class="row between">
+              <p class="celeb-name">${c.name}</p>
+              <span class="badge">✓ Verified</span>
+            </div>
+            <div class="row wrap" style="gap:6px;">
+              <span class="badge ${availBadge(c.availability)}">${c.availability}</span>
+              <span class="badge-blue badge">${c.category}</span>
+              <span class="badge-amber badge">${c.region.split(' ').map(w=>w[0]).join('')}</span>
+            </div>
+            <p class="small muted">${c.agencyRepresentation} · ${c.region}</p>
+            <div class="stat-bar">
+              <div class="stat-bar-labels"><span>Demand</span><span>${c.demandIndex}%</span></div>
+              <div class="stat-bar-track"><div class="stat-bar-fill" style="width:${c.demandIndex}%"></div></div>
+            </div>
+            <div class="stat-bar">
+              <div class="stat-bar-labels"><span>Popularity</span><span>${c.popularityScore}%</span></div>
+              <div class="stat-bar-track"><div class="stat-bar-fill" style="width:${c.popularityScore}%;opacity:.7"></div></div>
+            </div>
+            <div class="row wrap" style="gap:6px;margin-top:2px;">
+              <span class="small muted">From</span>
+              <span style="font-weight:700;color:var(--gold);">$${c.startingPrice.toLocaleString()}</span>
+              <span class="small muted">·</span>
+              <span class="small muted">${c.socialReachMillions}M reach</span>
+            </div>
+            <div class="row wrap" style="gap:6px;">
+              <span class="small muted">Risk:</span>
+              <span class="badge ${riskBadge(c.riskIndex)}">${c.riskIndex}</span>
+              <span class="small muted">NDA:</span>
+              <span class="small">${c.ndaDefault?'Required':'Optional'}</span>
+            </div>
+            <p class="small muted" style="line-height:1.5">🏆 ${c.awards.slice(0,3).join(' · ')}</p>
+            <div class="small muted" id="status-${c.id}" style="min-height:18px;color:var(--green);"></div>
+            <div class="celeb-actions">
+              <button data-action="check-availability" data-id="${c.id}">Check Availability</button>
+              <button data-action="message-rep" data-id="${c.id}" data-name="${c.name}">Message Representative</button>
+              <a class="btn primary" href="booking.html?id=${c.id}">Initiate Booking →</a>
+            </div>
+          </div>
         </article>`).join('');
 
-      document.querySelectorAll('[data-action="check-availability"]').forEach((button) => {
-        button.onclick = async () => {
-          const celebrityId = button.getAttribute('data-id');
-          const selectedDate = document.getElementById('availabilityDate').value;
-          const statusEl = document.getElementById(`status-${celebrityId}`);
-
-          if (!selectedDate) {
-            statusEl.textContent = 'Select a date first.';
-            return;
-          }
-
+      // Availability
+      document.querySelectorAll('[data-action="check-availability"]').forEach(btn => {
+        btn.onclick = async () => {
+          const id = btn.dataset.id;
+          const date = document.getElementById('availabilityDate').value;
+          const status = document.getElementById(`status-${id}`);
+          if (!date) { status.textContent = 'Select a date above first.'; return; }
+          btn.textContent = '…';
           try {
-            const result = await request(`/celebrities/${celebrityId}/availability?date=${selectedDate}`);
-            statusEl.textContent = result.available ? `Available on ${result.date}` : `Unavailable: ${result.reason}`;
-          } catch (error) {
-            statusEl.textContent = error.message;
-          }
+            const r = await request(`/celebrities/${id}/availability?date=${date}`);
+            status.style.color = r.available ? 'var(--green)' : 'var(--red)';
+            status.textContent = r.available ? `✓ Available on ${r.date}` : `✗ Unavailable — ${r.reason}`;
+          } catch(e) { status.textContent = e.message; status.style.color = 'var(--red)'; }
+          btn.textContent = 'Check Availability';
         };
       });
 
-      document.querySelectorAll('[data-action="message-rep"]').forEach((button) => {
-        button.onclick = async () => {
-          const celebrityId = button.getAttribute('data-id');
-          const celebrityName = button.getAttribute('data-name');
-          const statusEl = document.getElementById(`status-${celebrityId}`);
-
+      // Message rep
+      document.querySelectorAll('[data-action="message-rep"]').forEach(btn => {
+        btn.onclick = async () => {
+          const id = btn.dataset.id;
+          const name = btn.dataset.name;
+          const status = document.getElementById(`status-${id}`);
+          btn.textContent = '…';
           try {
-            const result = await request('/messages/send', {
+            const r = await request('/messages/send', {
               method: 'POST',
-              body: JSON.stringify({
-                celebrityId,
-                priority: 'Priority',
-                body: `Requesting representative callback regarding ${celebrityName} for strategic event alignment.`,
-              }),
+              body: JSON.stringify({ celebrityId: id, priority: 'Priority', body: `Requesting representative callback regarding ${name} for strategic event alignment.` })
             });
-            statusEl.textContent = result.acknowledgement.body;
-          } catch (error) {
-            statusEl.textContent = `${error.message}. Login from Access first.`;
+            status.style.color = 'var(--green)';
+            status.textContent = r.acknowledgement.body;
+          } catch(e) {
+            status.style.color = 'var(--red)';
+            status.textContent = e.message + ' — login first.';
           }
+          btn.textContent = 'Message Representative';
         };
       });
     }

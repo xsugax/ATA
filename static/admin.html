@@ -1,35 +1,281 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AURELUX Sovereign - Admin</title>
+  <title>ALL TALENTS — Admin Control Centre</title>
   <link rel="stylesheet" href="assets/styles.css" />
+  <style>
+    body { background: #04030a; }
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(212,175,55,0.09), transparent 65%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .admin-header {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: rgba(4,3,10,0.92);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(212,175,55,0.28);
+    }
+    .admin-nav {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 13px 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+    }
+    .admin-brand { display: flex; align-items: center; gap: 12px; }
+    .admin-brand .brand { font-size: 15px; }
+    .admin-badge {
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #000;
+      background: var(--gold);
+      padding: 3px 9px;
+      border-radius: 5px;
+    }
+    .admin-menu { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .admin-menu a {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--plat-dim);
+      padding: 7px 13px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      transition: all 0.18s;
+    }
+    .admin-menu a:hover { background: var(--panel); border-color: var(--line); color: var(--plat); }
+    .admin-menu .back { color: var(--plat-dim); }
+    .admin-menu .logout { color: var(--red); border-color: rgba(239,68,68,0.25); }
+    .admin-menu .logout:hover { background: rgba(239,68,68,0.1); }
+
+    .login-section {
+      max-width: 460px;
+      margin: 80px auto;
+    }
+    .section-title {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--plat-dim);
+      margin-bottom: 12px;
+    }
+    .audit-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      font-size: 12px;
+    }
+    .audit-row:last-child { border-bottom: none; }
+    .audit-time { color: var(--plat-dim); white-space: nowrap; min-width: 100px; }
+    .audit-actor { color: var(--gold); white-space: nowrap; }
+    .audit-action { color: var(--plat); }
+  </style>
 </head>
 <body>
-  <div class="container" id="app"></div>
+  <div id="admin-root"></div>
+
   <script type="module">
-    import { request, nav } from './assets/api.js';
+    import { request } from './assets/api.js';
 
-    const app = document.getElementById('app');
-    app.innerHTML = `${nav('admin')}<section class="section" id="admin"></section>`;
+    const root = document.getElementById('admin-root');
 
-    try {
-      const d = await request('/admin/dashboard');
-      document.getElementById('admin').innerHTML = `
-        <div class="grid grid-4">
-          <div class="card"><div class="small muted">Revenue YTD</div><div class="kpi">$${(d.kpis.revenueYTD/1000000).toFixed(1)}M</div></div>
-          <div class="card"><div class="small muted">Active Bookings</div><div class="kpi">${d.kpis.activeBookings}</div></div>
-          <div class="card"><div class="small muted">Avg Escrow %</div><div class="kpi">${d.kpis.avgEscrowPercent}%</div></div>
-          <div class="card"><div class="small muted">Suspended Users</div><div class="kpi">${d.kpis.suspendedUsers}</div></div>
-        </div>
-        <div class="grid grid-2 top-space">
-          <div class="card"><h3>Revenue over time</h3><table class="table"><tr><th>Month</th><th>Revenue</th></tr>${d.charts.revenueSeries.map(x=>`<tr><td>${x.month}</td><td>$${x.revenue.toLocaleString()}</td></tr>`).join('')}</table></div>
-          <div class="card"><h3>Regional demand intensity</h3><table class="table"><tr><th>Region</th><th>Intensity</th></tr>${d.charts.regional.map(x=>`<tr><td>${x.region}</td><td>${x.intensity}</td></tr>`).join('')}</table></div>
-        </div>
-        <div class="card top-space"><h3>Audit Logs</h3>${(d.auditLogs || []).map(l => `<p class='small'>${l.timestamp} · ${l.action} · ${l.actor}</p>`).join('') || '<p class="small muted">No logs yet</p>'}</div>`;
-    } catch (e) {
-      document.getElementById('admin').innerHTML = `<div class="card">${e.message}. Login as admin first.</div>`;
+    function adminHeader(showLogout = false) {
+      return `
+      <div class="admin-header">
+        <nav class="admin-nav">
+          <div class="admin-brand">
+            <div>
+              <div class="brand" style="letter-spacing:.18em;color:var(--gold);font-weight:800;">ALL TALENTS</div>
+              <div style="font-size:9px;letter-spacing:.3em;color:var(--plat-dim);text-transform:uppercase;">Agency</div>
+            </div>
+            <span class="admin-badge">Admin</span>
+          </div>
+          <div class="admin-menu">
+            <a href="index.html" class="back">← Main Site</a>
+            ${showLogout ? `<a href="#" class="logout" id="logoutBtn">Sign Out</a>` : ''}
+          </div>
+        </nav>
+      </div>`;
+    }
+
+    async function showDashboard() {
+      root.innerHTML = adminHeader(true) + `
+        <div class="container" style="position:relative;z-index:1;">
+          <div style="padding:20px 0 10px;">
+            <div style="font-size:10px;letter-spacing:.4em;color:var(--gold);text-transform:uppercase;margin-bottom:6px;">Control Centre</div>
+            <h2>Admin Dashboard</h2>
+            <p class="muted small" style="margin-top:4px;">Full operational oversight — revenue, bookings, audit trail.</p>
+          </div>
+          <div id="dash">
+            <div class="grid grid-4 section">
+              ${[0,1,2,3].map(()=>`<div class="card"><div class="skeleton" style="height:72px;"></div></div>`).join('')}
+            </div>
+          </div>
+        </div>`;
+
+      document.getElementById('logoutBtn').onclick = (e) => {
+        e.preventDefault();
+        localStorage.removeItem('aurelux_token');
+        localStorage.removeItem('aurelux_user');
+        location.reload();
+      };
+
+      try {
+        const d = await request('/admin/dashboard');
+
+        document.getElementById('dash').innerHTML = `
+          <div class="grid grid-4 section">
+            <div class="card" style="text-align:center;padding:22px 16px;">
+              <div class="kpi-label">Revenue YTD</div>
+              <div class="kpi">$${(d.kpis.revenueYTD/1000000).toFixed(1)}M</div>
+              <div class="kpi-trend">↑ On track</div>
+            </div>
+            <div class="card" style="text-align:center;padding:22px 16px;">
+              <div class="kpi-label">Active Bookings</div>
+              <div class="kpi">${d.kpis.activeBookings}</div>
+              <div class="kpi-trend">Live pipeline</div>
+            </div>
+            <div class="card" style="text-align:center;padding:22px 16px;">
+              <div class="kpi-label">Avg Escrow %</div>
+              <div class="kpi">${d.kpis.avgEscrowPercent}%</div>
+              <div class="kpi-trend">Standard 30%</div>
+            </div>
+            <div class="card" style="text-align:center;padding:22px 16px;">
+              <div class="kpi-label">Suspended Users</div>
+              <div class="kpi" style="color:var(--red);">${d.kpis.suspendedUsers}</div>
+              <div class="kpi-trend" style="color:var(--red);">Flagged accounts</div>
+            </div>
+          </div>
+
+          <div class="grid grid-2 section">
+            <div class="card">
+              <div class="section-title">Revenue Timeline</div>
+              <table class="table">
+                <thead><tr><th>Month</th><th>Revenue</th></tr></thead>
+                <tbody>
+                  ${d.charts.revenueSeries.map(x=>`
+                    <tr>
+                      <td>${x.month}</td>
+                      <td style="color:var(--gold);font-weight:600;">$${x.revenue.toLocaleString()}</td>
+                    </tr>`).join('')}
+                </tbody>
+              </table>
+            </div>
+            <div class="card">
+              <div class="section-title">Regional Demand Intensity</div>
+              <table class="table">
+                <thead><tr><th>Region</th><th>Intensity</th></tr></thead>
+                <tbody>
+                  ${d.charts.regional.map(x=>`
+                    <tr>
+                      <td>${x.region}</td>
+                      <td>
+                        <div class="stat-bar">
+                          <div class="stat-bar-labels"><span></span><span>${x.intensity}</span></div>
+                          <div class="stat-bar-track"><div class="stat-bar-fill" style="width:${Math.min(x.intensity,100)}%"></div></div>
+                        </div>
+                      </td>
+                    </tr>`).join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card section">
+            <div class="section-title">Audit Log</div>
+            ${(d.auditLogs||[]).length
+              ? d.auditLogs.map(l=>`
+                <div class="audit-row">
+                  <span class="audit-time">${new Date(l.timestamp).toLocaleString('en-GB',{hour:'2-digit',minute:'2-digit',day:'2-digit',month:'short'})}</span>
+                  <span class="audit-actor">${l.actor}</span>
+                  <span class="audit-action">${l.action}</span>
+                </div>`).join('')
+              : `<p class="small muted">No audit entries yet.</p>`}
+          </div>`;
+
+      } catch(e) {
+        document.getElementById('dash').innerHTML = `
+          <div class="card section" style="text-align:center;padding:30px;">
+            <p style="color:var(--red);">✗ ${e.message}</p>
+            <p class="small muted" style="margin-top:8px;">You may need to re-authenticate as admin.</p>
+          </div>`;
+      }
+    }
+
+    async function showLogin() {
+      root.innerHTML = adminHeader(false) + `
+        <div class="container" style="position:relative;z-index:1;">
+          <div class="login-section">
+            <div class="glass card" style="padding:32px;">
+              <div style="font-size:10px;letter-spacing:.45em;color:var(--gold);text-transform:uppercase;text-align:center;margin-bottom:6px;">Admin Control Centre</div>
+              <h2 style="text-align:center;margin-bottom:6px;">Admin Access</h2>
+              <p class="muted small" style="text-align:center;margin-bottom:24px;">Restricted — authorised personnel only.</p>
+              <div class="grid" style="gap:12px;">
+                <label>Email
+                  <input id="email" type="email" value="admin@aurelux.com" />
+                </label>
+                <label>Password
+                  <input id="password" type="password" value="Admin@123" />
+                </label>
+                <button class="primary" id="loginBtn">Authenticate as Admin</button>
+                <div style="text-align:center;min-height:24px;">
+                  <span id="status" class="small"></span>
+                </div>
+              </div>
+            </div>
+            <div style="text-align:center;margin-top:16px;">
+              <a href="index.html" style="font-size:11px;color:var(--plat-dim);letter-spacing:.1em;text-transform:uppercase;">← Back to Main Site</a>
+            </div>
+          </div>
+        </div>`;
+
+      document.getElementById('loginBtn').onclick = async () => {
+        const btn = document.getElementById('loginBtn');
+        const status = document.getElementById('status');
+        btn.textContent = 'Authenticating…'; btn.disabled = true;
+        try {
+          const payload = await request('/auth/login', {
+            method: 'POST',
+            body: JSON.stringify({
+              email: document.getElementById('email').value,
+              password: document.getElementById('password').value,
+            })
+          });
+          if (payload.user.role !== 'admin') throw new Error('Access denied — admin role required');
+          localStorage.setItem('aurelux_token', payload.token);
+          localStorage.setItem('aurelux_user', JSON.stringify(payload.user));
+          status.style.color = 'var(--green)';
+          status.textContent = '✓ Admin authenticated';
+          setTimeout(() => showDashboard(), 700);
+        } catch(e) {
+          status.style.color = 'var(--red)';
+          status.textContent = '✗ ' + e.message;
+          btn.textContent = 'Authenticate as Admin'; btn.disabled = false;
+        }
+      };
+    }
+
+    // Check if already authenticated as admin
+    const userData = JSON.parse(localStorage.getItem('aurelux_user') || 'null');
+    if (userData && userData.role === 'admin' && localStorage.getItem('aurelux_token')) {
+      await showDashboard();
+    } else {
+      await showLogin();
     }
   </script>
 </body>

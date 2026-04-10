@@ -1,39 +1,153 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AURELUX Sovereign - Portal</title>
+  <title>ALL TALENTS / Agency — Client Portal</title>
   <link rel="stylesheet" href="assets/styles.css" />
+  <style>
+    .tier-badge {
+      display: inline-block;
+      padding: 5px 14px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, rgba(212,175,55,0.25), rgba(212,175,55,0.08));
+      border: 1px solid var(--line-gold);
+      color: var(--gold);
+    }
+    .msg-item {
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .msg-item:last-child { border-bottom: none; }
+    .msg-from { font-size: 12px; font-weight: 700; color: var(--gold); }
+    .msg-body { font-size: 13px; color: var(--plat-dim); margin-top: 3px; line-height: 1.5; }
+    .concierge-card {
+      border-color: rgba(212,175,55,0.3);
+      background: linear-gradient(135deg, rgba(212,175,55,0.05), transparent);
+    }
+    .vip-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      font-size: 13px;
+    }
+    .vip-item::before {
+      content: '◆';
+      color: var(--gold);
+      font-size: 10px;
+      flex-shrink: 0;
+    }
+    .vip-item:last-child { border-bottom: none; }
+  </style>
 </head>
 <body>
-  <div class="container" id="app"></div>
+  <div id="app"></div>
+
   <script type="module">
     import { request, nav } from './assets/api.js';
 
-    const app = document.getElementById('app');
-    app.innerHTML = `${nav('portal')}<section class="section" id="portal"></section>`;
+    document.getElementById('app').innerHTML = `
+      ${nav('portal')}
+      <div class="container">
+        <div class="section" id="portal">
+          <div class="grid grid-3">
+            ${[0,1,2].map(()=>`<div class="card"><div class="skeleton" style="height:80px;"></div></div>`).join('')}
+          </div>
+        </div>
+      </div>`;
 
     try {
       const data = await request('/portal/overview');
+
       document.getElementById('portal').innerHTML = `
-        <div class="card"><h2>Sovereign Client Portal</h2><p class="muted">Membership: <span style="color:var(--gold)">${data.membershipTier}</span></p></div>
-        <div class="grid grid-3 top-space">
-          <div class="card"><div class="small muted">Active Bookings</div><div class="kpi">${data.bookings.length}</div></div>
-          <div class="card"><div class="small muted">Contract Vault</div><div class="kpi">${data.contracts.length}</div></div>
-          <div class="card"><div class="small muted">Payment Dashboard</div><div class="kpi">${data.payments.length}</div></div>
+        <div class="card" style="margin-bottom:20px;">
+          <div class="row between" style="flex-wrap:wrap;gap:12px;">
+            <div>
+              <h2>Sovereign Client Portal</h2>
+              <p class="muted small" style="margin-top:4px;">Private access — verified member dashboard</p>
+            </div>
+            <span class="tier-badge">✦ ${data.membershipTier}</span>
+          </div>
         </div>
-        <div class="card top-space">
-          <h3>Private AI Concierge Assistant</h3>
-          <p class="muted">${data.concierge.suggestion}</p>
-          <div class="top-space small">VIP Upgrades: ${data.vipUpgradeOptions.join(' · ')}</div>
+
+        <div class="grid grid-3" style="margin-bottom:20px;">
+          <div class="card" style="text-align:center;padding:22px 16px;">
+            <div class="kpi-label">Active Bookings</div>
+            <div class="kpi">${data.bookings.length}</div>
+            <div class="kpi-trend">↑ In progress</div>
+          </div>
+          <div class="card" style="text-align:center;padding:22px 16px;">
+            <div class="kpi-label">Contract Vault</div>
+            <div class="kpi">${data.contracts.length}</div>
+            <div class="kpi-trend">Secured & encrypted</div>
+          </div>
+          <div class="card" style="text-align:center;padding:22px 16px;">
+            <div class="kpi-label">Payment Dashboard</div>
+            <div class="kpi">${data.payments.length}</div>
+            <div class="kpi-trend">Escrow managed</div>
+          </div>
         </div>
-        <div class="card top-space">
-          <h3>Messaging with Representatives</h3>
-          ${data.messages.map(m => `<p class="small"><strong>${m.from}:</strong> ${m.body}</p>`).join('') || '<p class="small muted">No messages</p>'}
+
+        <div class="grid grid-2" style="gap:16px;">
+          <div class="card concierge-card">
+            <div class="row" style="gap:10px;margin-bottom:14px;">
+              <span style="font-size:20px;">✦</span>
+              <h3>Private AI Concierge</h3>
+            </div>
+            <p class="muted" style="line-height:1.7;font-size:14px;">${data.concierge.suggestion}</p>
+            <hr class="divider" />
+            <div class="small muted" style="margin-bottom:8px;letter-spacing:0.1em;text-transform:uppercase;">VIP Upgrades Available</div>
+            ${data.vipUpgradeOptions.map(o=>`<div class="vip-item">${o}</div>`).join('')}
+          </div>
+
+          <div class="card">
+            <h3 style="margin-bottom:16px;">Representative Messages</h3>
+            ${data.messages.length
+              ? data.messages.map(m=>`
+                <div class="msg-item">
+                  <div class="msg-from">${m.from}</div>
+                  <div class="msg-body">${m.body}</div>
+                </div>`).join('')
+              : `<p class="small muted">No messages yet — send one from the Explorer.</p>`}
+            <hr class="divider" />
+            <a href="explorer.html" class="btn" style="margin-top:4px;">Browse Talent →</a>
+          </div>
+        </div>
+
+        ${data.bookings.length ? `
+        <div class="card section">
+          <h3 style="margin-bottom:14px;">Active Bookings</h3>
+          <table class="table">
+            <thead><tr><th>ID</th><th>Status</th><th>Event</th><th>Date</th><th>Location</th></tr></thead>
+            <tbody>
+              ${data.bookings.map(b=>`
+                <tr>
+                  <td><span class="small muted">${b.id}</span></td>
+                  <td><span class="badge">${b.status}</span></td>
+                  <td>${b.eventType||'—'}</td>
+                  <td>${b.date||'—'}</td>
+                  <td>${b.location||'—'}</td>
+                </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>` : ''}`;
+
+    } catch(e) {
+      document.getElementById('portal').innerHTML = `
+        <div class="card" style="text-align:center;padding:40px 20px;">
+          <div style="font-size:2rem;margin-bottom:16px;">🔒</div>
+          <h3>Authentication Required</h3>
+          <p class="muted small" style="margin-top:8px;margin-bottom:20px;">${e.message}</p>
+          <a href="login.html" class="btn primary" style="display:inline-flex;width:auto;padding:11px 28px;">
+            Login to Access →
+          </a>
         </div>`;
-    } catch (e) {
-      document.getElementById('portal').innerHTML = `<div class="card">${e.message}. Login in Access first.</div>`;
     }
   </script>
 </body>
