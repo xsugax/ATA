@@ -1,4 +1,4 @@
-const API_BASE = localStorage.getItem('aurelux_api') || 'http://localhost:4000/api';
+const API_BASE = localStorage.getItem('aurelux_api') || 'https://ata-h0yo.onrender.com/api';
 
 export const setApiBase = (value) => localStorage.setItem('aurelux_api', value);
 export const token = () => localStorage.getItem('aurelux_token');
@@ -24,8 +24,8 @@ export function nav(active) {
   return `
   <header class="glass nav">
     <div>
-      <div class="brand">AURELUX Sovereign</div>
-      <div class="small muted">Private Wealth Booking Institution</div>
+      <div class="brand">ALL TALENTS</div>
+      <div class="small muted">Agency</div>
     </div>
     <nav class="menu">
       <a href="index.html" class="${active==='home'?'active':''}">Dashboard</a>
