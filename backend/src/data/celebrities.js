@@ -1,5 +1,5 @@
 const partnerships = ["Nike", "LVMH", "Apple", "Netflix", "Rolex", "Patek Philippe", "Mercedes-Benz"];
-const awards = ["Grammy", "Oscar", "Ballon d`Or", "Emmy", "Forbes 30", "Cannes"];
+const awards = ["Grammy", "Oscar", "Ballon d\u2019Or", "Emmy", "Forbes 30", "Cannes"];
 
 const tierTemplates = [
   { type: "Private Event",      multiplier: 1.0  },
