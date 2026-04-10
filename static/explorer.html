@@ -1,211 +1,95 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ALL TALENTS / Agency — Celebrity Explorer</title>
-  <link rel="stylesheet" href="assets/styles.css" />
-  <style>
-    .celeb-card { display: flex; flex-direction: column; }
-    .celeb-card .card-body { flex: 1; display: flex; flex-direction: column; gap: 8px; padding-top: 12px; }
-    .celeb-actions { display: flex; flex-direction: column; gap: 8px; margin-top: auto; padding-top: 12px; }
-    .filter-panel { padding: 22px; }
-    .filter-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--plat-dim); margin-bottom: 14px; }
-    .count-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      color: var(--plat-dim);
-      padding: 4px 10px;
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 999px;
-    }
-    .count-chip strong { color: var(--gold); }
-    .celeb-name { font-size: 1rem; font-weight: 700; margin: 0; }
-    .celeb-sub { font-size: 12px; color: var(--plat-dim); }
-    .img-wrap { position: relative; }
-    .img-fallback {
-      width: 100%;
-      height: 220px;
-      border-radius: var(--radius-sm);
-      background: linear-gradient(135deg, var(--deep), rgba(212,175,55,0.06));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.5rem;
-    }
-  </style>
-</head>
-<body>
-  <div id="app"></div>
+﻿<!doctype html><html lang="en"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>ALL TALENTS Agency  Explorer</title>
+<link rel="stylesheet" href="assets/styles.css"/>
+<style>
+.celeb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}
+.celeb-card{cursor:pointer}.celeb-card img{height:260px;object-fit:cover;object-position:top;border-radius:var(--radius-sm)}
+.celeb-card:hover{border-color:var(--line);transform:translateY(-3px);box-shadow:var(--shadow-violet)}
+.filter-bar{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin-bottom:20px}
+.filter-bar label{min-width:140px}
+</style>
+</head><body>
+<div id="app"></div>
+<script type="module">
+import { request, nav } from './assets/api.js';
+const app = document.getElementById('app');
+const avail = a => a==='Open'?'badge-green':a==='Limited'?'badge-amber':'badge-red';
 
-  <script type="module">
-    import { request, nav } from './assets/api.js';
+app.innerHTML = nav('explorer') + `
+<div class="container">
+  <div class="section" style="padding-bottom:4px">
+    <div style="font-size:10px;letter-spacing:.45em;color:var(--violet-bright);text-transform:uppercase;margin-bottom:6px">Roster</div>
+    <h2 style="font-size:2rem;font-weight:900;letter-spacing:-.025em">100 Elite Icons</h2>
+    <p class="muted" style="margin-top:6px">Filter by category, region, availability and price range.</p>
+  </div>
+  <div class="card section filter-bar" style="padding:18px">
+    <label>Category<select id="f-cat"><option value="">All Categories</option><option>Film</option><option>Music</option><option>Sports</option><option>Fashion</option><option>Business</option><option>Influencer</option></select></label>
+    <label>Region<select id="f-reg"><option value="">All Regions</option><option>North America</option><option>Europe</option><option>Middle East</option><option>Asia</option><option>Latin America</option><option>Africa</option></select></label>
+    <label>Availability<select id="f-avail"><option value="">All</option><option>Open</option><option>Limited</option><option>Booked</option></select></label>
+    <label>Max Rate ($K)<input id="f-price" type="number" min="1" max="10000" placeholder="e.g. 500" style="max-width:130px"/></label>
+    <button onclick="applyFilters()" style="width:auto;padding:11px 22px;align-self:flex-end" class="primary">Filter</button>
+    <button onclick="clearFilters()" style="width:auto;padding:11px 18px;align-self:flex-end">Clear</button>
+  </div>
+  <div id="count" class="small faint section"></div>
+  <div class="celeb-grid section" id="grid">
+    ${Array(8).fill('<div class="card skeleton" style="height:380px"></div>').join('')}
+  </div>
+</div>`;
 
-    const filters = {
-      search: '', category: 'All', region: 'All', minPrice: 0, maxPrice: 2000000,
-      minPopularity: 60, minDemand: 55, maxAvailabilityDays: 60, netWorthTier: 'All', eventType: 'All'
-    };
+let all = [];
+try {
+  const r = await request('/celebrities?minPopularity=0&minDemand=0&maxPrice=99999999');
+  all = r.data;
+} catch(e) {
+  app.innerHTML += '<p class="muted" style="padding:40px 24px">Backend waking  refreshing in 6s</p>';
+  setTimeout(()=>location.reload(),6000); throw e;
+}
 
-    const riskBadge = r => r === 'low' ? 'badge-green' : r === 'medium' ? 'badge-amber' : 'badge-red';
-    const availBadge = a => a === 'Open' ? 'badge-green' : a === 'Limited' ? 'badge-amber' : 'badge-red';
-    const catEmoji = { Film: '🎬', Music: '🎵', Sports: '⚽', Fashion: '👗', Business: '💼', Influencer: '📱' };
-
-    document.getElementById('app').innerHTML = `
-      ${nav('explorer')}
-      <div class="container">
-        <div class="glass filter-panel section">
-          <div class="row between" style="margin-bottom:14px;flex-wrap:wrap;gap:10px;">
-            <div>
-              <h2 style="margin-bottom:4px;">Celebrity Explorer</h2>
-              <p class="muted small">Pinpoint talent across 100 verified elite profiles.</p>
-            </div>
-            <div class="count-chip"><strong id="result-count">—</strong> profiles match</div>
-          </div>
-          <div class="grid grid-4">
-            <input id="search" placeholder="Search by name…" />
-            <select id="category">
-              <option>All</option><option>Film</option><option>Music</option>
-              <option>Sports</option><option>Fashion</option><option>Business</option><option>Influencer</option>
-            </select>
-            <select id="region">
-              <option>All</option><option>North America</option><option>Europe</option>
-              <option>Middle East</option><option>Asia</option><option>Latin America</option><option>Africa</option>
-            </select>
-            <select id="eventType">
-              <option>All</option><option>Summit</option><option>Gala</option>
-              <option>Launch</option><option>Private Dinner</option><option>Festival</option>
-            </select>
-            <label>Min Price
-              <input id="minPrice" type="number" value="0" placeholder="0" />
-            </label>
-            <label>Max Price
-              <input id="maxPrice" type="number" value="2000000" placeholder="2000000" />
-            </label>
-            <label>Min Popularity
-              <input id="minPopularity" type="number" value="60" placeholder="60" />
-            </label>
-            <label>Net Worth Tier
-              <select id="netWorthTier">
-                <option>All</option><option>$50M+</option><option>$100M+</option><option>$500M+</option><option>$1B+</option>
-              </select>
-            </label>
-          </div>
-          <div class="top-space" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-            <label style="text-transform:uppercase;font-size:10px;letter-spacing:.15em;color:var(--plat-dim);flex-direction:row;gap:8px;align-items:center;">
-              Check date:
-              <input id="availabilityDate" type="date" style="width:auto;" />
-            </label>
-          </div>
+function render(list) {
+  document.getElementById('count').textContent = list.length + ' results';
+  document.getElementById('grid').innerHTML = list.map(c=>`
+    <article class="card celeb-card" onclick="location.href='booking.html?id=${c.id}'">
+      <img src="${c.portrait}" alt="${c.name}" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed='+encodeURIComponent('${c.name}')+'&backgroundColor=1a0533'"/>
+      <div style="padding-top:14px">
+        <div class="row between" style="margin-bottom:8px;flex-wrap:wrap;gap:5px">
+          <span class="badge">${c.category}</span>
+          <span class="badge ${avail(c.availability)}">${c.availability}</span>
         </div>
-        <div class="grid grid-3 section" id="results">
-          ${[0,1,2,3,4,5].map(()=>`<div class="card skeleton" style="height:420px;"></div>`).join('')}
+        <h3 style="margin-bottom:4px">${c.name}</h3>
+        <div class="small muted" style="margin-bottom:12px">${c.region} &middot; ${c.agency}</div>
+        <div class="row between" style="margin-bottom:10px">
+          <span class="small faint">Demand</span>
+          <span style="font-weight:700;font-size:13px;color:var(--violet-bright)">${c.demandIndex}%</span>
         </div>
-      </div>`;
+        <div class="stat-bar" style="margin-bottom:12px">
+          <div class="stat-bar-track"><div class="stat-bar-fill" style="width:${c.demandIndex}%"></div></div>
+        </div>
+        <div class="row between">
+          <span class="small faint">From</span>
+          <span style="font-weight:800;color:var(--gold-bright)">$${(c.averageEventRate/1000).toFixed(0)}K</span>
+        </div>
+      </div>
+    </article>`).join('');
+}
 
-    ['search','category','region','eventType','minPrice','maxPrice','minPopularity','netWorthTier']
-      .forEach(id => document.getElementById(id).addEventListener('input', async e => {
-        filters[id] = e.target.value;
-        await load();
-      }));
-
-    async function load() {
-      const q = new URLSearchParams(filters).toString();
-      const res = await request('/celebrities?' + q);
-      document.getElementById('result-count').textContent = res.data.length;
-
-      document.getElementById('results').innerHTML = res.data.map(c => `
-        <article class="card celeb-card">
-          <div class="img-wrap">
-            <img src="${c.portrait}" alt="${c.name}"
-              onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
-              style="width:100%;height:220px;object-fit:cover;object-position:top;border-radius:var(--radius-sm);background:#111;" />
-            <div class="img-fallback" style="display:none;">${catEmoji[c.category]||'🌟'}</div>
-          </div>
-          <div class="card-body">
-            <div class="row between">
-              <p class="celeb-name">${c.name}</p>
-              <span class="badge">✓ Verified</span>
-            </div>
-            <div class="row wrap" style="gap:6px;">
-              <span class="badge ${availBadge(c.availability)}">${c.availability}</span>
-              <span class="badge-blue badge">${c.category}</span>
-              <span class="badge-amber badge">${c.region.split(' ').map(w=>w[0]).join('')}</span>
-            </div>
-            <p class="small muted">${c.agencyRepresentation} · ${c.region}</p>
-            <div class="stat-bar">
-              <div class="stat-bar-labels"><span>Demand</span><span>${c.demandIndex}%</span></div>
-              <div class="stat-bar-track"><div class="stat-bar-fill" style="width:${c.demandIndex}%"></div></div>
-            </div>
-            <div class="stat-bar">
-              <div class="stat-bar-labels"><span>Popularity</span><span>${c.popularityScore}%</span></div>
-              <div class="stat-bar-track"><div class="stat-bar-fill" style="width:${c.popularityScore}%;opacity:.7"></div></div>
-            </div>
-            <div class="row wrap" style="gap:6px;margin-top:2px;">
-              <span class="small muted">From</span>
-              <span style="font-weight:700;color:var(--gold);">$${c.startingPrice.toLocaleString()}</span>
-              <span class="small muted">·</span>
-              <span class="small muted">${c.socialReachMillions}M reach</span>
-            </div>
-            <div class="row wrap" style="gap:6px;">
-              <span class="small muted">Risk:</span>
-              <span class="badge ${riskBadge(c.riskIndex)}">${c.riskIndex}</span>
-              <span class="small muted">NDA:</span>
-              <span class="small">${c.ndaDefault?'Required':'Optional'}</span>
-            </div>
-            <p class="small muted" style="line-height:1.5">🏆 ${c.awards.slice(0,3).join(' · ')}</p>
-            <div class="small muted" id="status-${c.id}" style="min-height:18px;color:var(--green);"></div>
-            <div class="celeb-actions">
-              <button data-action="check-availability" data-id="${c.id}">Check Availability</button>
-              <button data-action="message-rep" data-id="${c.id}" data-name="${c.name}">Message Representative</button>
-              <a class="btn primary" href="booking.html?id=${c.id}">Initiate Booking →</a>
-            </div>
-          </div>
-        </article>`).join('');
-
-      // Availability
-      document.querySelectorAll('[data-action="check-availability"]').forEach(btn => {
-        btn.onclick = async () => {
-          const id = btn.dataset.id;
-          const date = document.getElementById('availabilityDate').value;
-          const status = document.getElementById(`status-${id}`);
-          if (!date) { status.textContent = 'Select a date above first.'; return; }
-          btn.textContent = '…';
-          try {
-            const r = await request(`/celebrities/${id}/availability?date=${date}`);
-            status.style.color = r.available ? 'var(--green)' : 'var(--red)';
-            status.textContent = r.available ? `✓ Available on ${r.date}` : `✗ Unavailable — ${r.reason}`;
-          } catch(e) { status.textContent = e.message; status.style.color = 'var(--red)'; }
-          btn.textContent = 'Check Availability';
-        };
-      });
-
-      // Message rep
-      document.querySelectorAll('[data-action="message-rep"]').forEach(btn => {
-        btn.onclick = async () => {
-          const id = btn.dataset.id;
-          const name = btn.dataset.name;
-          const status = document.getElementById(`status-${id}`);
-          btn.textContent = '…';
-          try {
-            const r = await request('/messages/send', {
-              method: 'POST',
-              body: JSON.stringify({ celebrityId: id, priority: 'Priority', body: `Requesting representative callback regarding ${name} for strategic event alignment.` })
-            });
-            status.style.color = 'var(--green)';
-            status.textContent = r.acknowledgement.body;
-          } catch(e) {
-            status.style.color = 'var(--red)';
-            status.textContent = e.message + ' — login first.';
-          }
-          btn.textContent = 'Message Representative';
-        };
-      });
-    }
-
-    await load();
-  </script>
-</body>
-</html>
+window.applyFilters = () => {
+  const cat = document.getElementById('f-cat').value;
+  const reg = document.getElementById('f-reg').value;
+  const av  = document.getElementById('f-avail').value;
+  const mp  = Number(document.getElementById('f-price').value)*1000||Infinity;
+  render(all.filter(c =>
+    (!cat || c.category===cat) &&
+    (!reg || c.region===reg) &&
+    (!av  || c.availability===av) &&
+    (c.averageEventRate<=mp)
+  ));
+};
+window.clearFilters = () => {
+  ['f-cat','f-reg','f-avail'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-price').value='';
+  render(all);
+};
+render(all);
+</script>
+</body></html>

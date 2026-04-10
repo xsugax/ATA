@@ -1,140 +1,94 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ALL TALENTS / Agency — Dashboard</title>
-  <link rel="stylesheet" href="assets/styles.css" />
-  <style>
-    .hero-carousel { transition: opacity 0.6s ease; }
-    .hero-carousel.fade { opacity: 0; }
-    .feature-card { cursor: default; }
-    .demand-badge {
-      position: absolute;
-      top: 12px; right: 12px;
-      font-size: 10px; font-weight: 800;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-    .portrait-wrap { position: relative; }
-    .hero-portrait {
-      width: 120px; height: 120px;
-      border-radius: 50%;
-      object-fit: cover;
-      object-position: top;
-      border: 2px solid rgba(212,175,55,0.4);
-      background: #111;
-      flex-shrink: 0;
-    }
-    @media(max-width:600px) {
-      .hero-portrait { width: 80px; height: 80px; }
-      .hero-name-row { flex-direction: column; gap: 14px; align-items: flex-start !important; }
-    }
-  </style>
-</head>
-<body>
-  <div id="app"></div>
+﻿<!doctype html><html lang="en"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>ALL TALENTS Agency  Dashboard</title>
+<link rel="stylesheet" href="assets/styles.css"/>
+<style>.hero-fade{transition:opacity .5s}.hero-fade.out{opacity:0}</style>
+</head><body>
+<div id="app"></div>
+<script type="module">
+import { request, nav } from './assets/api.js';
+const app = document.getElementById('app');
+const avail = a => a==='Open'?'badge-green':a==='Limited'?'badge-amber':'badge-red';
 
-  <script type="module">
-    import { request, nav } from './assets/api.js';
+app.innerHTML = nav('home') + `
+<div class="container">
+  <section class="hero section hero-fade" id="hero"><div class="skeleton" style="height:280px;border-radius:18px"></div></section>
+  <section class="grid grid-4 section" id="kpis">
+    <div class="card"><div class="skeleton" style="height:92px"></div></div>
+    <div class="card"><div class="skeleton" style="height:92px"></div></div>
+    <div class="card"><div class="skeleton" style="height:92px"></div></div>
+    <div class="card"><div class="skeleton" style="height:92px"></div></div>
+  </section>
+  <section class="grid grid-3 section" id="feats"></section>
+  <section id="trending" class="section"></section>
+</div>`;
 
-    const app = document.getElementById('app');
-    app.innerHTML = `
-      ${nav('home')}
-      <div class="container">
-        <section class="glass hero hero-carousel section" id="hero">
-          <div class="skeleton" style="height:240px;border-radius:14px;"></div>
-        </section>
-        <section class="grid grid-4 section" id="kpis">
-          ${[0,1,2,3].map(()=>`<div class="card"><div class="skeleton" style="height:72px;"></div></div>`).join('')}
-        </section>
-        <section class="grid grid-3 section" id="features"></section>
-      </div>`;
+let payload;
+try { payload = await request('/celebrities/featured'); }
+catch(e) {
+  document.getElementById('hero').innerHTML = `<div class="hero-eyebrow">System</div><h1>Waking Up...</h1><p class="muted" style="margin-top:12px">Backend initializing  refreshing in 6s</p>`;
+  setTimeout(()=>location.reload(),6000); throw e;
+}
 
-    let payload;
-    try {
-      payload = await request('/celebrities/featured');
-    } catch(e) {
-      document.getElementById('hero').innerHTML = `<p class="muted" style="padding:20px">Backend waking up — refreshing in 5s…</p>`;
-      setTimeout(() => location.reload(), 5000);
-      throw e;
-    }
+const m = payload.metrics;
+document.getElementById('kpis').innerHTML = [
+  {label:'Total Bookings',val:m.totalGlobalBookings.toLocaleString(),trend:'+12% QoQ',cls:''},
+  {label:'Portfolio Value',val:'$'+(m.managedPortfolioValue/1e6).toFixed(0)+'M',trend:'AUM record',cls:'kpi-gold'},
+  {label:'Live Negotiations',val:m.activeNegotiations,trend:'Active pipeline',cls:'kpi-cyan'},
+  {label:'Elite Roster',val:m.verifiedCelebrities,trend:'100 verified icons',cls:''},
+].map(k=>`<article class="card"><div class="kpi-label">${k.label}</div><div class="kpi ${k.cls}">${k.val}</div><div class="kpi-trend">&#8593; ${k.trend}</div></article>`).join('');
 
-    // KPIs
-    const m = payload.metrics;
-    const kpiData = [
-      { label: 'Total Global Bookings', value: m.totalGlobalBookings.toLocaleString(), trend: '+12% this quarter' },
-      { label: 'Managed Portfolio Value', value: `$${(m.managedPortfolioValue/1000000).toFixed(0)}M`, trend: 'AUM milestone' },
-      { label: 'Active Negotiations', value: m.activeNegotiations.toLocaleString(), trend: 'Live right now' },
-      { label: 'Verified Celebrities', value: m.verifiedCelebrities.toLocaleString(), trend: '100 elites on-roster' },
-    ];
-    document.getElementById('kpis').innerHTML = kpiData.map(k => `
-      <article class="card">
-        <div class="kpi-label">${k.label}</div>
-        <div class="kpi">${k.value}</div>
-        <div class="kpi-trend">↑ ${k.trend}</div>
-      </article>`).join('');
+document.getElementById('feats').innerHTML = `
+  <article class="card"><div class="feature-icon">&#9824;</div><h3>Invite-Only Black Card</h3><p class="small muted" style="margin-top:8px;line-height:1.7">Private wealth onboarding with full discretion tier compliance and NDA orchestration.</p></article>
+  <article class="card card-hot"><div class="feature-icon" style="background:linear-gradient(135deg,rgba(232,121,249,.2),rgba(139,92,246,.12))">&#9889;</div><h3>Auction-Style Bidding</h3><p class="small muted" style="margin-top:8px;line-height:1.7">Live escalation windows for unavailable icons through sovereign bid ladders.</p></article>
+  <article class="card card-gold"><div class="feature-icon" style="background:linear-gradient(135deg,rgba(245,158,11,.2),rgba(251,146,60,.1))">&#9670;</div><h3>Back a Legend</h3><p class="small muted" style="margin-top:8px;line-height:1.7">Co-fund celebrity projects  documentaries, galas, fan tours. Top backers get private access.</p><a href="crowdfund.html" class="btn primary" style="margin-top:14px">View Campaigns &#8594;</a></article>`;
 
-    // Feature cards
-    document.getElementById('features').innerHTML = `
-      <article class="card feature-card">
-        <div class="feature-icon">♠</div>
-        <h3>Invite-Only Black Card</h3>
-        <p class="muted small" style="margin-top:8px">Private wealth onboarding with discretion and compliance orchestration.</p>
-      </article>
-      <article class="card feature-card">
-        <div class="feature-icon">⚡</div>
-        <h3>Auction-Style Bidding</h3>
-        <p class="muted small" style="margin-top:8px">Escalation windows for unavailable icons through sovereign bid ladders.</p>
-      </article>
-      <article class="card feature-card">
-        <div class="feature-icon">◆</div>
-        <h3>Request an Unlisted Icon</h3>
-        <p class="muted small" style="margin-top:8px">Private representation channel for off-market talent access.</p>
-      </article>`;
+try {
+  const cf = await request('/crowdfunding');
+  document.getElementById('trending').innerHTML = `
+    <div class="row between" style="margin-bottom:16px;flex-wrap:wrap;gap:10px"><h2>Trending Campaigns</h2><a href="crowdfund.html" class="btn" style="width:auto;padding:8px 18px">See All &#8594;</a></div>
+    <div class="grid grid-3">${cf.data.slice(0,3).map(c=>`
+      <article class="card" style="cursor:pointer" onclick="location.href='crowdfund.html'">
+        <img src="${c.portrait}" alt="${c.celebrityName}" style="height:180px" onerror="this.style.display='none'"/>
+        <div style="padding-top:12px">
+          <div class="row between" style="margin-bottom:8px;flex-wrap:wrap;gap:6px"><span class="badge-magenta badge">${c.category}</span><span class="small faint">${c.daysLeft}d left</span></div>
+          <h3 style="font-size:.95rem;margin-bottom:8px">${c.title}</h3>
+          <div class="progress-bar"><div class="progress-fill" style="width:${Math.min(c.percentFunded,100)}%"></div></div>
+          <div class="row between" style="margin-top:8px"><span style="font-weight:800;color:var(--gold-bright)">$${c.raised.toLocaleString()} raised</span><span class="small faint">${c.percentFunded}%</span></div>
+        </div>
+      </article>`).join('')}</div>`;
+} catch(_) {}
 
-    // Hero carousel
-    let index = 0;
-    const heroes = payload.data;
-    const heroEl = document.getElementById('hero');
-
-    function renderHero(fade = false) {
-      const c = heroes[index];
-      const availColor = c.availability === 'Open' ? 'badge-green' : c.availability === 'Limited' ? 'badge-amber' : 'badge-red';
-      if (fade) heroEl.classList.add('fade');
-      setTimeout(() => {
-        heroEl.innerHTML = `
-          <div class="hero-eyebrow">Global Featured Profile</div>
-          <div class="row hero-name-row" style="justify-content:space-between;align-items:center;gap:20px;">
-            <div style="flex:1">
-              <h1>${c.name}</h1>
-              <div class="row wrap" style="margin-top:10px;gap:8px;">
-                <span class="badge">${c.category}</span>
-                <span class="badge ${availColor}">${c.availability}</span>
-                <span class="badge-blue badge">${c.region}</span>
-              </div>
-            </div>
-            <img class="hero-portrait" src="${c.portrait}" alt="${c.name}" onerror="this.style.display='none'" />
-          </div>
-          <div class="hero-meta">
-            <div class="hero-meta-item"><div class="label">Booking Tier</div><div class="value">${c.bookingTiers[2].type}</div></div>
-            <div class="hero-meta-item"><div class="label">Starting Rate</div><div class="value">$${c.averageEventRate.toLocaleString()}</div></div>
-            <div class="hero-meta-item"><div class="label">Demand Index</div><div class="value">${c.demandIndex}%</div></div>
-            <div class="hero-meta-item"><div class="label">Brand Alignment</div><div class="value">${c.recentBrandAlignment}</div></div>
-          </div>
-          <a href="explorer.html" class="btn primary" style="display:inline-flex;width:auto;margin-top:22px;padding:11px 26px;">
-            Explore Full Roster →
-          </a>`;
-        heroEl.classList.remove('fade');
-      }, fade ? 350 : 0);
-    }
-
-    renderHero();
-    setInterval(() => {
-      index = (index + 1) % heroes.length;
-      renderHero(true);
-    }, 4000);
-  </script>
-</body>
-</html>
-</html>
+const heroEl = document.getElementById('hero');
+const heroes = payload.data;
+let idx = 0;
+function renderHero() {
+  const c = heroes[idx];
+  heroEl.innerHTML = `
+    <div class="hero-eyebrow">Global Featured Profile</div>
+    <h1>${c.name}</h1>
+    <div class="row wrap" style="gap:8px;margin-top:12px">
+      <span class="badge">${c.category}</span>
+      <span class="badge ${avail(c.availability)}">${c.availability}</span>
+      <span class="badge-cyan badge">${c.region}</span>
+      <span class="badge-gold badge">$${(c.averageEventRate/1000).toFixed(0)}K avg</span>
+    </div>
+    <div class="hero-meta">
+      <div class="hero-meta-item"><div class="label">Demand Index</div><div class="value">${c.demandIndex}%</div></div>
+      <div class="hero-meta-item"><div class="label">Booking Tier</div><div class="value">${c.bookingTiers[2].type}</div></div>
+      <div class="hero-meta-item"><div class="label">Social Reach</div><div class="value">${c.socialReachMillions}M</div></div>
+      <div class="hero-meta-item"><div class="label">Brand Partner</div><div class="value">${c.recentBrandAlignment}</div></div>
+    </div>
+    <div style="margin-top:22px;display:flex;gap:12px;flex-wrap:wrap;position:relative">
+      <a href="explorer.html" class="btn primary" style="width:auto;padding:11px 26px">Explore Roster &#8594;</a>
+      <a href="booking.html?id=${c.id}" class="btn" style="width:auto;padding:11px 26px">Book Now</a>
+    </div>
+    <img class="hero-portrait" src="${c.portrait}" alt="${c.name}" onerror="this.remove()"/>`;
+}
+renderHero();
+setInterval(()=>{
+  heroEl.classList.add('out');
+  setTimeout(()=>{ idx=(idx+1)%heroes.length; renderHero(); heroEl.classList.remove('out'); },500);
+},4500);
+</script>
+</body></html>

@@ -1,0 +1,164 @@
+﻿<!doctype html><html lang="en"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>ALL TALENTS Agency  Crowdfund</title>
+<link rel="stylesheet" href="assets/styles.css"/>
+<style>
+.cf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+.cf-portrait{width:100%;height:220px;object-fit:cover;object-position:top;border-radius:var(--radius-sm);background:var(--deep)}
+.stat-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;background:rgba(139,92,246,.1);border:1px solid var(--line);font-size:11px}
+</style>
+</head><body>
+<div id="app"></div>
+<script type="module">
+import { request, nav, token } from './assets/api.js';
+const app = document.getElementById('app');
+app.innerHTML = nav('crowdfund') + `
+<div class="container">
+  <div class="section" style="padding-bottom:4px">
+    <div style="font-size:10px;letter-spacing:.45em;color:var(--violet-bright);text-transform:uppercase;margin-bottom:8px">Crowdfunding Platform</div>
+    <h2 style="font-size:2.2rem;font-weight:900;letter-spacing:-.025em">Back a Legend</h2>
+    <p class="muted" style="margin-top:6px;max-width:580px">Co-fund celebrity projects  documentaries, galas, fan tours, social campaigns. Top backers get private access and permanent recognition.</p>
+  </div>
+  <div class="row wrap section" style="gap:10px;margin-bottom:20px;align-items:flex-end">
+    <label style="min-width:200px;flex-direction:row;align-items:center;gap:8px">
+      <select id="cf-filter" style="flex:1">
+        <option value="">All Categories</option>
+        <option>Documentary Film</option><option>Charity Gala</option>
+        <option>Fan Experience Tour</option><option>Creative Album Project</option>
+        <option>Youth Foundation</option><option>Environmental Campaign</option>
+        <option>Stadium Fan Event</option><option>Social Initiative</option>
+        <option>Podcast Series</option>
+      </select>
+    </label>
+    <label style="min-width:170px;flex-direction:row;align-items:center;gap:8px">
+      <select id="cf-sort" style="flex:1">
+        <option value="trending">Trending</option>
+        <option value="ending">Ending Soon</option>
+        <option value="funded">Most Funded</option>
+      </select>
+    </label>
+    <div class="stat-chip"><span class="glow-dot"></span><strong id="cf-count" class="violet" style="font-size:14px">--</strong><span class="faint">campaigns</span></div>
+  </div>
+  <div class="cf-grid" id="cf-grid">
+    ${Array(6).fill('<div class="card skeleton" style="height:460px"></div>').join('')}
+  </div>
+</div>
+<div id="pledge-mount"></div>`;
+
+const CATS = ['Documentary Film','Charity Gala','Fan Experience Tour','Creative Album Project','Youth Foundation','Environmental Campaign','Stadium Fan Event','Social Initiative','Podcast Series'];
+const TITLES = (n,i) => [`${n}  Untold Story Documentary`,`${n} World Tour Fan Experience`,`${n} Foundation Launch`,`${n} Creative Vision Project`,`${n} Private Gala Access`,`${n} Social Impact Initiative`][i%6];
+
+let all = [];
+const buildFallback = (celebs) => celebs.slice(0,24).map((c,i) => {
+  const goal = 50000 + (i*27773)%475000;
+  const raised = Math.round(goal*(0.12+(i*0.031)%0.72));
+  return {id:`cf${i+1}`,celebrityId:c.id,celebrityName:c.name,portrait:c.portrait,
+    category:CATS[i%CATS.length],title:TITLES(c.name,i),
+    description:`An exclusive opportunity to co-fund ${c.name}'s next landmark project. Top-tier backers receive unprecedented private access and recognition.`,
+    goal,raised,backers:40+(i*23)%820,daysLeft:3+(i*9)%26,
+    percentFunded:Math.min(100,Math.round((raised/goal)*100)),
+    tiers:[
+      {name:'Supporter',amount:50,perks:'Name in credits  Exclusive digital content  Campaign updates'},
+      {name:'Patron',amount:500,perks:'Signed collector item  VIP stream access  All Supporter perks'},
+      {name:'Sovereign Backer',amount:5000,perks:'Private meet & greet  Executive producer credit  Front row access  All Patron perks'},
+    ]};
+});
+
+try {
+  const res = await request('/crowdfunding');
+  all = res.data.map(c=>({...c,percentFunded:Math.min(100,Math.round((c.raised/c.goal)*100))}));
+} catch(_) {
+  try {
+    const cr = await request('/celebrities?minPopularity=0&minDemand=0&maxPrice=99999999');
+    all = buildFallback(cr.data);
+  } catch(e2) {
+    document.getElementById('cf-grid').innerHTML = '<p class="muted" style="grid-column:1/-1">Initializing  backend waking up, refreshing in 6s</p>';
+    setTimeout(()=>location.reload(),6000);
+    throw e2;
+  }
+}
+
+function render(list) {
+  document.getElementById('cf-count').textContent = list.length;
+  document.getElementById('cf-grid').innerHTML = list.map(c=>`
+    <article class="card" style="border-color:rgba(232,121,249,.15)">
+      <img class="cf-portrait" src="${c.portrait}" alt="${c.celebrityName}" onerror="this.style.display='none'"/>
+      <div style="padding-top:14px">
+        <div class="row between" style="margin-bottom:8px;flex-wrap:wrap;gap:6px">
+          <span class="badge-magenta badge">${c.category}</span>
+          <span class="stat-chip" style="font-size:10px;padding:3px 8px">
+            ${c.daysLeft<=5?'<span class="glow-dot" style="background:var(--red);box-shadow:0 0 6px var(--red)"></span>':'<span class="glow-dot"></span>'}
+            ${c.daysLeft}d left
+          </span>
+        </div>
+        <h3 style="font-size:.95rem;line-height:1.4;margin-bottom:8px">${c.title}</h3>
+        <p class="small muted" style="line-height:1.6;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${c.description}</p>
+        <div class="progress-bar"><div class="progress-fill" style="width:${c.percentFunded}%"></div></div>
+        <div class="row between" style="margin-top:10px;margin-bottom:16px">
+          <div><div style="font-weight:800;color:var(--gold-bright);font-size:1.05rem">$${c.raised.toLocaleString()}</div><div class="small faint">of $${c.goal.toLocaleString()} goal</div></div>
+          <div style="text-align:right"><div style="font-weight:700;color:var(--violet-bright)">${c.percentFunded}%</div><div class="small faint">${c.backers} backers</div></div>
+        </div>
+        <button class="primary" onclick='openPledge(${JSON.stringify(c).replace(/'/g,"&#39;")})'>Back This Project &#8594;</button>
+      </div>
+    </article>`).join('');
+}
+
+function applyFilters() {
+  const cat = document.getElementById('cf-filter').value;
+  const srt = document.getElementById('cf-sort').value;
+  let data = cat ? all.filter(c=>c.category===cat) : [...all];
+  if (srt==='ending') data.sort((a,b)=>a.daysLeft-b.daysLeft);
+  else if (srt==='funded') data.sort((a,b)=>b.percentFunded-a.percentFunded);
+  render(data);
+}
+document.getElementById('cf-filter').oninput = applyFilters;
+document.getElementById('cf-sort').oninput = applyFilters;
+applyFilters();
+
+window.openPledge = (c) => {
+  document.getElementById('pledge-mount').innerHTML = `
+    <div class="modal-overlay" id="pledge-modal">
+      <div class="modal-box">
+        <div class="row between" style="margin-bottom:18px">
+          <h3 style="font-size:1rem">${c.celebrityName}</h3>
+          <button onclick="document.getElementById('pledge-modal').remove()" style="width:auto;padding:6px 14px;font-size:11px">&#10005; Close</button>
+        </div>
+        <p style="font-size:13px;color:var(--plat-dim);margin-bottom:16px;line-height:1.6">${c.title}</p>
+        <div style="margin-bottom:16px">
+          ${c.tiers.map((t,i)=>`
+            <div class="tier-reward ${i===0?'selected':''}" data-tier="${t.name}" data-amount="${t.amount}" onclick="selectTier(this)">
+              <div class="tier-amount">$${t.amount.toLocaleString()}</div>
+              <div class="tier-name">${t.name}</div>
+              <div class="tier-perks">${t.perks||t.perks}</div>
+            </div>`).join('')}
+        </div>
+        <button class="primary" id="pledge-btn" onclick="submitPledge('${c.id}')">Confirm Pledge &#8594;</button>
+        <div id="pledge-msg" style="margin-top:12px;text-align:center;min-height:20px;font-size:13px"></div>
+      </div>
+    </div>`;
+};
+
+window.selectTier = (el) => {
+  document.querySelectorAll('.tier-reward').forEach(t=>t.classList.remove('selected'));
+  el.classList.add('selected');
+};
+
+window.submitPledge = async (id) => {
+  if (!token()) {
+    document.getElementById('pledge-msg').innerHTML = `<span style="color:var(--amber)">&#9888; <a href="login.html" style="color:var(--violet-bright);text-decoration:underline">Login first</a> to pledge.</span>`;
+    return;
+  }
+  const sel = document.querySelector('.tier-reward.selected');
+  const btn = document.getElementById('pledge-btn');
+  btn.textContent='Processing...'; btn.disabled=true;
+  try {
+    const r = await request(`/crowdfunding/${id}/pledge`,{method:'POST',body:JSON.stringify({tierName:sel.dataset.tier,amount:Number(sel.dataset.amount)})});
+    document.getElementById('pledge-msg').innerHTML = `<span style="color:var(--green)">&#10003; ${r.message}</span>`;
+    btn.textContent='&#10003; Pledged!';
+  } catch(e) {
+    document.getElementById('pledge-msg').innerHTML = `<span style="color:var(--red)">&#10007; ${e.message}</span>`;
+    btn.textContent='Confirm Pledge '; btn.disabled=false;
+  }
+};
+</script>
+</body></html>
