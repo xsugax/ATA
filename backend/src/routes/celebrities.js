@@ -13,7 +13,7 @@ router.get("/featured", (_req, res) => {
     data: celebrities.slice(0, 6),
     metrics: {
       totalGlobalBookings: 3241,
-      managedPortfolioValue: 980000000,
+      managedPortfolioValue: 284000000000,
       activeNegotiations: 128,
       verifiedCelebrities: celebrities.length,
     },

@@ -5,9 +5,19 @@ import { motion } from "framer-motion";
 export default function MetricCounters({ metrics }) {
   if (!metrics) return null;
 
+  const fmt = (v) => {
+    if (typeof v === "number") {
+      if (v >= 1e12) return `$${(v / 1e12).toFixed(2)}T`;
+      if (v >= 1e9)  return `$${(v / 1e9).toFixed(1)}B`;
+      if (v >= 1e6)  return `$${(v / 1e6).toFixed(0)}M`;
+      return `$${v.toLocaleString()}`;
+    }
+    return v;
+  };
+
   const cards = [
-    ["Total Global Bookings", metrics.totalGlobalBookings],
-    ["Managed Portfolio Value", `$${(metrics.managedPortfolioValue / 1_000_000).toFixed(0)}M`],
+    ["Total Global Bookings", metrics.totalGlobalBookings.toLocaleString()],
+    ["Managed Portfolio Value", fmt(metrics.managedPortfolioValue)],
     ["Active Negotiations", metrics.activeNegotiations],
     ["Verified Celebrities", metrics.verifiedCelebrities],
   ];
