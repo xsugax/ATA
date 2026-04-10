@@ -15,11 +15,11 @@ if (!token()) {
   app.innerHTML = nav('portal') + `
 <div class="container">
   <div class="section">
-    <div style="font-size:10px;letter-spacing:.45em;color:var(--violet-bright);text-transform:uppercase;margin-bottom:6px">Sovereign Portal</div>
+    <div style="font-size:10px;letter-spacing:.45em;color:var(--teal-bright);text-transform:uppercase;margin-bottom:6px">Sovereign Portal</div>
     <div class="row between" style="flex-wrap:wrap;gap:12px">
       <h2 style="font-size:2rem;font-weight:900;letter-spacing:-.025em">Welcome back${u?', '+u.name.split(' ')[0]:''}</h2>
       <div class="row" style="gap:8px">
-        <span class="badge ${u&&u.role==='admin'?'badge-magenta':u&&u.role==='manager'?'badge-gold':'badge-cyan'}">${u?u.role:'client'}</span>
+        <span class="badge ${u&&u.role==='admin'?'badge-teal':u&&u.role==='manager'?'badge-sky':'badge-slate'}">${u?u.role:'client'}</span>
         <button onclick="logout()" style="width:auto;padding:7px 16px">Logout</button>
       </div>
     </div>
@@ -37,21 +37,27 @@ if (!token()) {
 
   try {
     const overview = await request('/portal/overview');
-    const { bookingStats, recentBookings, messages } = overview;
+    const { bookings, messages } = overview;
+    const bookingStats = {
+      total: bookings.length,
+      confirmed: bookings.filter(b=>b.status==='Confirmed').length,
+      totalValue: bookings.reduce((s,b)=>s+(b.finalRate||0),0),
+    };
+
     document.getElementById('stats').innerHTML = [
-      {label:'Total Bookings',val:bookingStats.total,cls:''},
-      {label:'Confirmed',val:bookingStats.confirmed,cls:'kpi-cyan'},
-      {label:'Total Value',val:'$'+(bookingStats.totalValue/1000).toFixed(0)+'K',cls:'kpi-gold'},
+      {label:'Total Bookings',   val:bookingStats.total,                                 cls:''},
+      {label:'Confirmed',        val:bookingStats.confirmed,                             cls:'kpi-sky'},
+      {label:'Total Value',      val:'$'+(bookingStats.totalValue/1000).toFixed(0)+'K', cls:''},
     ].map(k=>`<article class="card"><div class="kpi-label">${k.label}</div><div class="kpi ${k.cls}" style="font-size:1.8rem">${k.val}</div></article>`).join('');
 
-    document.getElementById('bookings-list').innerHTML = recentBookings.length
+    document.getElementById('bookings-list').innerHTML = bookings.length
       ? '<table class="table"><thead><tr><th>Celebrity</th><th>Event</th><th>Status</th><th>Value</th></tr></thead><tbody>' +
-        recentBookings.map(b=>`<tr><td>${b.celebrity||b.celebrityId}</td><td>${b.eventType}</td><td><span class="badge ${b.status==='Confirmed'?'badge-green':b.status==='Pending'?'badge-amber':'badge-cyan'}">${b.status}</span></td><td class="gold">$${(b.finalRate/1000).toFixed(0)}K</td></tr>`).join('') +
+        bookings.map(b=>`<tr><td>${b.celebrity||b.celebrityId}</td><td>${b.eventType}</td><td><span class="badge ${b.status==='Confirmed'?'badge-green':b.status==='Pending'?'badge-amber':'badge-sky'}">${b.status}</span></td><td style="color:var(--teal-bright);font-weight:700">$${((b.finalRate||0)/1000).toFixed(0)}K</td></tr>`).join('') +
         '</tbody></table>'
-      : '<p class="small faint">No bookings yet. <a href="booking.html" style="color:var(--violet-bright)">Book now &#8594;</a></p>';
+      : '<p class="small faint">No bookings yet. <a href="booking.html" style="color:var(--teal-bright)">Book now &#8594;</a></p>';
 
     document.getElementById('messages-list').innerHTML = messages.length
-      ? messages.slice(-5).reverse().map(m=>`<div style="padding:9px 0;border-bottom:1px solid var(--line-dim)"><span class="small faint">${m.from||'System'}</span><p class="small" style="margin-top:3px">${m.text}</p></div>`).join('')
+      ? messages.slice(-5).reverse().map(m=>`<div style="padding:9px 0;border-bottom:1px solid var(--line-dim)"><span class="small faint">${m.from||'System'}</span><p class="small" style="margin-top:3px">${m.body}</p></div>`).join('')
       : '<p class="small faint">No messages yet.</p>';
   } catch(e) {
     document.getElementById('stats').innerHTML = '<p class="small faint" style="grid-column:1/-1">Portal data unavailable  backend may be sleeping.</p>';
@@ -67,7 +73,11 @@ if (!token()) {
       li.insertAdjacentHTML('afterbegin',`<div style="padding:9px 0;border-bottom:1px solid var(--line-dim)"><span class="small faint">You</span><p class="small" style="margin-top:3px">${txt}</p></div>`);
     } catch(_) {}
   };
-  window.logout = () => { localStorage.removeItem('aurelux_token'); localStorage.removeItem('aurelux_user'); location.href='login.html'; };
+  window.logout = () => {
+    localStorage.removeItem('aurelux_token');
+    localStorage.removeItem('aurelux_user');
+    location.href='login.html';
+  };
 }
 </script>
 </body></html>

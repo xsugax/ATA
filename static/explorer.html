@@ -5,21 +5,21 @@
 <style>
 .celeb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}
 .celeb-card{cursor:pointer}.celeb-card img{height:260px;object-fit:cover;object-position:top;border-radius:var(--radius-sm)}
-.celeb-card:hover{border-color:var(--line);transform:translateY(-3px);box-shadow:var(--shadow-violet)}
+.celeb-card:hover{border-color:var(--line);transform:translateY(-3px);box-shadow:var(--shadow-teal)}
 .filter-bar{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin-bottom:20px}
 .filter-bar label{min-width:140px}
 </style>
 </head><body>
 <div id="app"></div>
 <script type="module">
-import { request, nav } from './assets/api.js';
+import { request, nav, buildFallbackRoster } from './assets/api.js';
 const app = document.getElementById('app');
 const avail = a => a==='Open'?'badge-green':a==='Limited'?'badge-amber':'badge-red';
 
 app.innerHTML = nav('explorer') + `
 <div class="container">
   <div class="section" style="padding-bottom:4px">
-    <div style="font-size:10px;letter-spacing:.45em;color:var(--violet-bright);text-transform:uppercase;margin-bottom:6px">Roster</div>
+    <div style="font-size:10px;letter-spacing:.45em;color:var(--teal-bright);text-transform:uppercase;margin-bottom:6px">Roster</div>
     <h2 style="font-size:2rem;font-weight:900;letter-spacing:-.025em">100 Elite Icons</h2>
     <p class="muted" style="margin-top:6px">Filter by category, region, availability and price range.</p>
   </div>
@@ -32,42 +32,47 @@ app.innerHTML = nav('explorer') + `
     <button onclick="clearFilters()" style="width:auto;padding:11px 18px;align-self:flex-end">Clear</button>
   </div>
   <div id="count" class="small faint section"></div>
-  <div class="celeb-grid section" id="grid">
-    ${Array(8).fill('<div class="card skeleton" style="height:380px"></div>').join('')}
-  </div>
+  <div class="celeb-grid section" id="grid"></div>
 </div>`;
 
-let all = [];
-try {
-  const r = await request('/celebrities?minPopularity=0&minDemand=0&maxPrice=99999999');
-  all = r.data;
-} catch(e) {
-  app.innerHTML += '<p class="muted" style="padding:40px 24px">Backend waking  refreshing in 6s</p>';
-  setTimeout(()=>location.reload(),6000); throw e;
-}
+let all = buildFallbackRoster();
+render(all);
+
+(async () => {
+  try {
+    const r = await request('/celebrities?minPopularity=0&minDemand=0&maxPrice=99999999');
+    if (r.data && r.data.length) { all = r.data; applyFilters(); }
+  } catch {}
+})();
 
 function render(list) {
   document.getElementById('count').textContent = list.length + ' results';
   document.getElementById('grid').innerHTML = list.map(c=>`
     <article class="card celeb-card" onclick="location.href='booking.html?id=${c.id}'">
-      <img src="${c.portrait}" alt="${c.name}" onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed='+encodeURIComponent('${c.name}')+'&backgroundColor=1a0533'"/>
+      <div class="celeb-media-wrap">
+        <img src="${c.portrait}" alt="${c.name}" loading="lazy"
+          onerror="this.src='https://i.pravatar.cc/400?img='+(Math.floor(Math.random()*70)+1)"/>
+        <div class="celeb-media-overlay">
+          <span class="badge badge-teal" style="font-size:9px">View Profile</span>
+        </div>
+      </div>
       <div style="padding-top:14px">
         <div class="row between" style="margin-bottom:8px;flex-wrap:wrap;gap:5px">
           <span class="badge">${c.category}</span>
           <span class="badge ${avail(c.availability)}">${c.availability}</span>
         </div>
         <h3 style="margin-bottom:4px">${c.name}</h3>
-        <div class="small muted" style="margin-bottom:12px">${c.region} &middot; ${c.agency}</div>
+        <div class="small muted" style="margin-bottom:12px">${c.region} &middot; ${c.agencyRepresentation}</div>
         <div class="row between" style="margin-bottom:10px">
           <span class="small faint">Demand</span>
-          <span style="font-weight:700;font-size:13px;color:var(--violet-bright)">${c.demandIndex}%</span>
+          <span style="font-weight:700;font-size:13px;color:var(--teal-bright)">${c.demandIndex}%</span>
         </div>
         <div class="stat-bar" style="margin-bottom:12px">
           <div class="stat-bar-track"><div class="stat-bar-fill" style="width:${c.demandIndex}%"></div></div>
         </div>
         <div class="row between">
           <span class="small faint">From</span>
-          <span style="font-weight:800;color:var(--gold-bright)">$${(c.averageEventRate/1000).toFixed(0)}K</span>
+          <span style="font-weight:800;color:var(--teal-bright)">$${(c.averageEventRate/1000).toFixed(0)}K</span>
         </div>
       </div>
     </article>`).join('');
@@ -90,6 +95,5 @@ window.clearFilters = () => {
   document.getElementById('f-price').value='';
   render(all);
 };
-render(all);
 </script>
 </body></html>
