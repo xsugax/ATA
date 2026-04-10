@@ -20,7 +20,7 @@ const tierTemplates = [
   { type: "Virtual Appearance", multiplier: 0.65 },
 ];
 
-const makeAvatar = (index) => `https://i.pravatar.cc/400?img=${((index - 1) % 70) + 1}`;
+const makeAvatar = (index) => `/assets/portraits/c${index}.jpg`;
 
 const generateCelebrity = (index, seed = {}) => {
   const category = seed.category || categories[index % categories.length];
