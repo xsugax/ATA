@@ -1,8 +1,8 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "AURELUX Sovereign",
-  description: "Global celebrity management and private booking ecosystem",
+  title: "All Talents Agency",
+  description: "Global celebrity booking and talent management",
 };
 
 export default function RootLayout({ children }) {

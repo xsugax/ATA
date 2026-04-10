@@ -16,8 +16,8 @@ export default function NavBar() {
   return (
     <header className="glass mb-5 flex items-center justify-between rounded-2xl px-5 py-4">
       <Link href="/" className="shrink-0 flex flex-col justify-center">
-        <p className="text-base font-semibold tracking-[0.25em] text-sovereign leading-snug">AURELUX</p>
-        <p className="text-[10px] tracking-[0.3em] text-platinum/35 uppercase">Sovereign</p>
+        <p className="text-base font-semibold tracking-[0.15em] text-sovereign leading-snug">ALL TALENTS</p>
+        <p className="text-[10px] tracking-[0.3em] text-platinum/35 uppercase">Agency</p>
       </Link>
       <nav className="flex items-center gap-2">
         {links.map((item) => (

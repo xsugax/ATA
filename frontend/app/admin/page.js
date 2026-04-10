@@ -240,7 +240,7 @@ export default function GodModeAdmin() {
           <div style={S.logo}>A</div>
           <div>
             <div style={S.title}>God Mode Command</div>
-            <div style={S.subtitle}>AURELUX Sovereign - Restricted Operations Center</div>
+            <div style={S.subtitle}>All Talents Agency - Admin Panel</div>
           </div>
         </div>
         <div style={{ display:"flex", alignItems:"center", gap:10, flexWrap:"wrap" }}>
