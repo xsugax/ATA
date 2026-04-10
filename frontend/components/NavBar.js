@@ -28,17 +28,17 @@ export default function NavBar() {
         <div style={{
           fontSize: "15px",
           fontWeight: 600,
-          letterSpacing: "0.22em",
+          letterSpacing: "0.18em",
           color: "#94B4D8",
           lineHeight: 1.2,
-        }}>AURELUX</div>
+        }}>ALL TALENTS</div>
         <div style={{
           fontSize: "9px",
-          letterSpacing: "0.35em",
+          letterSpacing: "0.3em",
           color: "rgba(230,236,244,0.3)",
           textTransform: "uppercase",
           marginTop: "1px",
-        }}>Sovereign</div>
+        }}>Agency</div>
       </Link>
 
       <nav style={{ display: "flex", alignItems: "center", gap: "4px" }}>

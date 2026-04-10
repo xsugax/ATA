@@ -21,16 +21,16 @@ export default function DashboardPage() {
       <MetricCounters metrics={payload?.metrics} />
       <section className="mt-3 grid gap-2 md:grid-cols-3">
         <div className="metric-card">
-          <h3 className="text-[11px] uppercase tracking-[0.25em] text-sovereign">Invite-Only Membership</h3>
-          <p className="mt-2 text-xs text-platinum/70">Black Card onboarding for private wealth offices with discretionary access controls.</p>
+          <h3 className="text-[11px] uppercase tracking-[0.25em] text-sovereign">Exclusive Membership</h3>
+          <p className="mt-2 text-xs text-platinum/70">Premium onboarding with full access to our verified global talent roster and private booking controls.</p>
         </div>
         <div className="metric-card">
-          <h3 className="text-[11px] uppercase tracking-[0.25em] text-sovereign">Auction Bidding</h3>
-          <p className="mt-2 text-xs text-platinum/70">Unavailable icons engaged through sovereign bid windows and private offer escalation.</p>
+          <h3 className="text-[11px] uppercase tracking-[0.25em] text-sovereign">Priority Booking</h3>
+          <p className="mt-2 text-xs text-platinum/70">Secure high-demand talent through our priority bid windows and direct offer escalation.</p>
         </div>
         <div className="metric-card">
-          <h3 className="text-[11px] uppercase tracking-[0.25em] text-sovereign">Unlisted Icon Requests</h3>
-          <p className="mt-2 text-xs text-platinum/70">Submit off-market representation requests with confidential vetting.</p>
+          <h3 className="text-[11px] uppercase tracking-[0.25em] text-sovereign">Private Talent Requests</h3>
+          <p className="mt-2 text-xs text-platinum/70">Submit off-roster talent requests with confidential vetting and dedicated representation.</p>
         </div>
       </section>
       <RevisionLog />

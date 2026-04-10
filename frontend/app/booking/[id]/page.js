@@ -60,7 +60,7 @@ export default function BookingPage() {
       <NavBar />
       <section className="grid gap-5 lg:grid-cols-3">
         <div className="glass rounded-2xl p-5 lg:col-span-2">
-          <h2 className="text-2xl font-semibold">Initiate Sovereign Booking · {celebrity.name}</h2>
+          <h2 className="text-2xl font-semibold">Book Talent · {celebrity.name}</h2>
           <div className="mt-4 grid gap-3 md:grid-cols-2">
             <input className="rounded-lg border border-white/10 bg-black/40 px-3 py-2" placeholder="Event type" value={form.eventType} onChange={(e) => setForm((p) => ({ ...p, eventType: e.target.value }))} />
             <input type="date" className="rounded-lg border border-white/10 bg-black/40 px-3 py-2" value={form.date} onChange={(e) => setForm((p) => ({ ...p, date: e.target.value }))} />

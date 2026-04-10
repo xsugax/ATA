@@ -55,7 +55,7 @@ export default function CelebrityCard({ celebrity, availabilityDate }) {
         <p>Risk: <span className="uppercase">{celebrity.riskIndex}</span> · NDA: {celebrity.ndaDefault ? "Required" : "Optional"}</p>
       </div>
       <div className="mt-4 grid gap-2">
-        <Link href={`/booking/${celebrity.id}`} className="flex-1 rounded-lg bg-sovereign px-3 py-2 text-center text-xs font-semibold uppercase text-black">Initiate Sovereign Booking</Link>
+        <Link href={`/booking/${celebrity.id}`} className="flex-1 rounded-lg bg-sovereign px-3 py-2 text-center text-xs font-semibold uppercase text-black">Book Now</Link>
         <button type="button" onClick={checkAvailability} className="rounded-lg border border-sovereign/35 bg-black/30 px-3 py-2 text-xs font-semibold uppercase tracking-wider text-sovereign">Check Availability</button>
         <button type="button" onClick={messageRepresentative} className="rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-xs font-semibold uppercase tracking-wider text-platinum">Message Representative</button>
       </div>

@@ -15,11 +15,11 @@ export default function PortalPage() {
     <main>
       <NavBar />
       {!data ? (
-        <div className="glass rounded-2xl p-6 text-sm">Login as client or manager to unlock the sovereign client portal.</div>
+        <div className="glass rounded-2xl p-6 text-sm">Login as client or manager to unlock the client portal.</div>
       ) : (
         <section className="space-y-5">
           <div className="glass rounded-2xl p-5">
-            <h2 className="text-2xl font-semibold">Sovereign Client Portal</h2>
+            <h2 className="text-2xl font-semibold">Client Portal</h2>
             <p className="text-sm text-platinum/70">Membership Tier: <span className="text-sovereign">{data.membershipTier}</span></p>
           </div>
           <div className="grid gap-4 lg:grid-cols-3">

@@ -33,8 +33,8 @@ export default function LoginPage() {
     <main>
       <NavBar />
       <section className="glass mx-auto max-w-xl rounded-2xl p-6">
-        <h2 className="text-2xl font-semibold">Sovereign Access Gateway</h2>
-        <p className="mt-1 text-sm text-platinum/70">Use seeded credentials to unlock role-based portals.</p>
+        <h2 className="text-2xl font-semibold">Agency Access</h2>
+        <p className="mt-1 text-sm text-platinum/70">Sign in to access your portal.</p>
         <form className="mt-4 space-y-3" onSubmit={submit}>
           <input className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2" value={email} onChange={(e) => setEmail(e.target.value)} />
           <input className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />

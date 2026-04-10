@@ -28,7 +28,7 @@ export default function HeroDeck({ featured }) {
           exit={{ opacity: 0, y: -15 }}
           transition={{ duration: 0.45 }}
         >
-          <p className="mb-1 text-[10px] uppercase tracking-[0.4em] text-sovereign">Featured Profile</p>
+          <p className="mb-1 text-[10px] uppercase tracking-[0.4em] text-sovereign">All Talents Agency</p>
           <h2 className="text-2xl font-semibold md:text-5xl">{active.name}</h2>
           <div className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-xs text-platinum/75 md:text-sm">
             <div><span className="text-platinum/40">Tier</span><br />{active.bookingTiers[2].type}</div>
