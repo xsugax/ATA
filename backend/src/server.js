@@ -7,6 +7,11 @@ import bookingRoutes from "./routes/bookings.js";
 import portalRoutes from "./routes/portal.js";
 import adminRoutes from "./routes/admin.js";
 import messagesRoutes from "./routes/messages.js";
+import intelligenceRoutes from "./routes/intelligence.js";
+import crowdEventsRoutes from "./routes/crowdEvents.js";
+import waitlistRoutes from "./routes/waitlist.js";
+import inquiryRoutes from "./routes/inquiry.js";
+import portfolioRoutes from "./routes/portfolio.js";
 import { authenticate, requireRole } from "./middleware/auth.js";
 
 const app = express();
@@ -34,6 +39,11 @@ app.use("/api/bookings", authenticate, bookingRoutes);
 app.use("/api/portal", authenticate, portalRoutes);
 app.use("/api/messages", authenticate, messagesRoutes);
 app.use("/api/admin", authenticate, requireRole("admin"), adminRoutes);
+app.use("/api/intelligence", intelligenceRoutes);
+app.use("/api/crowd-events", crowdEventsRoutes);
+app.use("/api/waitlist", authenticate, waitlistRoutes);
+app.use("/api/inquiry", inquiryRoutes);
+app.use("/api/portfolio", authenticate, requireRole("admin"), portfolioRoutes);
 
 app.use((err, _req, res, _next) => {
   console.error(err);

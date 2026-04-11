@@ -20,6 +20,47 @@ router.get("/featured", (_req, res) => {
   });
 });
 
+router.get("/:id/dossier", (req, res) => {
+  const cel = celebrities.find((c) => c.id === req.params.id);
+  if (!cel) return res.status(404).json({ error: "Celebrity not found" });
+
+  const classificationLevels = ["RESTRICTED", "CLASSIFIED", "TOP SECRET", "SOVEREIGN EYES ONLY"];
+  const leverageLevels = [
+    "Moderate - Standard commercial terms apply",
+    "High - Negotiation window required",
+    "Maximum - Direct representative engagement only",
+  ];
+  const venues = ["Private Estate", "Sovereign Suite", "Penthouse Boardroom", "Yacht Charter", "Private Island", "Embassy Ballroom"];
+  const leadTimes = ["45 days minimum", "60 days minimum", "90 days minimum", "6 months advance notice"];
+
+  const idx = parseInt(cel.id.replace(/\D/g, ""), 10) || 1;
+  const classLevel = classificationLevels[idx % classificationLevels.length];
+  const leverage = leverageLevels[idx % leverageLevels.length];
+  const venue = venues[idx % venues.length];
+  const leadTime = leadTimes[idx % leadTimes.length];
+  const mediaScore = Math.min(99, Math.round(cel.demandIndex * 0.9 + 8));
+
+  const talkingPoints = [
+    `${cel.name} has a verified social reach of ${cel.socialReach} followers.`,
+    `Represented exclusively by ${cel.agency}.`,
+    `Net worth estimated at ${cel.netWorth} — bookings start at $${cel.bookingPrice.toLocaleString()}.`,
+    `${cel.eliteSignal}`,
+    `Optimal engagement window: ${leadTime}.`,
+  ];
+
+  return res.json({
+    celebrity: cel,
+    dossier: {
+      classificationLevel: classLevel,
+      mediaAuthorityScore: mediaScore,
+      negotiationLeverage: leverage,
+      optimalLeadTime: leadTime,
+      recommendedVenue: venue,
+      talkingPoints,
+    },
+  });
+});
+
 router.get("/:id/availability", (req, res) => {
   const celebrity = celebrities.find((entry) => entry.id === req.params.id);
   if (!celebrity) {
