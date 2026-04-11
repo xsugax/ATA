@@ -109,6 +109,7 @@ const PORTRAIT_MAP = {
   "Carlos Santana":     "/assets/portraits/c171.jpg",
   "Daddy Yankee":       "/assets/portraits/c172.png",
   "Luis Fonsi":         "/assets/portraits/c173.jpg",
+  "Mariah Carey":       "/assets/portraits/c174.png",
 };
 
 const parseNetWorthTier = (worth) => {
