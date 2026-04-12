@@ -1,4 +1,4 @@
-const partnerships = ["Nike", "LVMH", "Apple", "Netflix", "Rolex", "Patek Philippe", "Mercedes-Benz"];
+﻿const partnerships = ["Nike", "LVMH", "Apple", "Netflix", "Rolex", "Patek Philippe", "Mercedes-Benz"];
 const awards = ["Grammy", "Oscar", "Ballon d\u2019Or", "Emmy", "Forbes 30", "Cannes"];
 
 const tierTemplates = [
@@ -110,6 +110,70 @@ const PORTRAIT_MAP = {
   "Daddy Yankee":       "/assets/portraits/c172.png",
   "Luis Fonsi":         "/assets/portraits/c173.jpg",
   "Mariah Carey":       "/assets/portraits/c174.png",
+  // BTS members
+  "RM":                  "/assets/portraits/c175.jpg",
+  "Jin":                 "/assets/portraits/c176.png",
+  "Suga":                "/assets/portraits/c177.jpg",
+  "J-Hope":              "/assets/portraits/c178.png",
+  "Jimin":               "/assets/portraits/c179.jpg",
+  "V":                   "/assets/portraits/c180.jpg",
+  "Jungkook":            "/assets/portraits/c181.png",
+  // BLACKPINK
+  "Jisoo":               "/assets/portraits/c182.png",
+  "Jennie":              "/assets/portraits/c183.jpg",
+  "Lisa":                "/assets/portraits/c185.jpg",
+  // Stray Kids
+  "Bang Chan":           "/assets/portraits/c186.png",
+  "Lee Know":            "/assets/portraits/c187.png",
+  "Changbin":            "/assets/portraits/c188.png",
+  "Hyunjin":             "/assets/portraits/c189.png",
+  "Han":                 "/assets/portraits/c190.png",
+  "Felix":               "/assets/portraits/c191.png",
+  "I.N":                 "/assets/portraits/c193.png",
+  // Korean Stars
+  "Hyun Bin":            "/assets/portraits/c196.jpg",
+  "Park Seo-joon":       "/assets/portraits/c197.png",
+  "IU":                  "/assets/portraits/c198.png",
+  "Song Hye-kyo":        "/assets/portraits/c199.jpg",
+  "Bae Suzy":            "/assets/portraits/c200.png",
+  "Ji Chang-wook":       "/assets/portraits/c201.jpg",
+  "Nam Joo-hyuk":        "/assets/portraits/c202.jpg",
+  "Psy":                 "/assets/portraits/c203.jpg",
+  // US Music
+  "Harry Styles":        "/assets/portraits/c204.jpg",
+  "Dua Lipa":            "/assets/portraits/c205.jpg",
+  "Olivia Rodrigo":      "/assets/portraits/c206.jpg",
+  "Doja Cat":            "/assets/portraits/c207.jpg",
+  "SZA":                 "/assets/portraits/c208.jpg",
+  "Kendrick Lamar":      "/assets/portraits/c209.jpg",
+  "Tyler, the Creator":  "/assets/portraits/c211.jpg",
+  "Sam Smith":           "/assets/portraits/c213.jpg",
+  "Charli XCX":          "/assets/portraits/c215.jpg",
+  "Chappell Roan":       "/assets/portraits/c216.jpg",
+  "21 Savage":           "/assets/portraits/c217.jpg",
+  "Jack Harlow":         "/assets/portraits/c218.jpg",
+  "Future":              "/assets/portraits/c219.jpg",
+  "Gunna":               "/assets/portraits/c220.png",
+  // US Film
+  "Timothee Chalamet":   "/assets/portraits/c221.jpg",
+  "Florence Pugh":       "/assets/portraits/c222.jpg",
+  "Sydney Sweeney":      "/assets/portraits/c223.jpg",
+  "Pedro Pascal":        "/assets/portraits/c225.jpg",
+  "Zoe Saldana":         "/assets/portraits/c226.jpg",
+  "Chris Evans":         "/assets/portraits/c227.jpg",
+  "Jennifer Aniston":    "/assets/portraits/c228.jpg",
+  // Bands
+  "Coldplay":            "/assets/portraits/c229.jpg",
+  "Imagine Dragons":     "/assets/portraits/c230.jpg",
+  "Maroon 5":            "/assets/portraits/c231.jpg",
+  "Red Hot Chili Peppers":"/assets/portraits/c232.jpg",
+  "Metallica":           "/assets/portraits/c233.jpg",
+  // Adult Entertainment
+  "Mia Khalifa":         "/assets/portraits/c234.png",
+  "Lana Rhoades":        "/assets/portraits/c235.jpg",
+  "Riley Reid":          "/assets/portraits/c236.jpg",
+  "Eva Elfie":           "/assets/portraits/c238.jpg",
+
 };
 
 const parseNetWorthTier = (worth) => {
@@ -222,6 +286,79 @@ const seeds = [
   { name: "Akon",              cat: "Music",      region: "Africa",        price:  300000, worth: "$80M",   reach: 8,   agency: "Independent", signal: "Akon Lighting Africa founder and pan-African investment champion. Private events and investment summits via Akonda Media and Entertainment." },
   { name: "Luis Fonsi",        cat: "Music",      region: "Latin America", price:  300000, worth: "$20M",   reach: 18,  agency: "WME",         signal: "Despacito co-creator and 8B YouTube record holder. Private concert events via WME Latin desk; all engagements include social-media rights agreement." },
   { name: "Maluma",            cat: "Music",      region: "Latin America", price:  400000, worth: "$18M",   reach: 62,  agency: "CAA",         signal: "Latin Grammy winner and global reggaeton ambassador. Private events require 21-day advance through CAA Latin desk with confirmed event tier." },
+  // BTS — 7 members (individually bookable)
+  { name: "RM",               cat: "Music",      region: "Asia",          price:  800000, worth: "$24M",   reach: 50,  agency: "HYBE",        signal: "BTS leader, UN General Assembly speaker and solo artist. Right Place, Wrong Person album certified platinum. Private events via HYBE America with 45-day lead and full diplomatic-level security protocols." },
+  { name: "Jin",              cat: "Music",      region: "Asia",          price:  700000, worth: "$20M",   reach: 42,  agency: "HYBE",        signal: "BTS vocalist and first member to complete solo military chapter. Multi-platinum solo discography and Grammy platform debut. Private engagements via HYBE with confirmed fan-safe venue standards and 30-day advance." },
+  { name: "Suga",             cat: "Music",      region: "Asia",          price:  700000, worth: "$25M",   reach: 44,  agency: "HYBE",        signal: "BTS rapper and Agust D solo artist. D-DAY World Tour 2023 sold out arenas on five continents. Events via HYBE with 30-day advance; engagements include full mental-wellness and security protocols." },
+  { name: "J-Hope",           cat: "Music",      region: "Asia",          price:  700000, worth: "$24M",   reach: 46,  agency: "HYBE",        signal: "BTS dance captain and Lollapalooza 2022 headline performer — first Korean solo artist to headline a major US festival. Private events via HYBE America require 30-day advance and premium stage setup." },
+  { name: "Jimin",            cat: "Music",      region: "Asia",          price:  800000, worth: "$20M",   reach: 52,  agency: "HYBE",        signal: "BTS main dancer. FACE solo album debuted at No. 1 on Billboard 200 — first Korean solo artist to achieve this. Private events via HYBE require advance fan credentialing and premium venue certification." },
+  { name: "V",                cat: "Music",      region: "Asia",          price:  800000, worth: "$28M",   reach: 62,  agency: "HYBE",        signal: "BTS vocalist and global luxury brand ambassador for Celine and Cartier. Solo debut Layover topped charts in 60+ countries. All private engagements via HYBE with fashion-level brand alignment and NDA." },
+  { name: "Jungkook",         cat: "Music",      region: "Asia",          price:  900000, worth: "$15M",   reach: 74,  agency: "HYBE",        signal: "BTS maknae and highest-streaming solo K-pop artist globally. Golden solo album and Seven single broke YouTube 24-hour records. Events via HYBE America require 45-day advance; highest individual demand index in K-pop." },
+  // BLACKPINK — 4 members
+  { name: "Jisoo",            cat: "Music",      region: "Asia",          price:  600000, worth: "$20M",   reach: 82,  agency: "YG Entertainment", signal: "BLACKPINK lead vocalist and Dior Global Ambassador. ME solo debut topped 37 countries. Private events via YG Entertainment require 30-day advance and fashion-industry aligned venue standards." },
+  { name: "Jennie",           cat: "Music",      region: "Asia",          price:  700000, worth: "$22M",   reach: 86,  agency: "OA",          signal: "BLACKPINK lead rapper, Chanel Exclusive Ambassador and OA label founder. Solo Mantra and You & Me hit globally. All engagements via OA comms with full NDA, lifestyle brand alignment and 30-day advance." },
+  { name: "Rose",             cat: "Music",      region: "Asia",          price:  600000, worth: "$20M",   reach: 72,  agency: "YG Entertainment", signal: "BLACKPINK main vocalist and Saint Laurent Ambassador. APT collab with Bruno Mars became 2024's fastest song to 1B streams. Events via YG Entertainment with 30-day advance and confirmed brand brief." },
+  { name: "Lisa",             cat: "Music",      region: "Asia",          price:  800000, worth: "$20M",   reach: 102, agency: "LLOUD",       signal: "BLACKPINK main dancer and LLOUD label CEO. ROCKSTAR solo single broke 100M views in 24 hours. Highest-followed K-pop artist on Instagram. Private events via LLOUD require 45-day advance and full production and security brief." },
+  // Stray Kids — 8 members
+  { name: "Bang Chan",        cat: "Music",      region: "Asia",          price:  350000, worth: "$8M",    reach: 18,  agency: "JYP Entertainment", signal: "Stray Kids leader, 3RACHA producer and domAIN World Tour headliner. First K-pop group to sell out Madison Square Garden twice. Events via JYP America with 21-day advance and fan-safe venue qualification." },
+  { name: "Lee Know",         cat: "Music",      region: "Asia",          price:  280000, worth: "$6M",    reach: 14,  agency: "JYP Entertainment", signal: "Stray Kids main dancer and soloist. ATE World Tour 2024 set group attendance records in Europe and Asia. Private events via JYP Entertainment with confirmed performance-level stage requirements." },
+  { name: "Changbin",         cat: "Music",      region: "Asia",          price:  280000, worth: "$6M",    reach: 14,  agency: "JYP Entertainment", signal: "Stray Kids main rapper and 3RACHA production crew member. Known for fastest rap delivery in K-pop. Private events via JYP with confirmed audience brief and 21-day advance." },
+  { name: "Hyunjin",          cat: "Music",      region: "Asia",          price:  350000, worth: "$8M",    reach: 20,  agency: "JYP Entertainment", signal: "Stray Kids main dancer and visual, Versace ambassador and fine artist. MIROH and God's Menu choreography viewed 500M+ times. Events via JYP; all appearances include media rights clause and brand alignment." },
+  { name: "Han",              cat: "Music",      region: "Asia",          price:  280000, worth: "$6M",    reach: 12,  agency: "JYP Entertainment", signal: "Stray Kids main vocalist-rapper and 3RACHA lyricist. Cipher and MEGAVERSE compositions among most complex in K-pop production. Events via JYP Entertainment with 21-day advance and full production rider." },
+  { name: "Felix",            cat: "Music",      region: "Asia",          price:  350000, worth: "$8M",    reach: 18,  agency: "JYP Entertainment", signal: "Stray Kids vocalist and most-recognizable global face of the group. Loewe ambassador and highest-followed member on TikTok. Private events via JYP with confirmed fan engagement protocol and brand alignment." },
+  { name: "Seungmin",         cat: "Music",      region: "Asia",          price:  260000, worth: "$6M",    reach: 12,  agency: "JYP Entertainment", signal: "Stray Kids lead vocalist and composer. Kim Seungmin solo debut in 2024 showcased cross-genre range. Private events via JYP Entertainment with 21-day advance booking confirmation." },
+  { name: "I.N",              cat: "Music",      region: "Asia",          price:  240000, worth: "$5M",    reach: 10,  agency: "JYP Entertainment", signal: "Stray Kids youngest member and vocalist. Featured on every Billboard-charting Stray Kids release. Events via JYP Entertainment with confirmed audience tier and 21-day advance." },
+  // Korean Actors and Stars
+  { name: "Lee Min-ho",       cat: "Film",       region: "Asia",          price:  400000, worth: "$35M",   reach: 32,  agency: "MYM Entertainment", signal: "Most-followed Korean actor globally with 32M+ Instagram followers. Boys Over Flowers and The King: Eternal Monarch global streaming records. Private appearances via MYM Entertainment with 30-day advance." },
+  { name: "Kim Soo-hyun",     cat: "Film",       region: "Asia",          price:  400000, worth: "$30M",   reach: 28,  agency: "GOLDMEDALIST", signal: "Queen of Tears lead and highest-paid Korean actor per-episode in 2024. My Love from the Star broke records across 40 countries. Events via GOLDMEDALIST with confirmed brand alignment and media blackout NDA." },
+  { name: "Hyun Bin",         cat: "Film",       region: "Asia",          price:  350000, worth: "$40M",   reach: 22,  agency: "VAST Entertainment", signal: "Crash Landing on You global phenomenon star and Samsung and Hyundai ambassador. Movie star status across all Asian markets. Private events via VAST Entertainment with confirmed 30-day advance and prestige venue standard." },
+  { name: "Park Seo-joon",    cat: "Film",       region: "Asia",          price:  300000, worth: "$25M",   reach: 26,  agency: "Awesome ENT",  signal: "Itaewon Class breakout star and Marvel's The Marvels cast member. Corporate and brand events via Awesome ENT with confirmed 21-day advance." },
+  { name: "IU",               cat: "Music",      region: "Asia",          price:  500000, worth: "$40M",   reach: 22,  agency: "Kakao Entertainment", signal: "Highest-grossing Korean female solo artist and Broker Cannes Film Festival cast member. Hermes Korea ambassador. Five consecutive chart records. Events via EDAM Entertainment with 30-day advance." },
+  { name: "Song Hye-kyo",     cat: "Film",       region: "Asia",          price:  350000, worth: "$35M",   reach: 14,  agency: "UAA",          signal: "The Glory Netflix global No. 1 record-holder and Chaumet France ambassador. Verified Hallyu Wave icon since Autumn Fairy Tale. Private events via UAA with confirmed prestige brand alignment." },
+  { name: "Bae Suzy",         cat: "Music",      region: "Asia",          price:  300000, worth: "$25M",   reach: 20,  agency: "Management Soop", signal: "Nation's First Love and top Korean actress-model hybrid. Vagabond and Start-Up Netflix leads. Samsung, Lancome and Guess ambassador. Events via Management Soop with 21-day advance booking." },
+  { name: "Ji Chang-wook",    cat: "Film",       region: "Asia",          price:  300000, worth: "$20M",   reach: 18,  agency: "Glorious Entertainment", signal: "Suspicious Partner and Healer action-drama lead with verified 18M+ fanbase outside Korea. Netflix The K2 global debut. Private appearances via Glorious Entertainment with 21-day advance." },
+  { name: "Nam Joo-hyuk",     cat: "Film",       region: "Asia",          price:  250000, worth: "$15M",   reach: 16,  agency: "Management Soop", signal: "Weightlifting Fairy and Twenty-Five Twenty-One romantic drama lead. Puma Korea ambassador with 16M+ combined social following. Events via Management Soop with confirmed 21-day advance and media brief." },
+  { name: "Psy",              cat: "Music",      region: "Asia",          price:  400000, worth: "$60M",   reach: 12,  agency: "P NATION",    signal: "Gangnam Style — first YouTube video to reach 1B and 2B views. History-maker who put K-pop on the global map in 2012. P NATION label CEO representing next-gen Korean artists. Events via P NATION with 30-day advance." },
+  // US Music — history makers and award winners
+  { name: "Harry Styles",     cat: "Music",      region: "Europe",        price: 1000000, worth: "$120M",  reach: 48,  agency: "Full Stop Management", signal: "Three consecutive Grammy Award wins including Album of the Year 2023. Love On Tour grossed $617M and ranked highest-grossing solo artist tour of the year. Private events via Full Stop require 45-day advance, full NDA and confirmed creative brief." },
+  { name: "Dua Lipa",         cat: "Music",      region: "Europe",        price:  800000, worth: "$80M",   reach: 88,  agency: "WME",         signal: "Grammy and Brit Award winner. Radical Optimism Tour 2024 headliner with sold-out European and US arena run. Three global No. 1 albums. Events via WME UK and US desks with 30-day advance and confirmed production rider." },
+  { name: "Olivia Rodrigo",   cat: "Music",      region: "North America", price:  600000, worth: "$30M",   reach: 56,  agency: "WME",         signal: "Seven Grammy nominations on debut album — youngest artist to achieve this. GUTS World Tour 2024 sold out 100+ shows globally. Private events via WME with 30-day advance and confirmed event classification." },
+  { name: "Doja Cat",         cat: "Music",      region: "North America", price:  500000, worth: "$14M",   reach: 24,  agency: "UTA",         signal: "Grammy-winning multi-platinum artist and Versace and BVLGARI brand collaborator. Scarlet era reinvention made global waves. Private events via UTA with confirmed creative brief, NDA and 21-day advance." },
+  { name: "SZA",              cat: "Music",      region: "North America", price:  400000, worth: "$8M",    reach: 14,  agency: "TDE",         signal: "Grammy Award winner. SOS album broke Billboard 200 record as longest-running No. 1 R&B album in history. Snooze and Kill Bill certified multi-platinum. Events via TDE with 21-day advance." },
+  { name: "Kendrick Lamar",   cat: "Music",      region: "North America", price: 1000000, worth: "$75M",   reach: 24,  agency: "CAA",         signal: "Pulitzer Prize winner, five-time Grammy laureate and Super Bowl LIX halftime headliner 2025. Not Like Us became fastest rap song to 1B streams. Private events via CAA require 45-day advance and executive-level NDA stack." },
+  { name: "Lil Baby",         cat: "Music",      region: "North America", price:  400000, worth: "$8M",    reach: 22,  agency: "CAA",         signal: "Billboard Hot 100 record with 11 simultaneous entries from one album. Certified platinum on every studio release. Private events via CAA with 21-day advance and confirmed fan-safe protocols." },
+  { name: "Tyler, the Creator", cat: "Music",    region: "North America", price:  500000, worth: "$16M",   reach: 22,  agency: "WME",         signal: "Grammy Album of the Year winner and Camp Flog Gnaw festival creator. IGOR redefined experimental rap-pop crossover. Events via WME require confirmed creative vision alignment and 30-day advance booking." },
+  { name: "Lizzo",            cat: "Music",      region: "North America", price:  400000, worth: "$12M",   reach: 14,  agency: "WME",         signal: "Three Grammy Award wins including Record of the Year. Special World Tour 2023 sold out globally. Body-positive cultural icon with seven-digit merchandise revenue. Events via WME with 21-day advance." },
+  { name: "Sam Smith",        cat: "Music",      region: "Europe",        price:  500000, worth: "$45M",   reach: 30,  agency: "CAA",         signal: "Four Grammy Awards, one Oscar and one Golden Globe winner. Unholy broke multiple records including fastest to 100M playlist adds. Events via CAA UK desk with 21-day advance and confirmed production brief." },
+  { name: "Sabrina Carpenter", cat: "Music",      region: "North America", price:  600000, worth: "$12M",   reach: 32,  agency: "UTA",         signal: "Short n' Sweet album 2024 broke multiple Billboard records. Espresso became global anthem with 2B+ streams. Short n' Sweet Tour sold out worldwide. Private events via UTA with 30-day advance and confirmed fan-safe event protocol." },
+  { name: "Charli XCX",       cat: "Music",      region: "Europe",        price:  400000, worth: "$16M",   reach: 18,  agency: "CAA",         signal: "Brat Summer cultural movement creator and Mercury Prize winner. Grammy nominations for Album of the Year 2025. Trans-genre producer-artist bridging hyperpop and mainstream. Events via CAA with 21-day advance." },
+  { name: "Chappell Roan",    cat: "Music",      region: "North America", price:  400000, worth: "$8M",    reach: 12,  agency: "WME",         signal: "Grammy Award winner Best New Artist 2025. The Rise and Fall of a Midwest Princess breakout and Hot to Go! viral phenomenon. Events via WME with confirmed fan engagement protocols and 21-day advance." },
+  { name: "21 Savage",        cat: "Music",      region: "North America", price:  350000, worth: "$12M",   reach: 16,  agency: "CAA",         signal: "Grammy Award winner and Drake and Eminem cross-generational collaborator. Her Loss co-album debuted at No. 1 globally. Private events via CAA with confirmed audience brief and 21-day advance booking." },
+  { name: "Jack Harlow",      cat: "Music",      region: "North America", price:  350000, worth: "$8M",    reach: 14,  agency: "WME",         signal: "Grammy-nominated breakout artist and First Class chart-topper. Cross-genre appeal confirmed across three continents. Events via WME with 21-day advance and confirmed event tier." },
+  { name: "Future",           cat: "Music",      region: "North America", price:  400000, worth: "$40M",   reach: 18,  agency: "WME",         signal: "Billboard and platinum-certified trap pioneer with 60+ charted Hot 100 entries. We Don't Trust You debuted No. 1. Private events via WME with confirmed audience brief, NDA and 21-day advance." },
+  { name: "Gunna",            cat: "Music",      region: "North America", price:  300000, worth: "$8M",    reach: 14,  agency: "CAA",         signal: "DS4EVER No. 1 debut and platinum-certified trap artist. a Gift and a Curse comeback cemented global status. Private events via CAA with confirmed event classification and 21-day advance." },
+  // US Film and TV
+  { name: "Timothee Chalamet", cat: "Film",      region: "North America", price:  500000, worth: "$25M",   reach: 24,  agency: "CAA",         signal: "Oscar nominee and Wonka global box office record-holder. Three-time BAFTA winner and Dune: Part Two $700M grosser. Private events via CAA require 30-day advance, confirmed creative alignment and full NDA execution." },
+  { name: "Florence Pugh",    cat: "Film",       region: "Europe",        price:  400000, worth: "$20M",   reach: 22,  agency: "CAA",         signal: "Oscar nominee, Oppenheimer ensemble lead and Valentino brand ambassador. Dune: Part Two and We Live in Time global releases. Events via CAA require 30-day advance and confirmed prestige brand alignment." },
+  { name: "Sydney Sweeney",   cat: "Film",       region: "North America", price:  350000, worth: "$10M",   reach: 20,  agency: "UTA",         signal: "Euphoria and White Lotus Emmy-nominated actress. Anyone But You box office breakout. Armani Beauty ambassador and most-searched actress of her generation. Events via UTA with confirmed 21-day advance and media brief." },
+  { name: "Ana de Armas",     cat: "Film",       region: "Latin America", price:  400000, worth: "$30M",   reach: 18,  agency: "CAA",         signal: "Oscar nominee for Blonde and Balenciaga ambassador. Knives Out 2 $469M grosser and John Wick franchise lead. Events via CAA with confirmed 30-day advance; all appearances require media embargo." },
+  { name: "Pedro Pascal",     cat: "Film",       region: "Latin America", price:  500000, worth: "$20M",   reach: 28,  agency: "UTA",         signal: "The Mandalorian and The Last of Us dual-franchise global star and Prada ambassador. Internet-phenomenon fanbase with premium demographic. Private events via UTA with 30-day advance and confirmed audience brief." },
+  { name: "Zoe Saldana",      cat: "Film",       region: "North America", price:  400000, worth: "$35M",   reach: 16,  agency: "WME",         signal: "Avengers and Avatar franchise lead — appears in the two highest-grossing films in history. Gucci ambassador and Afro-Latina cultural icon. Events via WME with confirmed brand alignment and 21-day advance." },
+  { name: "Chris Evans",      cat: "Film",       region: "North America", price:  500000, worth: "$80M",   reach: 28,  agency: "CAA",         signal: "Captain America franchise anchor across $10B MCU run and Knives Out sequel star. Global recognition above 90% in all English-speaking markets. Events via CAA with confirmed 30-day advance and NDA execution." },
+  { name: "Jennifer Aniston", cat: "Film",       region: "North America", price:  500000, worth: "$320M",  reach: 44,  agency: "CAA",         signal: "Friends global legacy star and Morning Show Apple TV+ lead. LolaVie haircare founder and living pop culture institution. Private events via CAA with 30-day advance and confirmed prestige venue standard." },
+  // Bands
+  { name: "Coldplay",         cat: "Music",      region: "Europe",        price: 2000000, worth: "$400M",  reach: 52,  agency: "WME",         signal: "World's highest-grossing active touring band — Music of the Spheres Tour grossed over $1B across 2022-2023. Five-time Grammy winners. Private shows are at sovereign-level pricing; all bookings via WME London with 90-day exclusive window." },
+  { name: "Imagine Dragons",  cat: "Music",      region: "North America", price:  800000, worth: "$70M",   reach: 28,  agency: "WME",         signal: "Biggest-selling rock band of the 2010s with 75M+ records sold. Thunder and Believer certified diamond globally. Lollapalooza and Super Bowl halftime alumni. Private events via WME with 45-day advance and full production rider." },
+  { name: "Maroon 5",         cat: "Music",      region: "North America", price:  600000, worth: "$90M",   reach: 26,  agency: "CAA",         signal: "Super Bowl LIII halftime headliner and seven consecutive top-10 albums. Girls Like You and Moves Like Jagger certified diamond. Corporate events via CAA with full production qualification and 30-day advance." },
+  { name: "Red Hot Chili Peppers", cat: "Music", region: "North America", price:  800000, worth: "$230M",  reach: 22,  agency: "WME",         signal: "Rock and Roll Hall of Fame inductees. Unlimited Love and Return of the Dream Canteen double-album record-setters. Four-decade history of sold-out stadium tours. Private events via WME with 45-day advance and full crew rider." },
+  { name: "Metallica",        cat: "Music",      region: "North America", price: 1000000, worth: "$1B",    reach: 28,  agency: "Live Nation",  signal: "Founding metal legends with 125M+ records sold — most of any metal act in history. 72 Seasons World Tour 2023-2024 grossed $350M. Private events exclusively via Live Nation executive desk with 60-day advance and sovereign-level NDA." },
+  // Adult Entertainment — mainstream media personalities with large fan communities
+  { name: "Mia Khalifa",      cat: "Influencer", region: "North America", price:   80000, worth: "$4M",    reach: 28,  agency: "Independent", signal: "Retired performer turned sports media commentator and Blacked Out podcast host. 28M+ Instagram followers and mainstream media presence. Corporate appearances and media panel events via independent representation only." },
+  { name: "Lana Rhoades",     cat: "Influencer", region: "North America", price:   60000, worth: "$3M",    reach: 18,  agency: "Independent", signal: "Retired performer turned social media personality with 18M+ followers. 3 Girls 1 Kitchen podcast co-host. Celebrity appearances via independent PR desk with confirmed event type and audience qualification." },
+  { name: "Riley Reid",       cat: "Influencer", region: "North America", price:   50000, worth: "$3M",    reach: 12,  agency: "Independent", signal: "Award-winning industry veteran and mainstream media crossover personality. 12M followers across platforms. Public appearances and convention keynotes via independent management only." },
+  { name: "Brandi Love",      cat: "Influencer", region: "North America", price:   40000, worth: "$2M",    reach: 8,   agency: "Independent", signal: "Industry veteran with 15-plus year career and mainstream podcast presence. Conservative political commentator crossover. Events via independent representation with confirmed audience brief." },
+  { name: "Eva Elfie",        cat: "Influencer", region: "Europe",        price:   35000, worth: "$2M",    reach: 10,  agency: "Independent", signal: "Award-winning performer and rising social media personality with global fanbase. Industry-leading social engagement metrics. European and international appearances via independent booking agents only." },
+
 ];
 
 const build = (s, i) => {
