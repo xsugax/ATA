@@ -121,6 +121,7 @@ const PORTRAIT_MAP = {
   // BLACKPINK
   "Jisoo":               "/assets/portraits/c182.png",
   "Jennie":              "/assets/portraits/c183.jpg",
+  "Rose":                "/assets/portraits/c184.jpg",
   "Lisa":                "/assets/portraits/c185.jpg",
   // Stray Kids
   "Bang Chan":           "/assets/portraits/c186.png",
@@ -129,8 +130,11 @@ const PORTRAIT_MAP = {
   "Hyunjin":             "/assets/portraits/c189.png",
   "Han":                 "/assets/portraits/c190.png",
   "Felix":               "/assets/portraits/c191.png",
+  "Seungmin":            "/assets/portraits/c192.jpg",
   "I.N":                 "/assets/portraits/c193.png",
   // Korean Stars
+  "Lee Min-ho":          "/assets/portraits/c194.jpg",
+  "Kim Soo-hyun":        "/assets/portraits/c195.jpg",
   "Hyun Bin":            "/assets/portraits/c196.jpg",
   "Park Seo-joon":       "/assets/portraits/c197.png",
   "IU":                  "/assets/portraits/c198.png",
@@ -146,8 +150,11 @@ const PORTRAIT_MAP = {
   "Doja Cat":            "/assets/portraits/c207.jpg",
   "SZA":                 "/assets/portraits/c208.jpg",
   "Kendrick Lamar":      "/assets/portraits/c209.jpg",
+  "Lil Baby":            "/assets/portraits/c210.jpg",
   "Tyler, the Creator":  "/assets/portraits/c211.jpg",
+  "Lizzo":               "/assets/portraits/c212.jpg",
   "Sam Smith":           "/assets/portraits/c213.jpg",
+  "Sabrina Carpenter":   "/assets/portraits/c214.jpg",
   "Charli XCX":          "/assets/portraits/c215.jpg",
   "Chappell Roan":       "/assets/portraits/c216.jpg",
   "21 Savage":           "/assets/portraits/c217.jpg",
@@ -158,6 +165,7 @@ const PORTRAIT_MAP = {
   "Timothee Chalamet":   "/assets/portraits/c221.jpg",
   "Florence Pugh":       "/assets/portraits/c222.jpg",
   "Sydney Sweeney":      "/assets/portraits/c223.jpg",
+  "Ana de Armas":        "/assets/portraits/c224.jpg",
   "Pedro Pascal":        "/assets/portraits/c225.jpg",
   "Zoe Saldana":         "/assets/portraits/c226.jpg",
   "Chris Evans":         "/assets/portraits/c227.jpg",
@@ -172,7 +180,11 @@ const PORTRAIT_MAP = {
   "Mia Khalifa":         "/assets/portraits/c234.png",
   "Lana Rhoades":        "/assets/portraits/c235.jpg",
   "Riley Reid":          "/assets/portraits/c236.jpg",
+  "Brandi Love":         "/assets/portraits/c237.jpg",
   "Eva Elfie":           "/assets/portraits/c238.jpg",
+  // New additions
+  "Salma Hayek":         "/assets/portraits/c239.jpg",
+  "Matt Rife":           "/assets/portraits/c240.jpg",
 
 };
 
@@ -358,6 +370,9 @@ const seeds = [
   { name: "Riley Reid",       cat: "Influencer", region: "North America", price:   50000, worth: "$3M",    reach: 12,  agency: "Independent", signal: "Award-winning industry veteran and mainstream media crossover personality. 12M followers across platforms. Public appearances and convention keynotes via independent management only." },
   { name: "Brandi Love",      cat: "Influencer", region: "North America", price:   40000, worth: "$2M",    reach: 8,   agency: "Independent", signal: "Industry veteran with 15-plus year career and mainstream podcast presence. Conservative political commentator crossover. Events via independent representation with confirmed audience brief." },
   { name: "Eva Elfie",        cat: "Influencer", region: "Europe",        price:   35000, worth: "$2M",    reach: 10,  agency: "Independent", signal: "Award-winning performer and rising social media personality with global fanbase. Industry-leading social engagement metrics. European and international appearances via independent booking agents only." },
+  // Comedy & New Media
+  { name: "Salma Hayek",      cat: "Film",       region: "Latin America", price:  400000, worth: "$200M",  reach: 28,  agency: "CAA",         signal: "Oscar-nominated actress and Frida producer-star. Eternals and Magic Mike's Last Dance global releases. Kering Group board member and Gucci brand collaborator. Private events via CAA with confirmed 30-day advance and prestige brand alignment." },
+  { name: "Matt Rife",        cat: "Influencer", region: "North America", price:  250000, worth: "$12M",   reach: 32,  agency: "WME",         signal: "Fastest stand-up comedian to sell out arenas in history — ProbleMATTic World Tour 2024 grossed $100M in first week of sales. 18M TikTok followers. Private shows and brand events via WME with confirmed audience qualification and 21-day advance." },
 
 ];
 
