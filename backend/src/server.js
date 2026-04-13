@@ -13,6 +13,11 @@ import waitlistRoutes from "./routes/waitlist.js";
 import inquiryRoutes from "./routes/inquiry.js";
 import portfolioRoutes from "./routes/portfolio.js";
 import { authenticate, requireRole } from "./middleware/auth.js";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
 
@@ -28,6 +33,9 @@ app.use(cors({
   credentials: true,
 }));
 app.use(express.json({ limit: "1mb" }));
+
+// Serve static files (CSS, JS, HTML, images, etc.)
+app.use(express.static(join(__dirname, "../../static")));
 
 app.get("/api/health", (_req, res) => {
   res.json({ ok: true, service: "AURELUX Sovereign API" });
