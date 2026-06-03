@@ -38,7 +38,7 @@ app.use(express.json({ limit: "1mb" }));
 app.use(express.static(join(__dirname, "../../static")));
 
 app.get("/api/health", (_req, res) => {
-  res.json({ ok: true, service: "AURELUX Sovereign API" });
+  res.json({ ok: true, service: "All Talents Agency API" });
 });
 
 app.use("/api/auth", authRoutes);
@@ -59,5 +59,5 @@ app.use((err, _req, res, _next) => {
 });
 
 app.listen(config.port, () => {
-  console.log(`AURELUX Sovereign API live on port ${config.port}`);
+  console.log(`All Talents Agency API live on port ${config.port}`);
 });

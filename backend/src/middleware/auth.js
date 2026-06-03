@@ -32,4 +32,4 @@ export const requireRole = (...roles) => (req, res, next) => {
     return res.status(403).json({ error: "Forbidden" });
   }
   return next();
-};
+}; 

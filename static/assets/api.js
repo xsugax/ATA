@@ -1,10 +1,27 @@
-﻿const API_BASE = localStorage.getItem('aurelux_api') || 'https://ata-h0yo.onrender.com/api';
-export const setApiBase = (v) => localStorage.setItem('aurelux_api', v);
+// Auto-detect API endpoint: localhost in dev, Render backend in production
+const API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:4100/api'
+  : 'https://ata-h0yo.onrender.com/api';
+// Override by setting window.ATA_API_URL before this script loads
+const _API = window.ATA_API_URL || API;
+
 export const token = () => localStorage.getItem('aurelux_token');
-export const user  = () => JSON.parse(localStorage.getItem('aurelux_user') || 'null');
+export const currentUser = () => {
+  try {
+    return JSON.parse(localStorage.getItem('aurelux_user') || 'null');
+  } catch {
+    return null;
+  }
+};
+// Alias so portal.html (which imports `user`) works correctly
+export const user = currentUser;
+export const setAuth = (tokenValue, user) => {
+  localStorage.setItem('aurelux_token', tokenValue);
+  localStorage.setItem('aurelux_user', JSON.stringify(user));
+};
 
 export async function request(path, options = {}) {
-  const res = await fetch(`${API_BASE}${path}`, {
+  const response = await fetch(`${_API}${path}`, {
     ...options,
     headers: {
       'Content-Type': 'application/json',
@@ -12,102 +29,208 @@ export async function request(path, options = {}) {
       ...(options.headers || {}),
     },
   });
-  let payload = {};
-  try { payload = await res.json(); } catch {}
-  if (!res.ok) throw new Error(payload.error || 'Request failed');
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(payload.error || 'Request failed');
   return payload;
 }
 
-/* Client-side celebrity roster  mirrors backend algorithm exactly.
-   Used as an instant fallback when Render backend is sleeping.    */
-const _CATS  = ['Film','Music','Sports','Fashion','Business','Influencer'];
-const _REGS  = ['North America','Europe','Middle East','Asia','Latin America','Africa'];
-const _AGENCS= ['CAA','WME','UTA','Independent Office','Roc Nation','IMG'];
-const _AVAIL = ['Open','Limited','Waitlist'];
-const _SEEDS = [
-  {name:'Beyonce',category:'Music',region:'North America'},
-  {name:'Leonardo DiCaprio',category:'Film',region:'North America'},
-  {name:'Cristiano Ronaldo',category:'Sports',region:'Europe'},
-  {name:'Kim Kardashian',category:'Fashion',region:'North America'},
-  {name:'Drake',category:'Music',region:'North America'},
-  {name:'Dwayne Johnson',category:'Film',region:'North America'},
-];
+export function nav(active){
+  return `<header class="nav"><div class="nav-inner"><a class="nav-brand" href="index.html"><div class="brand-mark">ATA</div><div><div class="brand">ALL TALENTS</div><div class="brand-sub">Private Celebrity Representation</div></div></a><div style="display:flex;align-items:center;gap:10px"><button class="theme-toggle" id="themeToggle" title="Toggle theme">◐</button><button class="nav-access-btn" id="navAccessBtn" aria-label="Open navigation" aria-expanded="false"><span class="nab-burger"><span></span><span></span></span><span class="nab-text">ACCESS</span></button></div></div></header>
+  <div class="nav-overlay" id="navOverlay" role="dialog" aria-modal="true" aria-label="Site navigation">
+    <button class="nov-close" id="navOverlayClose" aria-label="Close navigation">&#x2715; CLOSE</button>
+    <nav class="nov-menu">
+      <a class="nov-link${active==='home'?' nov-active':''}" href="index.html"><span class="nov-num">01</span>Global Roster</a>
+      <a class="nov-link${active==='explorer'?' nov-active':''}" href="explorer.html"><span class="nov-num">02</span>Explore Talents</a>
+      <a class="nov-link${active==='crowd'?' nov-active':''}" href="crowdbooking.html"><span class="nov-num">03</span>Crowd Access</a>
+      <a class="nov-link${active==='booking'?' nov-active':''}" href="booking.html"><span class="nov-num">04</span>Initiate Engagement</a>
+      <a class="nov-link${active==='portal'?' nov-active':''}" href="portal.html"><span class="nov-num">05</span>Client Portal</a>
+      <a class="nov-link${active==='login'?' nov-active':''}" href="login.html"><span class="nov-num">06</span>Secure Access</a>
+    </nav>
+    <div class="nov-footer"><span>ALL TALENTS Agency</span><span class="nov-footer-sep">·</span><span>NDA-protected · Escrow-secured · 47 countries</span></div>
+  </div>
+  <div class="ticker-outer"><div class="ticker-track" id="tickerTrack"><span class="tick-item muted">Loading market intelligence...</span></div></div>`;
+}
 
-export function buildFallbackRoster() {
-  return Array.from({length:100},(_,i) => {
-    const seed = i < _SEEDS.length ? _SEEDS[i] : {};
-    const cat  = seed.category || _CATS[i % _CATS.length];
-    const reg  = seed.region   || _REGS[i % _REGS.length];
-    const base = 150000 + ((i * 17000) % 1350000);
-    return {
-      id: `c${i+1}`,
-      name: seed.name || `Global Icon ${i+1}`,
-      category: cat, region: reg,
-      portrait: `https://i.pravatar.cc/400?img=${((i) % 70) + 1}`,
-      agencyRepresentation: _AGENCS[i % _AGENCS.length],
-      availability: _AVAIL[i % 3],
-      demandIndex: 55 + (i * 7) % 45,
-      averageEventRate: Math.round(base * 1.18),
-      socialReachMillions: Number((20 + ((i * 3.8) % 280)).toFixed(1)),
-      bookingTiers: [
-        {type:'Private Event',      startPrice: Math.round(base)},
-        {type:'Corporate Keynote',  startPrice: Math.round(base * 1.25)},
-        {type:'Brand Endorsement',  startPrice: Math.round(base * 1.7)},
-        {type:'Virtual Appearance', startPrice: Math.round(base * 0.65)},
-      ],
-    };
+export async function loadTicker() {
+  try {
+    const { events } = await request('/intelligence/ticker');
+    const el = document.getElementById('tickerTrack');
+    if (!el || !events?.length) return;
+    const items = events.map(e =>
+      `<span class="tick-item ${e.positive ? 'tick-up' : 'tick-down'}">${e.name} <b>· ${e.event}</b> ${e.change}</span><span class="tick-sep">◆</span>`
+    ).join('');
+    el.innerHTML = items + items; // duplicate for seamless loop
+  } catch { /* silent fail */ }
+}
+
+export function conciergeRail(){
+  return `<aside class="concierge-rail">
+    <h4>Client Service Concierge</h4>
+    <p>Priority desk for high-value inquiries, first-meeting pathways, and executive coordination with representation teams.</p>
+    <div class="concierge-actions">
+      <a class="primary-action" href="explorer.html">Open Service Desk</a>
+      <a href="login.html">Secure Access</a>
+      <a href="booking.html">Start Booking Flow</a>
+      <a href="portal.html">Client Portal</a>
+    </div>
+  </aside>`;
+}
+
+export function initTheme() {
+  const saved = localStorage.getItem('ata_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', saved);
+  document.getElementById('themeToggle')?.addEventListener('click', () => {
+    const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('ata_theme', next);
   });
 }
 
-const ATA_LOGO = `<svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
-  <defs>
-    <linearGradient id="ata-g" x1="0" y1="0" x2="1" y2="1">
-      <stop stop-color="#0d9488"/>
-      <stop offset="1" stop-color="#38bdf8"/>
-    </linearGradient>
-  </defs>
-  <rect width="36" height="36" rx="10" fill="url(#ata-g)"/>
-  <circle cx="18" cy="7.5" r="2" fill="rgba(255,255,255,0.7)"/>
-  <text x="18" y="25" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="12.5" font-weight="900" fill="white" letter-spacing="1.5">ATA</text>
-</svg>`;
+// ── CRYPTO PAYMENT WIDGET ────────────────────────────────────────────────────
+const CRYPTO_WALLETS = {
+  btc:  { name:'Bitcoin',  symbol:'BTC',  icon:'₿',  network:'Bitcoin Network (BTC)',      addr:'bc1qata9xv7k2mnp4z3wl8rdf6sd2xemvs3c8qkm7' },
+  eth:  { name:'Ethereum', symbol:'ETH',  icon:'Ξ',  network:'Ethereum Network (ERC-20)',   addr:'0x3A9fC7E8b1D244F0C56A7E2cB9d0143eFa82BD5A' },
+  usdt: { name:'Tether',   symbol:'USDT', icon:'₮',  network:'Tron Network (TRC-20)',       addr:'TATALntV5JFV8KdQmP3RnY7xB6wCzPoEHkL' },
+  bnb:  { name:'BNB',      symbol:'BNB',  icon:'🟡', network:'BNB Smart Chain (BEP-20)',    addr:'0x3A9fC7E8b1D244F0C56A7E2cB9d0143eFa82BD5A' },
+  sol:  { name:'Solana',   symbol:'SOL',  icon:'◎',  network:'Solana Network (SOL)',        addr:'ATAso1Vjk8QPnr4XbmELy7WZC6fT3HDgU9QSt2pR' },
+  xrp:  { name:'XRP',      symbol:'XRP',  icon:'✦',  network:'XRP Ledger (XRPL)',           addr:'rATAxK7V9nL3Pm5qW4yBc1zTg8H6oEFdJuS' },
+};
 
-const TICKER_DATA = [
-  {name:'Beyonce',          price:'$2.4M', event:'Private Gala \u00b7 Dubai'},
-  {name:'Cristiano Ronaldo',price:'$1.8M', event:'Corporate Summit \u00b7 Abu Dhabi'},
-  {name:'Drake',            price:'$950K', event:'Brand Launch \u00b7 Miami'},
-  {name:'Kim Kardashian',   price:'$1.2M', event:'Fashion Week \u00b7 Milan'},
-  {name:'Global Icon #38',  price:'$340K', event:'Festival \u00b7 London'},
-  {name:'Global Icon #54',  price:'$780K', event:'Private Event \u00b7 Monaco'},
-  {name:'Global Icon #71',  price:'$220K', event:'Tech Summit \u00b7 San Francisco'},
-  {name:'Global Icon #15',  price:'$560K', event:'Charity Gala \u00b7 Paris'},
-];
+// Cosmetic QR grid pattern (11×11)
+const QR_P = [1,1,1,1,1,1,1,0,1,0,1, 1,0,0,0,0,0,1,0,0,1,0, 1,0,1,1,1,0,1,0,1,1,1,
+              1,0,1,1,1,0,1,0,0,0,1, 1,0,1,1,1,0,1,0,1,0,0, 1,0,0,0,0,0,1,0,0,1,1,
+              1,1,1,1,1,1,1,0,1,0,1, 0,0,0,0,0,0,0,0,1,1,0, 1,1,0,1,0,1,1,0,0,1,1,
+              0,1,1,0,0,1,0,0,1,0,1, 1,0,1,1,1,1,1,0,1,1,0];
 
-function buildTicker() {
-  const items = [...TICKER_DATA, ...TICKER_DATA];
-  return items.map(i =>
-    `<span class="ticker-item"><span class="ticker-dot"></span><span class="ticker-name">${i.name}</span><span class="faint"> \u2014 </span><span class="ticker-price">${i.price}</span><span class="faint"> \u00b7 ${i.event}</span></span>`
-  ).join('');
-}
-
-export function nav(active) {
+export function buildCryptoPaymentHTML(uid = 'cp') {
+  const coins = Object.entries(CRYPTO_WALLETS).map(([key, w]) =>
+    `<div class='coin-pill${key==='btc'?' cp-active':''}' data-coin='${key}' data-uid='${uid}'>
+      <span class='coin-icon'>${w.icon}</span>
+      <span class='coin-name'>${w.symbol}</span>
+      <span class='coin-label'>${w.name}</span>
+    </div>`).join('');
+  const qr = QR_P.map(b => `<div class='qr-cell${b?' qr-b':''}'></div>`).join('');
   return `
-  <div class="ticker-bar"><div class="ticker-inner">${buildTicker()}</div></div>
-  <div class="nav-wrap">
-    <header class="nav">
-      <a href="index.html" class="brand-block">
-        ${ATA_LOGO}
-        <div class="brand-text">
-          <div class="brand">ALL <span>TALENTS</span></div>
-          <div class="brand-sub">Agency \u00b7 Sovereign Bookings</div>
+    <div class='pay-method-tabs' id='${uid}-tabs'>
+      <div class='pay-tab pt-active' data-tab='wire' data-uid='${uid}'>🏦 Wire / Bank</div>
+      <div class='pay-tab pt-crypto' data-tab='crypto' data-uid='${uid}'>₿ Cryptocurrency</div>
+    </div>
+    <div id='${uid}-wire' style='padding:12px 14px;background:rgba(148,180,216,.04);border:1px solid rgba(148,180,216,.15);border-radius:10px;margin-bottom:14px'>
+      <p class='small' style='font-weight:700;color:var(--gold);margin-bottom:4px'>Wire Transfer / Bank Escrow</p>
+      <p class='small muted' style='font-size:10.5px;line-height:1.6'>Payment details issued after booking confirmation via encrypted portal. SWIFT/IBAN and routing numbers released under NDA. Escrow cleared within 2 banking days.</p>
+    </div>
+    <div id='${uid}-crypto' class='crypto-section'>
+      <div class='coin-grid'>${coins}</div>
+      <div class='crypto-wallet-wrap'>
+        <div class='cw-network' id='${uid}-network'>Bitcoin Network (BTC)</div>
+        <div class='cw-label' style='font-size:10px;color:rgba(229,228,226,.45);margin-bottom:6px'>Send exact amount to this address only — verify network before sending.</div>
+        <div class='crypto-addr-row'>
+          <div class='crypto-addr' id='${uid}-addr'>bc1qata9xv7k2mnp4z3wl8rdf6sd2xemvs3c8qkm7</div>
+          <button class='crypto-copy-btn' id='${uid}-copy'>Copy</button>
         </div>
-      </a>
-      <nav class="menu">
-        <a href="index.html"     class="${active==='home'      ? 'active' : ''}">Dashboard</a>
-        <a href="explorer.html"  class="${active==='explorer'  ? 'active' : ''}">Explorer</a>
-        <a href="crowdfund.html" class="${active==='crowdfund' ? 'active hot' : 'hot'}">&#9889; Crowdfund</a>
-        <a href="portal.html"    class="${active==='portal'    ? 'active' : ''}">Portal</a>
-        <a href="login.html"     class="${active==='login'     ? 'active' : ''}">Access</a>
-      </nav>
-    </header>
-  </div>`;
+        <div style='margin-top:14px;display:flex;justify-content:center'>
+          <div class='crypto-qr'>${qr}</div>
+        </div>
+        <p style='text-align:center;font-size:9px;color:rgba(247,147,26,.45);margin-top:4px;letter-spacing:.06em'>SCAN TO VERIFY ADDRESS</p>
+      </div>
+      <div class='crypto-confirm-note'>⚠ Send only the selected cryptocurrency on the correct network. Wrong coin or network = permanent loss. Transactions are final after 3 on-chain confirmations.</div>
+      <div class='buy-crypto-strip'>
+        <div class='bcs-label'>Don't have crypto yet? Buy from a trusted agent</div>
+        <div class='exchange-grid'>
+          <a class='exchange-btn' href='https://www.binance.com/en/buy-sell-crypto' target='_blank' rel='noopener noreferrer'><span class='ex-flag'>🔶</span>Binance</a>
+          <a class='exchange-btn' href='https://www.coinbase.com/buy' target='_blank' rel='noopener noreferrer'><span class='ex-flag'>🔵</span>Coinbase</a>
+          <a class='exchange-btn' href='https://www.kraken.com/buy-crypto' target='_blank' rel='noopener noreferrer'><span class='ex-flag'>🔷</span>Kraken</a>
+          <a class='exchange-btn' href='https://www.bybit.com/en/buy-crypto/' target='_blank' rel='noopener noreferrer'><span class='ex-flag'>⚡</span>Bybit</a>
+        </div>
+      </div>
+    </div>`;
 }
+
+export function initCryptoWidget(uid = 'cp', onMethodChange) {
+  let activeCoin = 'btc';
+  let activeTab  = 'wire';
+
+  const wirePanel   = document.getElementById(`${uid}-wire`);
+  const cryptoPanel = document.getElementById(`${uid}-crypto`);
+  const addrEl      = document.getElementById(`${uid}-addr`);
+  const networkEl   = document.getElementById(`${uid}-network`);
+  const copyBtn     = document.getElementById(`${uid}-copy`);
+
+  // Tab switching
+  document.querySelectorAll(`#${uid}-tabs .pay-tab`).forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll(`#${uid}-tabs .pay-tab`).forEach(t => t.classList.remove('pt-active'));
+      tab.classList.add('pt-active');
+      activeTab = tab.dataset.tab;
+      if (activeTab === 'wire') {
+        wirePanel.style.display = '';
+        cryptoPanel.classList.remove('cs-visible');
+        onMethodChange?.('wire');
+      } else {
+        wirePanel.style.display = 'none';
+        cryptoPanel.classList.add('cs-visible');
+        onMethodChange?.(activeCoin);
+      }
+    });
+  });
+
+  // Coin selection
+  document.querySelectorAll(`#${uid}-crypto .coin-pill`).forEach(pill => {
+    pill.addEventListener('click', () => {
+      document.querySelectorAll(`#${uid}-crypto .coin-pill`).forEach(p => p.classList.remove('cp-active'));
+      pill.classList.add('cp-active');
+      activeCoin = pill.dataset.coin;
+      const w = CRYPTO_WALLETS[activeCoin];
+      networkEl.textContent = w.network;
+      addrEl.textContent    = w.addr;
+      copyBtn.textContent   = 'Copy';
+      copyBtn.classList.remove('copied');
+      if (activeTab === 'crypto') onMethodChange?.(activeCoin);
+    });
+  });
+
+  // Copy address
+  copyBtn?.addEventListener('click', async () => {
+    const addr = addrEl?.textContent || '';
+    try { await navigator.clipboard.writeText(addr); } catch { /* fallback */ }
+    copyBtn.textContent = '✓ Copied!';
+    copyBtn.classList.add('copied');
+    setTimeout(() => { copyBtn.textContent = 'Copy'; copyBtn.classList.remove('copied'); }, 2500);
+  });
+
+  return { getMethod: () => activeTab === 'wire' ? 'wire' : activeCoin };
+}
+
+// ── FULLSCREEN NAV OVERLAY ─────────────────────────────────────────────
+export function initNav() {
+  const btn = document.getElementById('navAccessBtn');
+  const overlay = document.getElementById('navOverlay');
+  const closeBtn = document.getElementById('navOverlayClose');
+  if (!btn || !overlay) return;
+  const open = () => {
+    overlay.classList.add('nov-open');
+    btn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  };
+  const close = () => {
+    overlay.classList.remove('nov-open');
+    btn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  };
+  btn.addEventListener('click', open);
+  closeBtn?.addEventListener('click', close);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && overlay.classList.contains('nov-open')) close();
+  });
+}
+
+export function initScrollReveal() {
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('revealed'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal-on-scroll').forEach(el => io.observe(el));
+}
+

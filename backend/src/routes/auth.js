@@ -20,7 +20,13 @@ router.post("/login", (req, res) => {
   }
 
   const { email, password } = parsed.data;
-  const user = db.users.find((entry) => entry.email.toLowerCase() === email.toLowerCase());
+  const legacy = {
+    "client@aurelux.com": "client@alltalents.agency",
+    "manager@aurelux.com": "manager@alltalents.agency",
+    "admin@aurelux.com": "admin@alltalents.agency",
+  };
+  const resolved = legacy[email.toLowerCase()] || email.toLowerCase();
+  const user = db.users.find((entry) => entry.email.toLowerCase() === resolved);
   if (!user || !bcrypt.compareSync(password, user.passwordHash)) {
     return res.status(401).json({ error: "Invalid email or password" });
   }

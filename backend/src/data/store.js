@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 const users = [
   {
     id: "u1",
-    email: "client@aurelux.com",
+    email: "client@alltalents.agency",
     name: "Aria Sterling",
     role: "client",
     passwordHash: bcrypt.hashSync("Client@123", 10),
@@ -11,7 +11,7 @@ const users = [
   },
   {
     id: "u2",
-    email: "manager@aurelux.com",
+    email: "manager@alltalents.agency",
     name: "Marcus Vale",
     role: "manager",
     passwordHash: bcrypt.hashSync("Manager@123", 10),
@@ -19,7 +19,7 @@ const users = [
   },
   {
     id: "u3",
-    email: "admin@aurelux.com",
+    email: "admin@alltalents.agency",
     name: "Helena Noir",
     role: "admin",
     passwordHash: bcrypt.hashSync("Admin@123", 10),
