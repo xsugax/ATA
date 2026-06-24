@@ -2,6 +2,12 @@ import express from "express";
 import { v4 as uuid } from "uuid";
 import { celebrities } from "../data/celebrities.js";
 import { db } from "../data/store.js";
+import {
+  APPROVAL_STAGE,
+  bookingStages,
+  closeAdminVerificationTask,
+  createDisclosureWorkspace,
+} from "./bookingWorkflow.js";
 
 const router = express.Router();
 
@@ -51,6 +57,8 @@ router.get("/dashboard", (_req, res) => {
     kpis: {
       revenueYTD: 148200000,
       activeBookings: db.bookings.length,
+      verificationQueue: db.followUpTasks.filter((task) => task.status === "open").length,
+      disclosureWorkspaces: db.disclosureWorkspaces.length,
       avgEscrowPercent: 30,
       suspendedUsers: 2,
     },
@@ -113,29 +121,48 @@ router.post("/users/:id/unsuspend", (req, res) => {
 router.get("/bookings", (_req, res) => {
   const enriched = db.bookings.map((b) => {
     const user = db.users.find((u) => u.id === b.userId);
-    return { ...b, userEmail: user?.email || "unknown", userName: user?.name || "Unknown" };
+    const followUpTask = db.followUpTasks.find((task) => task.bookingId === b.id && task.type === "admin_verification");
+    const disclosureWorkspace = db.disclosureWorkspaces.find((workspace) => workspace.bookingId === b.id);
+    return { ...b, userEmail: user?.email || "unknown", userName: user?.name || "Unknown", followUpTask, disclosureWorkspace };
   });
   return res.json({ data: enriched.reverse(), total: enriched.length });
 });
-
-const bookingStages = [
-  "Inquiry Received", "Under Representation Review", "Terms Negotiation",
-  "Contract Finalized", "Escrow Secured", "Confirmed",
-];
 
 router.patch("/bookings/:id/status", (req, res) => {
   const booking = db.bookings.find((b) => b.id === req.params.id);
   if (!booking) return res.status(404).json({ error: "Booking not found" });
   const { stage } = req.body;
   if (!bookingStages.includes(stage)) return res.status(400).json({ error: "Invalid stage" });
+
+  if (stage === APPROVAL_STAGE && booking.verificationRequired && !booking.verifiedAt) {
+    return res.status(409).json({ error: "Admin verification must be completed before approval." });
+  }
+
+  if (stage === "Admin Verified - Terms Review" && !booking.verifiedAt) {
+    booking.verifiedAt = new Date().toISOString();
+    booking.verifiedBy = req.user.email;
+    booking.verificationRequired = false;
+    booking.approvalLockedReason = null;
+    closeAdminVerificationTask(db, booking.id, req.user.email);
+  }
+
   booking.status = stage;
   booking.statusHistory.push({ stage, at: new Date().toISOString() });
+  let disclosureWorkspace = null;
+  if (stage === APPROVAL_STAGE) {
+    disclosureWorkspace = createDisclosureWorkspace(db, booking, req.user.email);
+  }
   db.auditLogs.push({
-    id: uuid(), actor: req.user.email, action: "ADMIN_BOOKING_STATUS_UPDATED",
+    id: uuid(), actor: req.user.email, action: stage === APPROVAL_STAGE ? "DISCLOSURE_WORKSPACE_CREATED" : "ADMIN_BOOKING_STATUS_UPDATED",
     referenceId: booking.id, timestamp: new Date().toISOString(),
   });
-  emitAdminEvent("BOOKING_STATUS_UPDATED", { bookingId: booking.id, stage, by: req.user.email });
-  return res.json({ booking });
+  emitAdminEvent(stage === APPROVAL_STAGE ? "DISCLOSURE_WORKSPACE_CREATED" : "BOOKING_STATUS_UPDATED", {
+    bookingId: booking.id,
+    stage,
+    workspaceId: disclosureWorkspace?.id,
+    by: req.user.email,
+  });
+  return res.json({ booking, disclosureWorkspace });
 });
 
 router.delete("/bookings/:id", (req, res) => {
@@ -184,8 +211,18 @@ router.post("/bookings/bulk", (req, res) => {
     const b = db.bookings.find((x) => x.id === id);
     if (!b) continue;
     if (action === "advance" && stage) {
+      if (!bookingStages.includes(stage)) continue;
+      if (stage === APPROVAL_STAGE && b.verificationRequired && !b.verifiedAt) continue;
+      if (stage === "Admin Verified - Terms Review" && !b.verifiedAt) {
+        b.verifiedAt = new Date().toISOString();
+        b.verifiedBy = req.user.email;
+        b.verificationRequired = false;
+        b.approvalLockedReason = null;
+        closeAdminVerificationTask(db, b.id, req.user.email);
+      }
       b.status = stage;
       b.statusHistory.push({ stage, at: new Date().toISOString() });
+      if (stage === APPROVAL_STAGE) createDisclosureWorkspace(db, b, req.user.email);
     } else if (action === "cancel") {
       db.bookings.splice(db.bookings.indexOf(b), 1);
     }

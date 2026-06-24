@@ -21,9 +21,9 @@ router.post("/login", (req, res) => {
 
   const { email, password } = parsed.data;
   const legacy = {
-    "client@aurelux.com": "client@alltalents.agency",
-    "manager@aurelux.com": "manager@alltalents.agency",
-    "admin@aurelux.com": "admin@alltalents.agency",
+    "client@alltalents.agency": "client@aurelux.com",
+    "manager@alltalents.agency": "manager@aurelux.com",
+    "admin@alltalents.agency": "admin@aurelux.com",
   };
   const resolved = legacy[email.toLowerCase()] || email.toLowerCase();
   const user = db.users.find((entry) => entry.email.toLowerCase() === resolved);

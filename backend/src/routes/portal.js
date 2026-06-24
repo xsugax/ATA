@@ -7,6 +7,11 @@ router.get("/overview", (req, res) => {
   const bookings = db.bookings.filter((entry) => entry.userId === req.user.id);
   const contracts = db.contracts.filter((entry) => bookings.some((booking) => booking.id === entry.bookingId));
   const payments = db.payments.filter((entry) => bookings.some((booking) => booking.id === entry.bookingId));
+  const disclosureWorkspaces = db.disclosureWorkspaces.filter((entry) => {
+    const allowedClient = entry.access?.clientUserIds?.includes(req.user.id);
+    const allowedAdmin = entry.access?.adminIds?.includes(req.user.id);
+    return allowedClient || allowedAdmin;
+  });
   const messages = db.messages.filter((entry) => entry.toUserId === req.user.id);
 
   return res.json({
@@ -14,6 +19,7 @@ router.get("/overview", (req, res) => {
     bookings,
     contracts,
     payments,
+    disclosureWorkspaces,
     messages,
     concierge: {
       assistantName: "AURELIA",

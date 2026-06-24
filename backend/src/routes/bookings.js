@@ -5,6 +5,7 @@ import { celebrities } from "../data/celebrities.js";
 import { db } from "../data/store.js";
 import { config } from "../config.js";
 import { emitAdminEvent } from "./admin.js";
+import { bookingStages, createAdminFollowUpTask } from "./bookingWorkflow.js";
 
 const router = express.Router();
 
@@ -17,16 +18,9 @@ const bookingSchema = z.object({
   securityLevel: z.string(),
   riderRequirements: z.string(),
   pricingAdjustmentPercent: z.number().min(-15).max(50),
+  paymentMethod: z.enum(["wire", "escrow", "crypto"]).default("wire"),
+  cryptoCurrency: z.string().optional(),
 });
-
-const bookingStages = [
-  "Inquiry Received",
-  "Under Representation Review",
-  "Terms Negotiation",
-  "Contract Finalized",
-  "Escrow Secured",
-  "Confirmed",
-];
 
 const calculatePricing = (basePrice, adjustmentPercent) => {
   const finalQuote = Math.round(basePrice * (1 + adjustmentPercent / 100));
@@ -72,12 +66,20 @@ router.post("/initiate", (req, res) => {
     riderRequirements: payload.riderRequirements,
     status: bookingStages[0],
     statusHistory: [{ stage: bookingStages[0], at: new Date().toISOString() }],
+    verificationRequired: true,
+    verifiedAt: null,
+    verifiedBy: null,
+    approvalLockedReason: "Admin verification required before approval.",
+    assignedAdminId: "u3",
+    paymentMethod: payload.paymentMethod,
+    cryptoCurrency: payload.paymentMethod === "crypto" ? payload.cryptoCurrency || "BTC" : null,
     pricing,
     createdAt: new Date().toISOString(),
     contractId: `CTR-${Math.floor(Math.random() * 900000 + 100000)}`,
   };
 
   db.bookings.push(booking);
+  const followUpTask = createAdminFollowUpTask(db, booking);
   db.contracts.push({
     id: booking.contractId,
     bookingId: booking.id,
@@ -91,6 +93,8 @@ router.post("/initiate", (req, res) => {
     amount: pricing.escrow,
     currency: "USD",
     status: "Pending Escrow",
+    method: payload.paymentMethod,
+    cryptoCurrency: booking.cryptoCurrency,
   });
   db.auditLogs.push({
     id: uuid(),
@@ -107,9 +111,11 @@ router.post("/initiate", (req, res) => {
     eventType: payload.eventType,
     quote: pricing.finalQuote,
     date: payload.date,
+    followUpTaskId: followUpTask.id,
+    status: booking.status,
   });
 
-  return res.status(201).json({ booking, bookingStages });
+  return res.status(201).json({ booking, bookingStages, followUpTask });
 });
 
 router.get("/mine", (req, res) => {
