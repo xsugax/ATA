@@ -185,6 +185,15 @@ const PORTRAIT_MAP = {
   // New additions
   "Salma Hayek":         "/assets/portraits/c239.jpg",
   "Matt Rife":           "/assets/portraits/c240.jpg",
+  "Monica Bellucci":     "https://i.pravatar.cc/300?u=Monica%20Bellucci",
+  "Sofia Vergara":       "https://i.pravatar.cc/300?u=Sofia%20Vergara",
+  "Kate Beckinsale":     "https://i.pravatar.cc/300?u=Kate%20Beckinsale",
+  "Elon Musk":           "https://i.pravatar.cc/300?u=Elon%20Musk",
+  "Steven Tyler":        "https://i.pravatar.cc/300?u=Steven%20Tyler",
+  "Riley Green":         "https://i.pravatar.cc/300?u=Riley%20Green",
+  "Mark Cuban":          "https://i.pravatar.cc/300?u=Mark%20Cuban",
+  "Ray Dalio":           "https://i.pravatar.cc/300?u=Ray%20Dalio",
+  "Richard Branson":     "https://i.pravatar.cc/300?u=Richard%20Branson",
 
 };
 
@@ -373,6 +382,23 @@ const seeds = [
   // Comedy & New Media
   { name: "Salma Hayek",      cat: "Film",       region: "Latin America", price:  400000, worth: "$200M",  reach: 28,  agency: "CAA",         signal: "Oscar-nominated actress and Frida producer-star. Eternals and Magic Mike's Last Dance global releases. Kering Group board member and Gucci brand collaborator. Private events via CAA with confirmed 30-day advance and prestige brand alignment." },
   { name: "Matt Rife",        cat: "Influencer", region: "North America", price:  250000, worth: "$12M",   reach: 32,  agency: "WME",         signal: "Fastest stand-up comedian to sell out arenas in history — ProbleMATTic World Tour 2024 grossed $100M in first week of sales. 18M TikTok followers. Private shows and brand events via WME with confirmed audience qualification and 21-day advance." },
+  { name: "Sofia Vergara",    cat: "Film",       region: "North America", price:  550000, worth: "$180M",  reach: 42,  agency: "CAA",         signal: "Modern family icon, global brand ambassador, and high-demand luxury event host. Private appearances are best suited to branded dinners, entertainment launches, and premium hospitality integrations with 30-day advance approval." },
+  { name: "Kate Beckinsale",  cat: "Film",       region: "Europe",        price:  450000, worth: "$40M",   reach: 14,  agency: "CAA",         signal: "Acclaimed screen actress and British film icon with established couture and prestige brand relationships. Private appearances are curated for film festival salons, luxury hospitality, and boutique philanthropic events with 45-day advance vetting." },
+  { name: "Steven Tyler",     cat: "Music",      region: "North America", price:  700000, worth: "$150M",  reach: 20,  agency: "WME",         signal: "Aerosmith frontman, multi-platinum recording artist, and long-running cultural tastemaker. Private performances and keynote appearances are reserved for premium entertainment, charity, and executive leadership summits with 60-day lead time." },
+  { name: "Riley Green",      cat: "Music",      region: "North America", price:  250000, worth: "$4M",    reach: 8,   agency: "Independent", signal: "Rising country star with breakout radio and streaming momentum. Private appearances suit private country dinners, hospitality brand partnerships, and regional charity fundraisers with 21-day coordination windows." },
+  { name: "Elon Musk",        cat: "Business",    region: "North America", price: 5000000, worth: "$300B",  reach: 160, agency: "Independent", signal: "Founder-led industrial and technology visionary with highly selective access. Engagements are routed through executive-level intermediaries for boardroom, infrastructure, and investment-focused events with sovereign security standards." },
+  { name: "Mark Cuban",       cat: "Business",    region: "North America", price: 1500000, worth: "$6B",    reach: 24,  agency: "Independent", signal: "Billionaire investor, Shark Tank icon, and high-conviction entrepreneur. Private appearances are best aligned to innovation, venture, sports, and leadership summits with 45-day executive review." },
+  { name: "Ray Dalio",        cat: "Business",    region: "North America", price: 1200000, worth: "$20B",   reach: 18,  agency: "Independent", signal: "Bridgewater founder and macroeconomic thought leader. Private engagements are reserved for institutional strategy forums, economic summits, and market leadership briefings with executive screening." },
+  { name: "Richard Branson",  cat: "Business",    region: "Europe",        price: 1300000, worth: "$3B",    reach: 22,  agency: "Independent", signal: "Virgin Group founder and global venture pioneer. Private appearances are routed through curated leadership and innovation platforms with strict exclusivity and brand alignment conditions." },
+  { name: "Monica Bellucci",  cat: "Film",       region: "Europe",        price:  450000, worth: "$45M",   reach: 6,   agency: "Independent", signal: "Italian cinema icon, Cannes and Venice red-carpet fixture, Cartier/Dolce & Gabbana luxury fashion presence and one of Europe's most elegant screen legends. Private appearances are best suited to couture dinners, fragrance launches, film salons and sovereign hospitality events with 30-day advance approval.",
+    preferredHotels: ["Hotel de Crillon, Paris", "Bulgari Hotel Milano", "Aman Venice", "Hotel de Russie, Rome", "Hotel de Paris Monte-Carlo"],
+    reservationWindows: [
+      { date: "2026-07-18", place: "Hotel de Crillon, Paris", format: "Private couture dinner" },
+      { date: "2026-09-05", place: "Aman Venice, Venice", format: "Film festival salon" },
+      { date: "2026-10-10", place: "Bulgari Hotel Milano, Milan", format: "Luxury brand reception" },
+      { date: "2026-11-14", place: "Hotel de Russie, Rome", format: "Private cinema evening" },
+      { date: "2026-12-05", place: "Hotel de Paris Monte-Carlo, Monaco", format: "Sovereign gala dinner" },
+    ] },
 
 ];
 
@@ -414,6 +440,8 @@ const build = (s, i) => {
     securityTiers:          ["Standard", "Enhanced", "Executive", "Sovereign"],
     recentBrandAlignment:   partnerships[(i + 3) % partnerships.length],
     eventCompatibility:     ["Summit", "Gala", "Launch", "Private Dinner", "Festival"].slice(0, 3 + (i % 3)),
+    preferredHotels:        s.preferredHotels || [],
+    reservationWindows:     s.reservationWindows || [],
   };
 };
 
