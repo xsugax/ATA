@@ -26,6 +26,7 @@ const productionOrigins = [
   "https://www.alltalentsagency.com",
   "https://alltalentsagency.com",
   "https://alltalents-agency.vercel.app",
+  "https://ata-h0yo.onrender.com",
 ];
 
 const devOrigins = ["http://localhost:3000", "http://localhost:3001"];
