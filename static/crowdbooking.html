@@ -229,7 +229,42 @@
 
     function renderEvents(events) {
       if (!events.length) {
-        document.getElementById('eventsGrid').innerHTML = `<div class='card' style='grid-column:1/-1;padding:40px;text-align:center'><p class='muted'>No events match your filters.</p></div>`;
+        const cat = document.getElementById('filterCat')?.value || 'All';
+        const maxP = parseInt(document.getElementById('filterPrice')?.value || '0', 10);
+        const hasAnyCategory = cat !== 'All' && allEvents.some(ev => ev.category === cat);
+        const hasAnyPrice = maxP > 0 && allEvents.some(ev => ev.pricePerSlot <= maxP);
+        const hint = hasAnyCategory && !hasAnyPrice
+          ? 'Your price ceiling is filtering out this category. Try a higher price range.'
+          : !hasAnyCategory && hasAnyPrice
+            ? 'No events in that category right now. Try All Categories or Music.'
+            : 'Try broader filters to reveal active verified events.';
+
+        document.getElementById('eventsGrid').innerHTML = `
+          <div class='card' style='grid-column:1/-1;padding:34px;text-align:center'>
+            <p class='eyebrow'>No Exact Matches</p>
+            <h3 style='margin:8px 0 6px'>No events match your current filters</h3>
+            <p class='small muted' style='margin-bottom:14px'>${hint}</p>
+            <div style='display:flex;gap:8px;justify-content:center;flex-wrap:wrap'>
+              <button class='secondary' id='crowdResetFilters' style='width:auto;padding:10px 16px'>Reset All Filters</button>
+              <button class='secondary' id='crowdKeepCategory' style='width:auto;padding:10px 16px'>Keep Category Only</button>
+              <button class='secondary' id='crowdKeepPrice' style='width:auto;padding:10px 16px'>Keep Price Only</button>
+            </div>
+          </div>
+        `;
+
+        document.getElementById('crowdResetFilters')?.addEventListener('click', () => {
+          document.getElementById('filterCat').value = 'All';
+          document.getElementById('filterPrice').value = '0';
+          renderEvents(getFiltered());
+        });
+        document.getElementById('crowdKeepCategory')?.addEventListener('click', () => {
+          document.getElementById('filterPrice').value = '0';
+          renderEvents(getFiltered());
+        });
+        document.getElementById('crowdKeepPrice')?.addEventListener('click', () => {
+          document.getElementById('filterCat').value = 'All';
+          renderEvents(getFiltered());
+        });
         return;
       }
       document.getElementById('eventsGrid').innerHTML = events.map(ev => {

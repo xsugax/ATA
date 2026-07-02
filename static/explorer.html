@@ -771,11 +771,20 @@
           method: 'POST',
           body: JSON.stringify({ celebrityIds: ids }),
         });
+        const winner = result?.recommendation?.winner || {};
+        const rankedFirst = result?.compared?.[0] || {};
+        const winnerId = winner.id || rankedFirst.id || ids[0];
+        const winnerName = winner.name || rankedFirst.name || celebMap.get(winnerId)?.name || 'Top Candidate';
         out.innerHTML = `
-          <p class='small'><b>Winner:</b> ${result.recommendation.winner.name}</p>
+          <p class='small'><b>Winner:</b> ${winnerName}</p>
           <p class='small'><b>Rationale:</b> ${result.recommendation.rationale}</p>
           <p class='small'><b>Ranking:</b> ${result.compared.map((r, i) => `${i + 1}. ${r.name} (Score ${r.valueScore})`).join(' - ')}</p>
+          <div style='display:flex;gap:8px;flex-wrap:wrap;margin-top:10px'>
+            <a href='booking.html?id=${winnerId}'><button class='primary' style='width:auto;padding:10px 16px;font-size:11px'>Book Top Candidate →</button></a>
+            <button class='secondary' id='compareOpenDossier' style='width:auto;padding:10px 16px;font-size:11px'>Open Dossier</button>
+          </div>
         `;
+        document.getElementById('compareOpenDossier')?.addEventListener('click', () => openDossier(winnerId));
       } catch (error) {
         out.textContent = error.message;
       }
