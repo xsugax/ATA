@@ -21,9 +21,20 @@ const __dirname = dirname(__filename);
 
 const app = express();
 
+const productionOrigins = [
+  "https://www.alltalentsagency.com",
+  "https://alltalentsagency.com",
+  "https://alltalents-agency.vercel.app",
+];
+
+const devOrigins = ["http://localhost:3000", "http://localhost:3001"];
+
+const defaultOrigins =
+  process.env.NODE_ENV === "production" ? productionOrigins : devOrigins;
+
 const allowedOrigins = process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(",").map((o) => o.trim())
-  : ["http://localhost:3000"];
+  : defaultOrigins;
 
 app.use(cors({
   origin: (origin, cb) => {

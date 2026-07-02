@@ -11,3 +11,5 @@ services:
         value: 4000
       - key: NODE_ENV
         value: production
+      - key: ALLOWED_ORIGINS
+        value: "https://www.alltalentsagency.com,https://alltalentsagency.com,https://alltalents-agency.vercel.app"
