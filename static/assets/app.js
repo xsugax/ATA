@@ -34,16 +34,16 @@ export async function request(path, options = {}) {
 
 export function nav(active){
   return `<header class="nav"><div class="nav-inner"><a class="nav-brand" href="index.html"><div class="brand-mark">ATA</div><div><div class="brand">ALL TALENTS</div><div class="brand-sub">Private Celebrity Representation</div></div></a><div style="display:flex;align-items:center;gap:10px"><button class="nav-search-btn" id="navSearchBtn" title="Search celebrities" aria-label="Search celebrities"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button><button class="theme-toggle" id="themeToggle" title="Toggle theme">◐</button><button class="nav-access-btn" id="navAccessBtn" aria-label="Open navigation" aria-expanded="false"><span class="nab-burger"><span></span><span></span></span><span class="nab-text">ACCESS</span></button></div></div></header>
-  <div class="nav-search-overlay" id="navSearchOverlay" role="search" aria-hidden="true"><button class="nso-close" id="nsoClose" aria-label="Close search">&#x2715; ESC</button><div class="nso-inner"><p style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.35);margin:0 0 16px">Search Celebrities</p><div class="nso-input-wrap"><input class="nso-input" id="nsoInput" placeholder="Beyonc\u00e9, Ronaldo, Taylor Swift\u2025" autocomplete="off" spellcheck="false" type="search"><button class="nso-submit" id="nsoSubmit">Search \u2192</button></div><p class="nso-hint">Type a name, category, or region &nbsp;\u00b7&nbsp; Press Enter or click Search</p></div></div>
+  <div class="nav-search-overlay" id="navSearchOverlay" role="search" aria-hidden="true"><button class="nso-close" id="nsoClose" aria-label="Close search">&#x2715; ESC</button><div class="nso-inner"><p style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.35);margin:0 0 16px">Search Celebrities</p><div class="nso-input-wrap"><input class="nso-input" id="nsoInput" placeholder="Beyonc\u00e9, Ronaldo, Taylor Swift\u2025" autocomplete="off" spellcheck="false" type="search"><button class="nso-submit" id="nsoSubmit">Search \u2192</button></div><p class="nso-hint">Type a name, category, or region &nbsp;\u00b7&nbsp; Press Enter or click Search</p><div style="margin-top:16px;display:flex;flex-wrap:wrap;gap:7px;align-items:center"><span style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-right:6px">Popular:</span><button class="nso-chip" data-q="Beyoncé">Beyoncé</button><button class="nso-chip" data-q="Drake">Drake</button><button class="nso-chip" data-q="Ronaldo">Ronaldo</button><button class="nso-chip" data-q="Zendaya">Zendaya</button><button class="nso-chip" data-q="Elon Musk">Elon Musk</button><button class="nso-chip" data-q="Taylor Swift">Taylor Swift</button></div></div></div>
   <div class="nav-overlay" id="navOverlay" role="dialog" aria-modal="true" aria-label="Site navigation">
     <button class="nov-close" id="navOverlayClose" aria-label="Close navigation">&#x2715; CLOSE</button>
     <nav class="nov-menu">
-      <a class="nov-link${active==='home'?' nov-active':''}" href="index.html"><span class="nov-num">01</span>Global Roster</a>
-      <a class="nov-link${active==='explorer'?' nov-active':''}" href="explorer.html"><span class="nov-num">02</span>Explore Talents</a>
-      <a class="nov-link${active==='crowd'?' nov-active':''}" href="crowdbooking.html"><span class="nov-num">03</span>Crowd Access</a>
-      <a class="nov-link${active==='booking'?' nov-active':''}" href="booking.html"><span class="nov-num">04</span>Initiate Engagement</a>
-      <a class="nov-link${active==='portal'?' nov-active':''}" href="portal.html"><span class="nov-num">05</span>Client Portal</a>
-      <a class="nov-link${active==='login'?' nov-active':''}" href="login.html"><span class="nov-num">06</span>Secure Access</a>
+      <a class="nov-link${active==='home'?' nov-active':''}" href="index.html"><span class="nov-num">01</span>Global Roster<span style="font-size:9px;opacity:.5;display:block;margin-top:2px;letter-spacing:.06em">Platform Overview</span></a>
+      <a class="nov-link${active==='explorer'?' nov-active':''}" href="explorer.html"><span class="nov-num">02</span>Explore Talents<span style="font-size:9px;opacity:.5;display:block;margin-top:2px;letter-spacing:.06em">Browse & Compare</span></a>
+      <a class="nov-link${active==='crowd'?' nov-active':''}" href="crowdbooking.html"><span class="nov-num">03</span>Crowd Access<span style="font-size:9px;opacity:.5;display:block;margin-top:2px;letter-spacing:.06em">Group Events</span></a>
+      <a class="nov-link${active==='booking'?' nov-active':''}" href="booking.html"><span class="nov-num">04</span>Initiate Engagement<span style="font-size:9px;opacity:.5;display:block;margin-top:2px;letter-spacing:.06em">Book Private</span></a>
+      <a class="nov-link${active==='portal'?' nov-active':''}" href="portal.html"><span class="nov-num">05</span>Client Portal<span style="font-size:9px;opacity:.5;display:block;margin-top:2px;letter-spacing:.06em">Track Bookings</span></a>
+      <a class="nov-link${active==='login'?' nov-active':''}" href="login.html"><span class="nov-num">06</span>Secure Access<span style="font-size:9px;opacity:.5;display:block;margin-top:2px;letter-spacing:.06em">Login</span></a>
     </nav>
     <div class="nov-footer"><span>ALL TALENTS Agency</span><span class="nov-footer-sep">·</span><span>NDA-protected · Escrow-secured · 47 countries</span></div>
   </div>
@@ -196,6 +196,16 @@ export function initNav() {
   nsoSubmit?.addEventListener('click', doSearch);
   nsoInput?.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); doSearch(); } });
   searchOverlay?.addEventListener('click', (e) => { if (e.target === searchOverlay) closeSearch(); });
+
+  // Popular search chips
+  searchOverlay?.querySelectorAll('.nso-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const q = chip.getAttribute('data-q');
+      if (!q) return;
+      nsoInput.value = q;
+      doSearch();
+    });
+  });
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') { closeNav(); closeSearch(); }

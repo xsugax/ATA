@@ -46,6 +46,27 @@
 		}
 
 		try {
+			const user = JSON.parse(localStorage.getItem('aurelux_user') || 'null');
+			if (!user) {
+				document.getElementById('p').innerHTML = `
+					<div class='card' style='max-width:520px;margin:0 auto;padding:40px 32px;text-align:center'>
+						<p class='eyebrow' style='color:var(--danger)'>Authentication Required</p>
+						<h2 style='margin:12px 0 8px'>Client Portal Access</h2>
+						<p class='small muted' style='margin-bottom:24px'>This page requires an authenticated session. Please log in to view your bookings, messages, and client standing.</p>
+						<a href='login.html'><button class='primary' style='width:auto;padding:14px 32px;font-size:12px;letter-spacing:.08em;text-transform:uppercase'>Go to Secure Login →</button></a>
+						<div style='margin-top:24px;padding:16px;background:var(--bg-alt);border:1px solid var(--line);border-radius:10px;text-align:left'>
+							<p class='small muted' style='margin-bottom:10px;font-weight:700'>Demo Credentials (click to use):</p>
+							<div style='display:grid;gap:8px;font-size:11px'>
+								<div><strong>Client:</strong> client@alltalents.agency / Client@123</div>
+								<div><strong>Manager:</strong> manager@alltalents.agency / Manager@123</div>
+								<div><strong>Admin:</strong> admin@alltalents.agency / Admin@123</div>
+							</div>
+						</div>
+					</div>
+				`;
+				return;
+			}
+
 			const [d, standing] = await Promise.all([
 				request('/portal/overview'),
 				request('/portal/standing').catch(() => null),

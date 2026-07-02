@@ -661,3 +661,20 @@ img{width:100%;height:220px;object-fit:cover;border-radius:8px;border:1px solid 
 @media(max-width:680px){.creds-strip{border-radius:8px}.cs-item{padding:16px 18px;min-width:88px}.cs-num{font-size:24px}.sovereignty-showcase{padding:30px 20px}.sovereignty-showcase::after{font-size:60px}.ss-pillars{grid-template-columns:1fr}.af-bar{flex-direction:column;align-items:flex-start;gap:14px}.af-links{gap:14px}.crowd-event-card .ce-body{padding:12px 14px}}
 @media(max-width:430px){.crowd-event-card .ce-body{padding:10px 12px}}
 @media(hover:none){.filter-pill:hover{background:var(--bg-alt);border-color:var(--line-strong);color:var(--text-2)}}
+
+/* -- NAV SEARCH OVERLAY ------------------------------------------------ */
+.nav-search-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.85);backdrop-filter:blur(16px);display:none;align-items:center;justify-content:center;padding:20px;opacity:0;transition:opacity .3s ease}
+.nav-search-overlay.nso-open{display:flex;opacity:1}
+.nso-close{position:absolute;top:24px;right:32px;background:transparent;border:none;color:rgba(255,255,255,.6);font-size:14px;cursor:pointer;padding:8px 16px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;width:auto;transition:color .2s}
+.nso-close:hover{color:#fff}
+.nso-inner{max-width:640px;width:100%}
+.nso-input-wrap{display:flex;gap:0;margin-bottom:12px}
+.nso-input{flex:1;padding:16px 20px;border-radius:10px 0 0 10px;border:2px solid rgba(255,255,255,.2);border-right:none;background:rgba(255,255,255,.08);color:#fff;font-size:16px;outline:none;transition:border-color .2s}
+.nso-input:focus{border-color:rgba(255,255,255,.5)}
+.nso-input::placeholder{color:rgba(255,255,255,.4)}
+.nso-submit{background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.2);border-left:none;color:#fff;padding:16px 28px;border-radius:0 10px 10px 0;font-weight:800;font-size:13px;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;width:auto;transition:background .2s,border-color .2s}
+.nso-submit:hover{background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.4)}
+.nso-hint{font-size:11px;color:rgba(255,255,255,.45);text-align:center;letter-spacing:.06em}
+.nso-chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.75);padding:6px 14px;border-radius:20px;font-size:11px;cursor:pointer;transition:all .2s;width:auto;font-weight:600;letter-spacing:.02em}
+.nso-chip:hover{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.4);color:#fff}
+
