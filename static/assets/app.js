@@ -84,13 +84,45 @@ export function conciergeRail(){
   </aside>`;
 }
 
+const THEME_MODES = ['sovereign', 'dark', 'light'];
+
+function applyTheme(mode) {
+  const nextMode = THEME_MODES.includes(mode) ? mode : 'sovereign';
+  document.documentElement.setAttribute('data-theme', nextMode);
+  localStorage.setItem('ata_theme', nextMode);
+
+  const btn = document.getElementById('themeToggle');
+  if (!btn) return;
+
+  const map = {
+    sovereign: { icon: '◐', label: 'Sovereign Theme' },
+    dark: { icon: '🌙', label: 'Dark Theme' },
+    light: { icon: '☀', label: 'Light Theme' },
+  };
+
+  btn.textContent = map[nextMode].icon;
+  btn.title = `${map[nextMode].label} (Alt+1/2/3)`;
+  btn.setAttribute('aria-label', map[nextMode].label);
+  document.dispatchEvent(new CustomEvent('ata:theme-changed', { detail: { mode: nextMode } }));
+}
+
 export function initTheme() {
-  const saved = localStorage.getItem('ata_theme') || 'dark';
-  document.documentElement.setAttribute('data-theme', saved);
+  const saved = localStorage.getItem('ata_theme') || 'sovereign';
+  applyTheme(saved);
+
   document.getElementById('themeToggle')?.addEventListener('click', () => {
-    const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('ata_theme', next);
+    const current = document.documentElement.getAttribute('data-theme') || 'sovereign';
+    const idx = THEME_MODES.indexOf(current);
+    const next = THEME_MODES[(idx + 1) % THEME_MODES.length];
+    applyTheme(next);
+  });
+
+  // Quick mode switching for power users.
+  document.addEventListener('keydown', (e) => {
+    if (!e.altKey) return;
+    if (e.key === '1') applyTheme('sovereign');
+    if (e.key === '2') applyTheme('dark');
+    if (e.key === '3') applyTheme('light');
   });
 }
 

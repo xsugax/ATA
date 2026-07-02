@@ -10,11 +10,12 @@
 	<link rel='stylesheet' href='assets/styles.css'>
 	<link rel='icon' href='/assets/favicon.svg' type='image/svg+xml'>
 	<link rel='shortcut icon' href='/assets/favicon.svg'>
+	<script>(function(){var t=localStorage.getItem('ata_theme')||'sovereign';document.documentElement.setAttribute('data-theme',t)})();</script>
 </head>
 <body>
 	<div class='container' id='app'></div>
 	<script type='module'>
-		import { request, nav, currentUser, loadTicker, buildCryptoPaymentHTML, initCryptoWidget } from './assets/app.js';
+		import { request, nav, currentUser, loadTicker, buildCryptoPaymentHTML, initCryptoWidget, initTheme, initNav, initScrollReveal, initDynamicTheme } from './assets/app.js';
 
 		const app = document.getElementById('app');
 		const id = new URLSearchParams(location.search).get('id');
@@ -29,6 +30,10 @@
 		const c = await request('/celebrities/' + id);
 
 		await loadTicker();
+		initTheme();
+		initNav();
+		initScrollReveal();
+		initDynamicTheme();
 
 		// Build 30-day availability calendar
 		function buildCalendar(celebrity) {
@@ -70,14 +75,43 @@
 
 		document.getElementById('left').innerHTML = `
 			<p class='eyebrow'>Executive Booking Desk</p>
-			<h2>Initiate Structured Engagement for ${c.name}</h2>
+			<h2>Initiate Premium Engagement for ${c.name}</h2>
 			<p class='lead'>Submit your event brief with security and operational requirements. The system simulates commercial impact prior to representative review and contract progression.</p>
 			<div class='grid section'>
 				<input id='eventType' value='Gala' placeholder='Event Type'>
 				<input id='date' type='date'>
-				<input id='location' value='Dubai' placeholder='Location'>
+				<select id='locationMode'>
+					<option value='hotel'>Luxury Hotel Suite</option>
+					<option value='estate'>Private Estate</option>
+					<option value='corporate'>Corporate Boardroom</option>
+					<option value='yacht'>Yacht / Marina</option>
+					<option value='virtual'>Virtual Secure Call</option>
+					<option value='custom'>Custom Location</option>
+				</select>
+				<input id='location' value='Dubai - Four Seasons Jumeirah' placeholder='Primary location / city'>
+				<div id='customLocationWrap' style='display:none;gap:8px'>
+					<input id='customVenue' placeholder='Venue Name (e.g., Royal Palm Private Villa)'>
+					<input id='customAddress' placeholder='Full Address / Coordinates'>
+					<textarea id='customLocationNotes' rows='2' placeholder='Custom access notes, floor, gate, contact, parking, helipad, etc.'></textarea>
+				</div>
 				<select id='security'>${c.securityTiers.map(s => `<option>${s}</option>`).join('')}</select>
+				<select id='logisticsTier'>
+					<option value='standard'>Standard Logistics</option>
+					<option value='priority'>Priority Logistics</option>
+					<option value='white-glove'>White-Glove Logistics</option>
+				</select>
+				<select id='arrivalMethod'>
+					<option value='chauffeur'>Chauffeur Ground Transfer</option>
+					<option value='helicopter'>Helicopter Coordination</option>
+					<option value='private-jet'>Private Jet Coordination</option>
+					<option value='secure-convoy'>Secure Convoy</option>
+				</select>
 				<textarea id='rider'>Private lounge protocol + secure arrival corridor + controlled media perimeter.</textarea>
+				<div class='flow-grid'>
+					<div class='flow-step'><p class='num'>Location Logic</p><h4 id='locationSummary'>Hotel Suite · Dubai</h4><p id='locationSummaryHint'>Standard private access venue.</p></div>
+					<div class='flow-step'><p class='num'>Logistics Lane</p><h4 id='logisticsSummary'>Standard</h4><p id='logisticsSummaryHint'>Chauffeur ground transfer with check-in desk.</p></div>
+					<div class='flow-step'><p class='num'>Readiness Score</p><h4 id='readinessScore'>72/100</h4><p id='readinessHint'>Baseline brief complete.</p></div>
+				</div>
 				<label class='small muted'>Dynamic Pricing Sensitivity</label>
 				<input id='adjust' type='range' min='-15' max='50' value='0'>
 				<div class='flow-grid'>
@@ -86,7 +120,9 @@
 					<div class='flow-step'><p class='num'>Visibility Impact</p><h4 id='simImpact'>0</h4><p id='simImpactHint'>Forecast index</p></div>
 				</div>
 				<button id='genPlan'>Generate Executive Scenario</button>
+				<button id='genLogistics' class='secondary'>Generate Logistics Brief</button>
 				<p class='small muted' id='planOut'>${currentUser() ? 'Generate a strategy scenario based on your current booking inputs.' : 'Login to enable scenario generation.'}</p>
+				<p class='small muted' id='logisticsOut'>Logistics brief will appear here once generated.</p>
 				<div style='border-top:1px solid rgba(255,255,255,.07);padding-top:16px;margin-top:4px'>
 					<p class='eyebrow' style='margin-bottom:12px'>Select Payment Method</p>
 					<div id='paymentWidgetWrap'></div>
@@ -97,10 +133,12 @@
 		`;
 
 		const stages = ['Inquiry Received', 'Representative Qualification', 'Commercial Negotiation', 'Contract Finalization', 'Escrow Confirmation', 'Engagement Confirmed'];
+		const stageTimeline = `<div class='phase-strip'>${stages.map((s, i) => `<div class='phase-node ${i === 0 ? 'ph-active' : ''}'><div class='phase-dot'>${i + 1}</div><div class='phase-lbl'>${s}</div></div>`).join('')}</div>`;
 		document.getElementById('right').innerHTML = `
 			<p class='eyebrow'>Process Control</p>
 			<h3>Structured Status Tracker</h3>
 			<p class='small muted'>Each phase reflects the formal representation lifecycle from intake through engagement confirmation.</p>
+			${stageTimeline}
 			<div class='flow-step'>
 				<p class='num'>Pre-check</p>
 				<h4>Before Submission</h4>
@@ -110,8 +148,74 @@
 			${buildCalendar(c)}
 		`;
 
+		const dateInput = document.getElementById('date');
+		dateInput.min = new Date().toISOString().split('T')[0];
+
 		const adjustInput = document.getElementById('adjust');
 		const securityInput = document.getElementById('security');
+		const locationModeInput = document.getElementById('locationMode');
+		const locationInput = document.getElementById('location');
+		const logisticsTierInput = document.getElementById('logisticsTier');
+		const arrivalMethodInput = document.getElementById('arrivalMethod');
+
+		const updateLocationMode = () => {
+			const customWrap = document.getElementById('customLocationWrap');
+			const mode = locationModeInput.value;
+			customWrap.style.display = mode === 'custom' ? 'grid' : 'none';
+			const labels = {
+				hotel: ['Hotel Suite', 'Discreet executive arrival via private lobby.'],
+				estate: ['Private Estate', 'Perimeter control and low-visibility route planning.'],
+				corporate: ['Corporate Boardroom', 'Secure business-only meeting lane with protocol desk.'],
+				yacht: ['Yacht / Marina', 'Marine dock timing + maritime security handoff.'],
+				virtual: ['Virtual Secure Call', 'Encrypted link with moderated participant access.'],
+				custom: ['Custom Location', 'Bespoke logistics requiring full site recon and route planning.'],
+			};
+			document.getElementById('locationSummary').textContent = `${labels[mode][0]} · ${locationInput.value || 'TBD'}`;
+			document.getElementById('locationSummaryHint').textContent = labels[mode][1];
+		};
+
+		const updateLogisticsSummary = () => {
+			const tier = logisticsTierInput.value;
+			const arrival = arrivalMethodInput.value;
+			const tierMap = {
+				standard: ['Standard', 'Core planning with fixed ETA windows.'],
+				priority: ['Priority', 'Dedicated coordinator with proactive reroute support.'],
+				'white-glove': ['White-Glove', 'Multi-team choreography with rehearsed access timing.'],
+			};
+			const arrivalMap = {
+				chauffeur: 'Chauffeur ground transfer with check-in desk.',
+				helicopter: 'Helipad slot + airspace timing confirmation lane.',
+				'private-jet': 'Airport corridor + FBO coordination with escort chain.',
+				'secure-convoy': 'Staggered convoy path with contingency extraction route.',
+			};
+			document.getElementById('logisticsSummary').textContent = tierMap[tier][0];
+			document.getElementById('logisticsSummaryHint').textContent = arrivalMap[arrival];
+
+			const readinessBase = tier === 'white-glove' ? 84 : tier === 'priority' ? 77 : 72;
+			const locationBonus = locationModeInput.value === 'custom' ? 6 : 0;
+			const readiness = Math.min(99, readinessBase + locationBonus + (arrival !== 'chauffeur' ? 4 : 0));
+			document.getElementById('readinessScore').textContent = `${readiness}/100`;
+			document.getElementById('readinessHint').textContent = readiness >= 88 ? 'Exceptional operational readiness.' : readiness >= 78 ? 'Strong logistics posture.' : 'Baseline brief complete.';
+		};
+
+		const composeLocation = () => {
+			if (locationModeInput.value !== 'custom') return locationInput.value;
+			const venue = (document.getElementById('customVenue')?.value || '').trim();
+			const addr = (document.getElementById('customAddress')?.value || '').trim();
+			const notes = (document.getElementById('customLocationNotes')?.value || '').trim();
+			return [venue, addr, notes].filter(Boolean).join(' · ') || locationInput.value;
+		};
+
+		const buildLogisticsBrief = () => {
+			const lines = [
+				`Logistics Tier: ${logisticsTierInput.value}`,
+				`Arrival Method: ${arrivalMethodInput.value}`,
+				`Location Mode: ${locationModeInput.value}`,
+				`Meeting Location: ${composeLocation()}`,
+				`Security Level: ${securityInput.value}`,
+			];
+			return lines.join(' | ');
+		};
 
 		const updateSimulator = () => {
 			const adjust = Number(adjustInput.value || 0);
@@ -130,7 +234,16 @@
 
 		adjustInput.addEventListener('input', updateSimulator);
 		securityInput.addEventListener('change', updateSimulator);
+		locationModeInput.addEventListener('change', () => { updateLocationMode(); updateLogisticsSummary(); });
+		locationInput.addEventListener('input', updateLocationMode);
+		logisticsTierInput.addEventListener('change', updateLogisticsSummary);
+		arrivalMethodInput.addEventListener('change', updateLogisticsSummary);
+		document.getElementById('customVenue')?.addEventListener('input', updateLocationMode);
+		document.getElementById('customAddress')?.addEventListener('input', updateLocationMode);
+		document.getElementById('customLocationNotes')?.addEventListener('input', updateLocationMode);
 		updateSimulator();
+		updateLocationMode();
+		updateLogisticsSummary();
 
 		// Inject crypto widget
 		document.getElementById('paymentWidgetWrap').innerHTML = buildCryptoPaymentHTML('bk');
@@ -147,7 +260,7 @@
 						celebrityId: id,
 						objective: `Premium ${document.getElementById('eventType').value} execution`,
 						audienceType: 'VIP & strategic stakeholders',
-						region: document.getElementById('location').value,
+						region: composeLocation(),
 						budget: projectedBudget,
 						timelineDays: 21,
 					}),
@@ -158,25 +271,33 @@
 			}
 		};
 
+		document.getElementById('genLogistics').onclick = () => {
+			const logOut = document.getElementById('logisticsOut');
+			const eta = arrivalMethodInput.value === 'private-jet' ? 'T-180 min' : arrivalMethodInput.value === 'helicopter' ? 'T-120 min' : 'T-90 min';
+			logOut.innerHTML = `<b>Logistics Brief:</b> ${buildLogisticsBrief()} · Client Checkpoint ETA ${eta} · Primary coordinator assigned.`;
+		};
+
 		document.getElementById('submit').onclick = async () => {
 			try {
 				const payMethod = cryptoWidget.getMethod();
+				const finalLocation = composeLocation();
+				const logisticsBrief = buildLogisticsBrief();
 				const r = await request('/bookings/initiate', {
 					method: 'POST',
 					body: JSON.stringify({
 						celebrityId: id,
 						eventType: document.getElementById('eventType').value,
 						date: document.getElementById('date').value,
-						location: document.getElementById('location').value,
+						location: finalLocation,
 						ndaRequired: true,
 						securityLevel: document.getElementById('security').value,
-						riderRequirements: document.getElementById('rider').value,
+						riderRequirements: `${document.getElementById('rider').value}\n\n[Logistics]\n${logisticsBrief}`,
 						pricingAdjustmentPercent: Number(document.getElementById('adjust').value),
 						paymentMethod: payMethod,
 					}),
 				});
 				const payLabel = payMethod === 'wire' ? 'Wire Transfer' : payMethod.toUpperCase();
-				document.getElementById('msg').innerHTML = `- Submission accepted. Booking <b>${r.booking.id.slice(0,8)}</b> - Contract <b>${r.booking.contractId}</b> - Payment via <b>${payLabel}</b>.`;
+				document.getElementById('msg').innerHTML = `- Submission accepted. Booking <b>${r.booking.id.slice(0,8)}</b> - Contract <b>${r.booking.contractId}</b> - Payment via <b>${payLabel}</b> - Location <b>${finalLocation}</b>.`;
 			} catch (e) {
 				document.getElementById('msg').textContent = e.message + ' (login first)';
 			}

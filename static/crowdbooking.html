@@ -12,7 +12,7 @@
   <link rel='icon' href='/assets/favicon.svg' type='image/svg+xml'>
   <link rel='shortcut icon' href='/assets/favicon.svg'>
   <link rel='stylesheet' href='assets/styles.css'>
-  <script>(function(){var t=localStorage.getItem('ata_theme')||'dark';document.documentElement.setAttribute('data-theme',t)})();</script>
+  <script>(function(){var t=localStorage.getItem('ata_theme')||'sovereign';document.documentElement.setAttribute('data-theme',t)})();</script>
 </head>
 <body>
   <div class='container' id='app'></div>
@@ -172,12 +172,47 @@
       }
     ];
 
-    let allEvents = STATIC_EVENTS;
+    function normalizeEvent(raw, idx) {
+      const safeSlots = Number(raw?.slots ?? 0) || 0;
+      const safeClaimed = Number(raw?.claimed ?? 0) || 0;
+      const safeSoldPct = Number(raw?.soldPct ?? (safeSlots > 0 ? Math.round((safeClaimed / safeSlots) * 100) : 0)) || 0;
+      const safePrice = Number(raw?.pricePerSlot ?? 0) || 0;
+      const safeIncludes = Array.isArray(raw?.includes)
+        ? raw.includes.filter(Boolean)
+        : typeof raw?.includes === 'string'
+          ? raw.includes.split(',').map(s => s.trim()).filter(Boolean)
+          : ['VIP credential', 'On-site concierge support'];
+      const safeInstallments = Array.isArray(raw?.installments)
+        ? raw.installments.filter(Boolean).map(inst => ({
+            months: Number(inst.months) || 0,
+            monthly: Number(inst.monthly) || 0,
+          })).filter(inst => inst.months > 0 && inst.monthly > 0)
+        : [];
+
+      return {
+        id: raw?.id || `evt-fallback-${idx}`,
+        celebId: raw?.celebId || '',
+        eventType: raw?.eventType || 'Private Access Event',
+        eventTitle: raw?.eventTitle || raw?.name || 'Verified Celebrity Event',
+        city: raw?.city || 'TBD',
+        date: raw?.date || new Date().toISOString().slice(0, 10),
+        name: raw?.name || 'Guest Celebrity',
+        category: raw?.category || 'All',
+        slots: safeSlots,
+        claimed: safeClaimed,
+        soldPct: Math.max(0, Math.min(100, safeSoldPct)),
+        pricePerSlot: safePrice,
+        installments: safeInstallments,
+        includes: safeIncludes,
+      };
+    }
+
+    let allEvents = STATIC_EVENTS.map(normalizeEvent);
 
     // Try to refresh from API silently in background (doesn't block the page)
     request('/crowd-events').then(res => {
       if (res?.data?.length) {
-        allEvents = res.data;
+        allEvents = res.data.map(normalizeEvent);
         allEvents.forEach(ev => { if (!planState[ev.id]) planState[ev.id] = 'full'; });
         renderEvents(getFiltered());
       }
@@ -198,8 +233,8 @@
         return;
       }
       document.getElementById('eventsGrid').innerHTML = events.map(ev => {
-        const avail = ev.slots - ev.claimed;
-        const pct = ev.soldPct;
+        const avail = Math.max(0, ev.slots - ev.claimed);
+        const pct = ev.slots > 0 ? Math.max(0, Math.min(100, Math.round((ev.claimed / ev.slots) * 100))) : ev.soldPct;
         const isFull = avail <= 0;
         const fullPrice = Math.round(ev.pricePerSlot * 0.95);
         const plan3 = ev.installments?.find(i => i.months === 3);
@@ -278,6 +313,7 @@
     }
 
     async function openConfirmModal(ev, plan) {
+      if (!ev) return;
       const isFullPay = plan === 'full';
       const displayAmt = isFullPay
         ? Math.round(ev.pricePerSlot * 0.95)
