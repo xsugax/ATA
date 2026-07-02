@@ -65,13 +65,13 @@
         </div>
       </section>
 
-      <section class='card section stack' style='padding:14px 18px'>
-        <div style='display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px'>
+      <section class='crowd-market card section'>
+        <div class='crowd-market-head'>
           <div>
             <p class='eyebrow'>Upcoming Verified Events</p>
             <p class='small muted' style='margin-top:2px'>All events NDA-protected · Escrow-secured · Slot codes issued 14 days prior</p>
           </div>
-          <div style='display:flex;gap:8px;flex-wrap:wrap'>
+          <div class='crowd-filters'>
             <select id='filterCat' style='width:auto;padding:8px 12px;font-size:11px'>
               <option value='All'>All Categories</option>
               <option value='Music'>Music</option>
@@ -89,10 +89,16 @@
             </select>
           </div>
         </div>
+        <div class='crowd-market-metrics' id='crowdMetrics'>
+          <div class='cmm-item'><div class='cmm-label'>Visible Events</div><div class='cmm-value'>6</div></div>
+          <div class='cmm-item'><div class='cmm-label'>Open Slots</div><div class='cmm-value'>81</div></div>
+          <div class='cmm-item'><div class='cmm-label'>Average Entry</div><div class='cmm-value'>$2,740</div></div>
+          <div class='cmm-item'><div class='cmm-label'>Next Event Window</div><div class='cmm-value'>17 May 2026</div></div>
+        </div>
       </section>
 
-      <section class='grid g3 section' id='eventsGrid'>
-        ${[1,2,3,4,5,6].map(() => `<div class='card' style='height:340px;opacity:.4'></div>`).join('')}
+      <section class='crowd-board section' id='eventsGrid'>
+        ${[1,2,3,4,5,6].map(() => `<div class='card' style='height:360px;opacity:.4'></div>`).join('')}
       </section>
 
       <section class='card section' style='text-align:center;padding:32px'>
@@ -227,7 +233,29 @@
     }
     function fmtPrice(p) { return '$' + p.toLocaleString(); }
 
+    function updateCrowdMetrics(events) {
+      const visible = events.length;
+      const openSlots = events.reduce((acc, ev) => acc + Math.max(0, ev.slots - ev.claimed), 0);
+      const avgEntry = visible ? Math.round(events.reduce((acc, ev) => acc + ev.pricePerSlot, 0) / visible) : 0;
+      const nextDate = visible
+        ? events
+            .map(ev => new Date(ev.date + 'T00:00:00'))
+            .sort((a, b) => a.getTime() - b.getTime())[0]
+            .toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+        : 'No upcoming';
+
+      const metrics = document.getElementById('crowdMetrics');
+      if (!metrics) return;
+      metrics.innerHTML = `
+        <div class='cmm-item'><div class='cmm-label'>Visible Events</div><div class='cmm-value'>${visible}</div></div>
+        <div class='cmm-item'><div class='cmm-label'>Open Slots</div><div class='cmm-value'>${openSlots}</div></div>
+        <div class='cmm-item'><div class='cmm-label'>Average Entry</div><div class='cmm-value'>${visible ? fmtPrice(avgEntry) : '—'}</div></div>
+        <div class='cmm-item'><div class='cmm-label'>Next Event Window</div><div class='cmm-value'>${nextDate}</div></div>
+      `;
+    }
+
     function renderEvents(events) {
+      updateCrowdMetrics(events);
       if (!events.length) {
         const cat = document.getElementById('filterCat')?.value || 'All';
         const maxP = parseInt(document.getElementById('filterPrice')?.value || '0', 10);
@@ -276,35 +304,51 @@
         const plan6 = ev.installments?.find(i => i.months === 6);
         return `
           <div class='crowd-event-card' id='card-${ev.id}'>
+            <div class='ce-topline'>
+              <span class='ce-cat-badge'>${ev.category}</span>
+              <span class='ce-date-badge'>${fmtDate(ev.date)}</span>
+            </div>
             <div class='ce-header'>
               <div class='ce-event-type'>${ev.eventType}</div>
               <div class='ce-title'>${ev.eventTitle}</div>
-              <div class='ce-meta'>${ev.city} · ${fmtDate(ev.date)} · ${ev.name}</div>
+              <div class='ce-meta'>${ev.city} · ${ev.name}</div>
             </div>
             <div class='ce-body'>
-              <div class='ce-slots'>
-                <div class='ce-slots-top'>
-                  <span class='ce-slots-label'>Slots Claimed</span>
-                  <span class='ce-slots-count'>${isFull ? '— SOLD OUT' : `${avail} of ${ev.slots} remaining`}</span>
+              <div class='ce-layout'>
+                <div class='ce-col ce-col-main'>
+                  <div class='ce-slots'>
+                    <div class='ce-slots-top'>
+                      <span class='ce-slots-label'>Capacity Status</span>
+                      <span class='ce-slots-count'>${isFull ? '— SOLD OUT' : `${avail} of ${ev.slots} remaining`}</span>
+                    </div>
+                    <div class='ce-slot-bar'><div class='ce-slot-fill${pct >= 80 ? " sf-critical" : ""}' style='width:${pct}%'></div></div>
+                    <div class='ce-slot-meta'>${ev.claimed} claimed · ${pct}% filled</div>
+                  </div>
+
+                  <div class='ce-includes-wrap'>
+                    <p class='ce-group-label'>Access Includes</p>
+                    <div class='ce-includes'>
+                      ${ev.includes.map(i => `<span>${i}</span>`).join('')}
+                    </div>
+                  </div>
                 </div>
-                <div class='ce-slot-bar'><div class='ce-slot-fill${pct >= 80 ? " sf-critical" : ""}' style='width:${pct}%'></div></div>
-              </div>
-              <div style='margin-bottom:10px'>
-                <div class='ce-price-row'>
-                  <span class='ce-price-main' id='disp-price-${ev.id}'>${fmtPrice(fullPrice)}</span>
-                  <span class='ce-price-sub' id='disp-sub-${ev.id}'>full pay (5% off)</span>
+
+                <div class='ce-col ce-col-price'>
+                  <div class='ce-pricing-panel'>
+                    <div class='ce-price-row'>
+                      <span class='ce-price-main' id='disp-price-${ev.id}'>${fmtPrice(fullPrice)}</span>
+                      <span class='ce-price-sub' id='disp-sub-${ev.id}'>full pay (5% off)</span>
+                    </div>
+                    <p class='small muted ce-regular'>Regular price ${fmtPrice(ev.pricePerSlot)} per slot</p>
+                    <div class='ce-plans'>
+                      <span class='ce-plan-pill cp-full cp-sel' data-ev='${ev.id}' data-plan='full'>Pay in Full · ${fmtPrice(fullPrice)}</span>
+                      ${plan3 ? `<span class='ce-plan-pill' data-ev='${ev.id}' data-plan='3-pay'>3× ${fmtPrice(plan3.monthly)}/mo</span>` : ''}
+                      ${plan6 ? `<span class='ce-plan-pill' data-ev='${ev.id}' data-plan='6-pay'>6× ${fmtPrice(plan6.monthly)}/mo</span>` : ''}
+                    </div>
+                    <button class='ce-join-btn' data-ev='${ev.id}' ${isFull ? 'disabled' : ''}>${isFull ? '— Fully Claimed' : 'Claim My Slot ?'}</button>
+                  </div>
                 </div>
-                <p class='small muted' style='margin:3px 0 8px;font-size:10px'>Regular price ${fmtPrice(ev.pricePerSlot)} per slot</p>
-                <div class='ce-plans'>
-                  <span class='ce-plan-pill cp-full cp-sel' data-ev='${ev.id}' data-plan='full'>Pay in Full · ${fmtPrice(fullPrice)}</span>
-                  ${plan3 ? `<span class='ce-plan-pill' data-ev='${ev.id}' data-plan='3-pay'>3× ${fmtPrice(plan3.monthly)}/mo</span>` : ''}
-                  ${plan6 ? `<span class='ce-plan-pill' data-ev='${ev.id}' data-plan='6-pay'>6× ${fmtPrice(plan6.monthly)}/mo</span>` : ''}
-                </div>
               </div>
-              <div class='ce-includes'>
-                ${ev.includes.map(i => `<span>${i}</span>`).join('')}
-              </div>
-              <button class='ce-join-btn' data-ev='${ev.id}' ${isFull ? 'disabled' : ''}>${isFull ? '— Fully Claimed' : 'Claim My Slot ?'}</button>
             </div>
           </div>
         `;
