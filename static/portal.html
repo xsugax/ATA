@@ -10,16 +10,21 @@
 	<link rel='stylesheet' href='assets/styles.css'>
 	<link rel='icon' href='/assets/favicon.svg' type='image/svg+xml'>
 	<link rel='shortcut icon' href='/assets/favicon.svg'>
+	<script>(function(){var t=localStorage.getItem('ata_theme')||'sovereign';document.documentElement.setAttribute('data-theme',t)})();</script>
 </head>
 <body>
 	<div class='container' id='app'></div>
 	<script type='module'>
-		import { request, nav, loadTicker } from './assets/app.js';
+		import { request, nav, loadTicker, initTheme, initNav, initScrollReveal, initDynamicTheme } from './assets/app.js';
 
 		const app = document.getElementById('app');
 		app.innerHTML = `${nav('portal')}<section id='p' class='section'></section>`;
 
 		await loadTicker();
+		initTheme();
+		initNav();
+		initScrollReveal();
+		initDynamicTheme();
 
 		const PHASES = [
 			'Inquiry Received',
