@@ -22,29 +22,7 @@ const deployMarker = "2026-07-02-render-redeploy-1";
 
 const app = express();
 
-const productionOrigins = [
-  "https://www.alltalentsagency.com",
-  "https://alltalentsagency.com",
-  "https://alltalents-agency.vercel.app",
-  "https://ata-h0yo.onrender.com",
-];
-
-const devOrigins = ["http://localhost:3000", "http://localhost:3001"];
-
-const defaultOrigins =
-  process.env.NODE_ENV === "production" ? productionOrigins : devOrigins;
-
-const allowedOrigins = process.env.ALLOWED_ORIGINS
-  ? process.env.ALLOWED_ORIGINS.split(",").map((o) => o.trim())
-  : defaultOrigins;
-
-app.use(cors({
-  origin: (origin, cb) => {
-    if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
-    cb(new Error("Not allowed by CORS"));
-  },
-  credentials: true,
-}));
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json({ limit: "1mb" }));
 
 // Serve static files (CSS, JS, HTML, images, etc.)
