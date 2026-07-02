@@ -18,6 +18,7 @@ import { dirname, join } from "path";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+const deployMarker = "2026-07-02-render-redeploy-1";
 
 const app = express();
 
@@ -49,7 +50,7 @@ app.use(express.json({ limit: "1mb" }));
 app.use(express.static(join(__dirname, "../../static")));
 
 app.get("/api/health", (_req, res) => {
-  res.json({ ok: true, service: "AURELUX Sovereign API" });
+  res.json({ ok: true, service: "AURELUX Sovereign API", deployMarker });
 });
 
 app.use("/api/auth", authRoutes);
