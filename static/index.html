@@ -3,42 +3,68 @@
 <head>
 	<meta charset='UTF-8'>
 	<meta name='viewport' content='width=device-width,initial-scale=1'>
-	<meta http-equiv='Content-Security-Policy' content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://i.pravatar.cc; connect-src 'self' http://localhost:4100 https://ata-h0yo.onrender.com; font-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
-	<meta name='referrer' content='no-referrer'>
-	<title>ALL TALENTS Agency | Book A-List Celebrities Worldwide</title>
+	<meta http-equiv='Content-Security-Policy' content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://i.pravatar.cc https://commons.wikimedia.org https://upload.wikimedia.org; connect-src 'self' http://localhost:4000 http://localhost:4100 https://ata-h0yo.onrender.com; font-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
+	<meta name='referrer' content='strict-origin-when-cross-origin'>
+	<title>All Talents Agency (ATA) — Meet People Who Change the World</title>
 	<!-- SEO: Primary Meta -->
-	<meta name="description" content="Book A-list celebrities, musicians, athletes, K-pop idols, and influencers for corporate events, brand campaigns, and exclusive appearances. 119+ verified talents. Secure & confidential.">
-	<meta name="keywords" content="celebrity booking agency, hire celebrity, book A-list talent, corporate entertainment, brand ambassador, celebrity appearance, talent agency, BTS booking, K-pop celebrities, celebrity event">
-	<meta name="robots" content="index, follow">
-	<meta name="author" content="ALL TALENTS Agency">
+	<meta name="description" content="All Talents Agency (ATA) — the world's most exclusive celebrity booking platform. Book 166+ verified A-list celebrities, billionaires, athletes, musicians, and global icons for private events, corporate summits, and brand experiences. NDA-protected. Escrow-secured. 47 countries.">
+	<meta name="keywords" content="All Talents Agency, ATA, ATA booking, celebrity booking agency, book a celebrity, hire celebrity for event, celebrity talent management, private celebrity events, luxury celebrity booking, corporate celebrity appearance, A-list talent booking, book Beyonce, book Elon Musk, celebrity entertainment agency, exclusive talent agency">
+	<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+	<meta name="author" content="All Talents Agency">
 	<!-- Open Graph -->
 	<meta property="og:type" content="website">
-	<meta property="og:site_name" content="ALL TALENTS Agency">
-	<meta property="og:title" content="ALL TALENTS Agency | Elite Celebrity Booking Platform">
-	<meta property="og:description" content="Book 119+ verified A-list celebrities for corporate events, brand campaigns, and exclusive appearances. Secure, confidential, globally managed.">
-	<meta property="og:url" content="https://alltalents-agency.vercel.app/">
-	<meta property="og:image" content="https://alltalents-agency.vercel.app/assets/og-preview.svg">
+	<meta property="og:site_name" content="All Talents Agency">
+	<meta property="og:title" content="All Talents Agency (ATA) — Global Celebrity Booking Platform">
+	<meta property="og:description" content="Book 166+ verified A-list celebrities for private events, corporate summits, and exclusive brand experiences. NDA-protected. Escrow-secured. 47 countries.">
+	<meta property="og:url" content="https://www.alltalentsagency.com/">
+	<meta property="og:image" content="https://www.alltalentsagency.com/assets/og-preview.svg">
+	<meta property="og:locale" content="en_US">
 	<!-- Twitter Card -->
 	<meta name="twitter:card" content="summary_large_image">
-	<meta name="twitter:title" content="ALL TALENTS Agency | Elite Celebrity Booking">
-	<meta name="twitter:description" content="Book 119+ verified A-list celebrities worldwide. Secure, confidential, fully managed talent representation.">
-	<meta name="twitter:image" content="https://alltalents-agency.vercel.app/assets/og-preview.svg">
+	<meta name="twitter:site" content="@alltalentsagency">
+	<meta name="twitter:title" content="All Talents Agency (ATA) — Global Celebrity Booking">
+	<meta name="twitter:description" content="Book 166+ verified A-list celebrities worldwide. Private events, corporate summits, brand experiences. NDA-protected. Escrow-secured.">
+	<meta name="twitter:image" content="https://www.alltalentsagency.com/assets/og-preview.svg">
 	<!-- Canonical -->
-	<link rel="canonical" href="https://alltalents-agency.vercel.app/">
+	<link rel="canonical" href="https://www.alltalentsagency.com/">
 	<!-- Structured Data -->
 	<script type="application/ld+json">
 	{
 		"@context": "https://schema.org",
-		"@type": "Organization",
-		"name": "ALL TALENTS Agency",
-		"url": "https://alltalents-agency.vercel.app",
-		"description": "Elite celebrity booking and talent representation platform - 119+ verified celebrities worldwide.",
-		"contactPoint": { "@type": "ContactPoint", "contactType": "Talent Booking", "availableLanguage": "English" },
-		"potentialAction": {
-			"@type": "SearchAction",
-			"target": { "@type": "EntryPoint", "urlTemplate": "https://alltalents-agency.vercel.app/explorer.html?search={search_term_string}" },
-			"query-input": "required name=search_term_string"
-		}
+		"@graph": [
+			{
+				"@type": "Organization",
+				"@id": "https://www.alltalentsagency.com/#organization",
+				"name": "All Talents Agency",
+				"alternateName": ["ATA", "All Talents Agency Inc.", "ATA Bookings", "alltalentsagency.com"],
+				"url": "https://www.alltalentsagency.com",
+				"description": "All Talents Agency (ATA) is the world's most exclusive celebrity booking and talent management platform. 166+ verified A-list profiles. Private events, corporate summits, and luxury brand experiences. NDA-protected. Escrow-secured. 47 countries.",
+				"foundingDate": "1996",
+				"areaServed": "Worldwide",
+				"serviceType": ["Celebrity Booking", "Talent Management", "Private Events", "Corporate Keynotes", "Brand Endorsements"],
+				"contactPoint": { "@type": "ContactPoint", "contactType": "Talent Booking", "url": "https://www.alltalentsagency.com/portal.html", "availableLanguage": "English" },
+				"sameAs": [
+					"https://www.instagram.com/alltalentsagency",
+					"https://twitter.com/alltalentsagency",
+					"https://www.linkedin.com/company/alltalentsagency"
+				]
+			},
+			{
+				"@type": "WebSite",
+				"@id": "https://www.alltalentsagency.com/#website",
+				"url": "https://www.alltalentsagency.com",
+				"name": "All Talents Agency",
+				"alternateName": "ATA",
+				"description": "Global celebrity booking and talent management — 166+ verified profiles, private events, corporate summits, luxury brand experiences.",
+				"publisher": { "@id": "https://www.alltalentsagency.com/#organization" },
+				"inLanguage": "en-US",
+				"potentialAction": {
+					"@type": "SearchAction",
+					"target": { "@type": "EntryPoint", "urlTemplate": "https://www.alltalentsagency.com/explorer.html?search={search_term_string}" },
+					"query-input": "required name=search_term_string"
+				}
+			}
+		]
 	}
 	</script>
 	<link rel='stylesheet' href='assets/styles.css'>
@@ -143,15 +169,15 @@
 			</div>
 			<section class='access-strip section reveal-on-scroll rv-d1'>
 				<div style='display:inline-flex;align-items:center;gap:10px;padding:6px 16px;border:1px solid rgba(245,197,24,.25);border-radius:5px;font-size:11px;color:var(--text-2);background:rgba(245,197,24,.05);margin-bottom:18px;width:max-content;font-weight:600'><span style='color:#F5C518;font-size:13px;letter-spacing:1px'>&#9733;&#9733;&#9733;&#9733;&#9733;</span><span style='font-weight:900;color:var(--text)'>4.9</span><span style='opacity:.6'>/5 &mdash; 2,400+ verified bookings</span></div>
-				<h2 class='access-strip-title'>100 Verified Celebrities.<br>Direct Access. Right Now.</h2>
-				<p class='access-strip-sub'>Every talent on this platform is reachable through Aurelux's authorized private channels. Your qualification as a registered client unlocks exclusive meeting windows, direct representative outreach, and priority booking rights - unavailable anywhere else.</p>
+				<h2 class='access-strip-title'>Opportunity to meet the people<br>who <em>change the world.</em></h2>
+				<p class='access-strip-sub'>All Talents Agency (ATA) is the world's most exclusive celebrity booking platform. 166+ verified A-list profiles. Your qualification unlocks private meeting windows, direct representative outreach, and priority access to talent unavailable anywhere else.</p>
 				<form id='heroSearch' style='display:flex;gap:0;margin:22px 0 24px;max-width:620px;width:100%' onsubmit='event.preventDefault(); const q = document.getElementById("heroSearchInput").value.trim(); if(q) window.location.href="explorer.html?search="+encodeURIComponent(q);'>
-					<input id='heroSearchInput' type='text' placeholder='Search for your favourite celebrity-' autocomplete='off' style='flex:1;border-radius:7px 0 0 7px;border:1.5px solid rgba(0,0,0,.15);border-right:none;background:var(--bg-alt);color:var(--text);padding:15px 20px;font-size:14px;letter-spacing:.02em;outline:none;min-width:0;transition:border-color .2s' onfocus='this.style.borderColor="rgba(144,96,232,.6)"' onblur='this.style.borderColor="rgba(0,0,0,.15)"'>
+					<input id='heroSearchInput' type='text' placeholder='Search any celebrity — Beyoncé, Elon Musk, Taylor Swift…' autocomplete='off' style='flex:1;border-radius:7px 0 0 7px;border:1.5px solid rgba(0,0,0,.15);border-right:none;background:var(--bg-alt);color:var(--text);padding:15px 20px;font-size:14px;letter-spacing:.02em;outline:none;min-width:0;transition:border-color .2s' onfocus='this.style.borderColor="rgba(144,96,232,.6)"' onblur='this.style.borderColor="rgba(0,0,0,.15)"'>
 					<button type='submit' style='background:var(--bg-dark);color:#fff;border:none;padding:15px 28px;border-radius:0 7px 7px 0;font-weight:800;font-size:12px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap'>Search &#x2192;</button>
 				</form>
 				<div style='display:flex;flex-wrap:wrap;gap:7px;margin-bottom:22px'>
 					<span style='font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);align-self:center;margin-right:4px'>Quick search:</span>
-					${['Beyonce','Taylor Swift','Cristiano Ronaldo','Rihanna','Drake','Zendaya','Dwayne Johnson','Bad Bunny','Salma Hayek','Matt Rife','Sabrina Carpenter','Kendrick Lamar','Jennifer Aniston','Lionel Messi','Kylie Jenner','BTS'].map(n => `<button onclick='window.location.href="explorer.html?search="+encodeURIComponent("${n}")' style='background:var(--bg-alt);border:1px solid rgba(0,0,0,.1);color:var(--text-2);padding:5px 12px;border-radius:20px;font-size:11px;cursor:pointer;transition:all .2s' onmouseover='this.style.background="rgba(0,0,0,.06)";this.style.borderColor="rgba(0,0,0,.2)"' onmouseout='this.style.background="var(--bg-alt)";this.style.borderColor="rgba(0,0,0,.1)"'>${n}</button>`).join('')}
+					${['Beyonce','Taylor Swift','Elon Musk','Cristiano Ronaldo','Rihanna','Drake','Zendaya','Dwayne Johnson','Monica Bellucci','Sofia Vergara','Kate Beckinsale','Steven Tyler','Bad Bunny','Lionel Messi','LeBron James','BTS'].map(n => `<button onclick='window.location.href="explorer.html?search="+encodeURIComponent("${n}")' style='background:var(--bg-alt);border:1px solid rgba(0,0,0,.1);color:var(--text-2);padding:5px 12px;border-radius:20px;font-size:11px;cursor:pointer;transition:all .2s' onmouseover='this.style.background="rgba(0,0,0,.06)";this.style.borderColor="rgba(0,0,0,.2)"' onmouseout='this.style.background="var(--bg-alt)";this.style.borderColor="rgba(0,0,0,.1)"'>${n}</button>`).join('')}
 				</div>
 				<div class='access-live-count'>Live windows open for qualified clients today</div>
 				<div class='window-grid' id='windowGrid' style='margin-top:18px'>

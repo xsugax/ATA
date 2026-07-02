@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
   <meta charset='UTF-8'>
@@ -99,7 +99,7 @@
         <p class='eyebrow'>Prefer Exclusive Private Access?</p>
         <h3 style='margin:8px 0 8px'>Book a Sole Private Meeting</h3>
         <p class='small muted' style='max-width:480px;margin:0 auto 16px'>Crowd Access is designed for maximum value. If your engagement requires total privacy, a sole event, or sovereign-tier presence — explore private bookings.</p>
-        <a href='explorer.html'><button class='primary' style='width:auto;padding:12px 28px;font-size:11px;letter-spacing:.08em;text-transform:uppercase'>Open Explorer →</button></a>
+        <a href='explorer.html'><button class='primary' style='width:auto;padding:12px 28px;font-size:11px;letter-spacing:.08em;text-transform:uppercase'>Open Explorer ?</button></a>
       </section>
     `;
 
@@ -108,7 +108,7 @@
     initNav();
     initScrollReveal();
 
-    // ── Static events — always visible instantly ───────────────────────
+    // -- Static events — always visible instantly -----------------------
     const STATIC_EVENTS = [
       {
         id:'evt-001', celebId:'beyonce',
@@ -234,7 +234,7 @@
               <div class='ce-includes'>
                 ${ev.includes.map(i => `<span>${i}</span>`).join('')}
               </div>
-              <button class='ce-join-btn' data-ev='${ev.id}' ${isFull ? 'disabled' : ''}>${isFull ? '— Fully Claimed' : 'Claim My Slot →'}</button>
+              <button class='ce-join-btn' data-ev='${ev.id}' ${isFull ? 'disabled' : ''}>${isFull ? '— Fully Claimed' : 'Claim My Slot ?'}</button>
             </div>
           </div>
         `;
@@ -308,7 +308,7 @@
           <div id='cm-pay-wrap'></div>
         </div>
         <p class='small muted' style='font-size:10.5px;line-height:1.55;margin-bottom:14px;padding:10px;background:var(--bg-alt);border-radius:8px;border:1px solid var(--line)'>By claiming this slot you agree to a standard NDA and confirm your registered client identity. Credentials are issued 14 days before the event.</p>
-        <button id='cmConfirmBtn' class='primary' style='border-radius:8px;padding:16px;font-size:12px;font-weight:900;letter-spacing:.1em;text-transform:uppercase'>Confirm & Secure My Slot →</button>
+        <button id='cmConfirmBtn' class='primary' style='border-radius:8px;padding:16px;font-size:12px;font-weight:900;letter-spacing:.1em;text-transform:uppercase'>Confirm & Secure My Slot ?</button>
         <p id='cmStatus' class='small muted' style='text-align:center;margin-top:8px'></p>
       `;
       modalBack.classList.add('cm-open');
@@ -326,7 +326,7 @@
           const payLabel = payMethod === 'wire' ? 'Wire Transfer' : payMethod.toUpperCase();
           modalContent.innerHTML = `
             <div style='text-align:center;padding:10px 0'>
-              <div style='font-size:48px;margin-bottom:12px'>✓</div>
+              <div style='font-size:48px;margin-bottom:12px'>?</div>
               <p class='eyebrow'>Slot Secured</p>
               <h3 style='margin:8px 0 4px;color:var(--text)'>${ev.eventTitle}</h3>
               <p class='small muted' style='margin-bottom:14px'>${ev.city} · ${ev.name}</p>
@@ -343,7 +343,7 @@
           if (idx >= 0) allEvents[idx].claimed++;
           renderEvents(getFiltered());
         } catch(err) {
-          btn.disabled = false; btn.textContent = 'Confirm & Secure My Slot →';
+          btn.disabled = false; btn.textContent = 'Confirm & Secure My Slot ?';
           status.textContent = err.message || 'Error — please log in first.';
           status.style.color = 'var(--danger)';
         }
@@ -368,3 +368,5 @@
   </script>
 </body>
 </html>
+
+

@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
   <meta charset='UTF-8'>
@@ -15,12 +15,12 @@
   <meta property="og:site_name" content="ALL TALENTS Agency">
   <meta property="og:title" content="Celebrity Talent Directory - 119+ Verified Stars | ALL TALENTS Agency">
   <meta property="og:description" content="Browse and book 119+ verified celebrities across music, film, sports, K-pop, comedy, and influencer categories worldwide.">
-  <meta property="og:url" content="https://alltalents-agency.vercel.app/explorer.html">
-  <meta property="og:image" content="https://alltalents-agency.vercel.app/assets/og-preview.svg">
+  <meta property="og:url" content="https://www.alltalentsagency.com/explorer.html">
+  <meta property="og:image" content="https://www.alltalentsagency.com/assets/og-preview.svg">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Celebrity Talent Directory - ALL TALENTS Agency">
   <meta name="twitter:description" content="Search 119+ verified A-list celebrities. Filter by K-pop, Music, Film, Sports, Comedy & more.">
-  <link rel='canonical' href='https://alltalents-agency.vercel.app/explorer.html'>
+  <link rel='canonical' href='https://www.alltalentsagency.com/explorer.html'>
   <link rel='icon' href='/assets/favicon.svg' type='image/svg+xml'>
   <link rel='shortcut icon' href='/assets/favicon.svg'>
   <script type="application/ld+json">
@@ -29,8 +29,8 @@
     "@type": "WebPage",
     "name": "Celebrity Talent Directory",
     "description": "Search 119+ verified celebrity talents across music, film, sports, comedy, and K-pop.",
-    "url": "https://alltalents-agency.vercel.app/explorer.html",
-    "isPartOf": { "@type": "WebSite", "name": "ALL TALENTS Agency", "url": "https://alltalents-agency.vercel.app" }
+    "url": "https://www.alltalentsagency.com/explorer.html",
+    "isPartOf": { "@type": "WebSite", "name": "ALL TALENTS Agency", "url": "https://www.alltalentsagency.com" }
   }
   </script>
   <link rel='stylesheet' href='assets/styles.css'>
@@ -247,7 +247,7 @@
         <p class='lead'>You have direct access to 119+ verified talents through Aurelux's authorized channel network. Tap any profile to open your private meeting portal - choose a venue, lock in your window, and initiate contact.</p>
         <div style='display:flex;gap:10px;align-items:center;margin-bottom:8px'>
           <div class='search-wrap' style='flex:1'><input id='search' placeholder='Search celebrities…' style='width:100%'><span class='search-hint'>/</span></div>
-          <button class='mob-filter-expand' id='filterToggle'>Filters ▾</button>
+          <button class='mob-filter-expand' id='filterToggle'>Filters ?</button>
         </div>
         <div class='filter-selects' id='filterSelects'>
           <div class='filter-pill-bar' id='categoryPills'>
@@ -376,7 +376,7 @@
       const row = document.getElementById('filterSelects');
       const tog = document.getElementById('filterToggle');
       const isOpen = row?.classList.toggle('mob-open');
-      if (tog) tog.textContent = isOpen ? 'Filters ▴' : 'Filters ▾';
+      if (tog) tog.textContent = isOpen ? 'Filters ?' : 'Filters ?';
     });
 
     function renderShortlistState() {
@@ -839,4 +839,6 @@
   </script>
 </body>
 </html>
+
+
 

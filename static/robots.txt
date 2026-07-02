@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /assets/api.js
+
+Sitemap: https://www.alltalentsagency.com/sitemap.xml
+Host: https://www.alltalentsagency.com
