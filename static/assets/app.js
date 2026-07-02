@@ -5,29 +5,17 @@ const API = window.location.hostname === 'localhost' || window.location.hostname
 // Override by setting window.ATA_API_URL before this script loads
 const _API = window.ATA_API_URL || API;
 
-const TOKEN_KEY = 'ata_token';
-const USER_KEY = 'ata_user';
-
-export const token = () => localStorage.getItem(TOKEN_KEY) || localStorage.getItem('aurelux_token');
+export const token = () => localStorage.getItem('aurelux_token');
 export const currentUser = () => {
   try {
-    const raw = localStorage.getItem(USER_KEY) || localStorage.getItem('aurelux_user');
-    return JSON.parse(raw || 'null');
+    return JSON.parse(localStorage.getItem('aurelux_user') || 'null');
   } catch {
     return null;
   }
 };
 export const setAuth = (tokenValue, user) => {
-  localStorage.setItem(TOKEN_KEY, tokenValue);
-  localStorage.setItem(USER_KEY, JSON.stringify(user));
-  localStorage.removeItem('aurelux_token');
-  localStorage.removeItem('aurelux_user');
-};
-export const clearAuth = () => {
-  localStorage.removeItem(TOKEN_KEY);
-  localStorage.removeItem(USER_KEY);
-  localStorage.removeItem('aurelux_token');
-  localStorage.removeItem('aurelux_user');
+  localStorage.setItem('aurelux_token', tokenValue);
+  localStorage.setItem('aurelux_user', JSON.stringify(user));
 };
 
 export async function request(path, options = {}) {
@@ -45,28 +33,43 @@ export async function request(path, options = {}) {
 }
 
 export function nav(active){
-  return `<header class="glass nav"><a class="brand-wrap" href="index.html"><div class="brand-mark">AT</div><div><div class="brand">All Talents Agency</div><div class="small muted brand-sub">Sovereign Celebrity Representation</div></div></a><nav class="menu">
-  <a class="${active==='home'?'active':''}" href="index.html">Home</a>
-  <a class="${active==='explorer'?'active':''}" href="explorer.html">Explorer</a>
-  <a class="${active==='crowd'?'active':''}" href="crowdbooking.html">Crowd Access</a>
-  <a class="${active==='booking'?'active':''}" href="booking.html">Booking</a>
-  <a class="${active==='portal'?'active':''}" href="portal.html">Portal</a>
-  <a class="${active==='login'?'active':''}" href="login.html">Login</a>
-  </nav></header>
-  <div class="ticker-outer"><div class="ticker-track" id="tickerTrack"><span class="tick-item muted">Loading market intelligence...</span></div></div>`;
+  return `<header class="nav"><div class="nav-inner"><a class="nav-brand" href="index.html"><div class="brand-mark">ATA</div><div><div class="brand">ALL TALENTS</div><div class="brand-sub">Private Celebrity Representation</div></div></a><div style="display:flex;align-items:center;gap:10px"><button class="nav-search-btn" id="navSearchBtn" title="Search celebrities" aria-label="Search celebrities"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button><button class="theme-toggle" id="themeToggle" title="Toggle theme">◐</button><button class="nav-access-btn" id="navAccessBtn" aria-label="Open navigation" aria-expanded="false"><span class="nab-burger"><span></span><span></span></span><span class="nab-text">ACCESS</span></button></div></div></header>
+  <div class="nav-search-overlay" id="navSearchOverlay" role="search" aria-hidden="true"><button class="nso-close" id="nsoClose" aria-label="Close search">&#x2715; ESC</button><div class="nso-inner"><p style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.35);margin:0 0 16px">Search Celebrities</p><div class="nso-input-wrap"><input class="nso-input" id="nsoInput" placeholder="Beyonc\u00e9, Ronaldo, Taylor Swift\u2025" autocomplete="off" spellcheck="false" type="search"><button class="nso-submit" id="nsoSubmit">Search \u2192</button></div><p class="nso-hint">Type a name, category, or region &nbsp;\u00b7&nbsp; Press Enter or click Search</p></div></div>
+  <div class="nav-overlay" id="navOverlay" role="dialog" aria-modal="true" aria-label="Site navigation">
+    <button class="nov-close" id="navOverlayClose" aria-label="Close navigation">&#x2715; CLOSE</button>
+    <nav class="nov-menu">
+      <a class="nov-link${active==='home'?' nov-active':''}" href="index.html"><span class="nov-num">01</span>Global Roster</a>
+      <a class="nov-link${active==='explorer'?' nov-active':''}" href="explorer.html"><span class="nov-num">02</span>Explore Talents</a>
+      <a class="nov-link${active==='crowd'?' nov-active':''}" href="crowdbooking.html"><span class="nov-num">03</span>Crowd Access</a>
+      <a class="nov-link${active==='booking'?' nov-active':''}" href="booking.html"><span class="nov-num">04</span>Initiate Engagement</a>
+      <a class="nov-link${active==='portal'?' nov-active':''}" href="portal.html"><span class="nov-num">05</span>Client Portal</a>
+      <a class="nov-link${active==='login'?' nov-active':''}" href="login.html"><span class="nov-num">06</span>Secure Access</a>
+    </nav>
+    <div class="nov-footer"><span>ALL TALENTS Agency</span><span class="nov-footer-sep">·</span><span>NDA-protected · Escrow-secured · 47 countries</span></div>
+  </div>
+  `;
 }
 
-export async function loadTicker() {
-  try {
-    const { events } = await request('/intelligence/ticker');
-    const el = document.getElementById('tickerTrack');
-    if (!el || !events?.length) return;
-    const items = events.map(e =>
-      `<span class="tick-item ${e.positive ? 'tick-up' : 'tick-down'}">${e.name} <b>· ${e.event}</b> ${e.change}</span><span class="tick-sep">◆</span>`
-    ).join('');
-    el.innerHTML = items + items; // duplicate for seamless loop
-  } catch { /* silent fail */ }
-}
+// Ticker data is fully static — no API call, always present instantly
+const TICKER_EVENTS = [
+  { name: 'Beyoncé',            event: 'Booking Confirmed',       change: '+$4.2M',       positive: true  },
+  { name: 'Taylor Swift',       event: 'Window Extended',         change: 'Open',         positive: true  },
+  { name: 'Cristiano Ronaldo',  event: 'New Access Inquiry',      change: '+$2.1M',       positive: true  },
+  { name: 'Rihanna',            event: 'Limited Slots',           change: '3 remaining',  positive: false },
+  { name: 'Drake',              event: 'Availability Confirmed',  change: 'Q3 2026',      positive: true  },
+  { name: 'LeBron James',       event: 'Waitlist Active',         change: 'High Demand',  positive: false },
+  { name: 'The Weeknd',         event: 'Rate Updated',            change: '+$800K',       positive: true  },
+  { name: 'Elon Musk',          event: 'New Access Window',       change: 'Q2 2026',      positive: true  },
+  { name: 'Adele',              event: 'Sold Out',                change: 'Waitlist Only',positive: false },
+  { name: 'Jay-Z',              event: 'Negotiation Open',        change: '$6M floor',    positive: true  },
+  { name: 'Lionel Messi',       event: 'Booking Confirmed',       change: '+$3.8M',       positive: true  },
+  { name: 'Kim Kardashian',     event: 'Window Opening',          change: 'Nov 2026',     positive: true  },
+  { name: 'Dwayne Johnson',     event: 'New Inquiry',             change: '+$5.0M',       positive: true  },
+  { name: 'Oprah Winfrey',      event: 'Rate Adjusted',           change: '$12M floor',   positive: true  },
+  { name: 'Justin Bieber',      event: 'Limited Availability',    change: '2 slots left', positive: false },
+];
+
+export function loadTicker() { /* ticker removed */ }
 
 export function conciergeRail(){
   return `<aside class="concierge-rail">
@@ -81,22 +84,144 @@ export function conciergeRail(){
   </aside>`;
 }
 
-// ── CRYPTO PAYMENT WIDGET ────────────────────────────────────────────────────
-const CRYPTO_WALLETS = {
-  btc:  { name:'Bitcoin',  symbol:'BTC',  icon:'₿',  network:'Bitcoin Network (BTC)',      addr:'bc1qata9xv7k2mnp4z3wl8rdf6sd2xemvs3c8qkm7' },
-  eth:  { name:'Ethereum', symbol:'ETH',  icon:'Ξ',  network:'Ethereum Network (ERC-20)',   addr:'0x3A9fC7E8b1D244F0C56A7E2cB9d0143eFa82BD5A' },
-  usdt: { name:'Tether',   symbol:'USDT', icon:'₮',  network:'Tron Network (TRC-20)',       addr:'TATALntV5JFV8KdQmP3RnY7xB6wCzPoEHkL' },
-  bnb:  { name:'BNB',      symbol:'BNB',  icon:'🟡', network:'BNB Smart Chain (BEP-20)',    addr:'0x3A9fC7E8b1D244F0C56A7E2cB9d0143eFa82BD5A' },
-  sol:  { name:'Solana',   symbol:'SOL',  icon:'◎',  network:'Solana Network (SOL)',        addr:'ATAso1Vjk8QPnr4XbmELy7WZC6fT3HDgU9QSt2pR' },
-  xrp:  { name:'XRP',      symbol:'XRP',  icon:'✦',  network:'XRP Ledger (XRPL)',           addr:'rATAxK7V9nL3Pm5qW4yBc1zTg8H6oEFdJuS' },
-};
+export function initTheme() {
+  const saved = localStorage.getItem('ata_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', saved);
+  document.getElementById('themeToggle')?.addEventListener('click', () => {
+    const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('ata_theme', next);
+  });
+}
 
-// Cosmetic QR grid pattern (11×11)
-const QR_P = [1,1,1,1,1,1,1,0,1,0,1, 1,0,0,0,0,0,1,0,0,1,0, 1,0,1,1,1,0,1,0,1,1,1,
-              1,0,1,1,1,0,1,0,0,0,1, 1,0,1,1,1,0,1,0,1,0,0, 1,0,0,0,0,0,1,0,0,1,1,
-              1,1,1,1,1,1,1,0,1,0,1, 0,0,0,0,0,0,0,0,1,1,0, 1,1,0,1,0,1,1,0,0,1,1,
-              0,1,1,0,0,1,0,0,1,0,1, 1,0,1,1,1,1,1,0,1,1,0];
+// ── FULLSCREEN NAV OVERLAY ─────────────────────────────────────────────
+export function initNav() {
+  const overlay  = document.getElementById('navOverlay');
+  const openBtn  = document.getElementById('navAccessBtn');
+  const closeBtn = document.getElementById('navOverlayClose');
+  if (!overlay || !openBtn) return;
 
+  function openNav() {
+    overlay.classList.add('nov-open');
+    openBtn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    overlay.querySelectorAll('.nov-link').forEach((el, i) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateX(-24px)';
+      setTimeout(() => {
+        el.style.transition = 'opacity .4s ease, transform .4s ease';
+        el.style.opacity = '';
+        el.style.transform = '';
+      }, 80 + i * 70);
+    });
+  }
+
+  function closeNav() {
+    overlay.classList.remove('nov-open');
+    openBtn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  openBtn.addEventListener('click', openNav);
+  closeBtn?.addEventListener('click', closeNav);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) closeNav(); });
+
+  // --- Nav Search Overlay ---
+  const searchOverlay = document.getElementById('navSearchOverlay');
+  const searchBtn     = document.getElementById('navSearchBtn');
+  const nsoClose      = document.getElementById('nsoClose');
+  const nsoInput      = document.getElementById('nsoInput');
+  const nsoSubmit     = document.getElementById('nsoSubmit');
+
+  function openSearch() {
+    closeNav();
+    searchOverlay?.classList.add('nso-open');
+    searchOverlay?.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => nsoInput?.focus(), 60);
+  }
+  function closeSearch() {
+    searchOverlay?.classList.remove('nso-open');
+    searchOverlay?.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+  function doSearch() {
+    const q = nsoInput?.value.trim();
+    if (!q) return;
+    const localSearch = document.getElementById('search');
+    if (localSearch) {
+      closeSearch();
+      localSearch.value = q;
+      localSearch.dispatchEvent(new Event('input'));
+      localSearch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else {
+      window.location.href = 'explorer.html?search=' + encodeURIComponent(q);
+    }
+  }
+
+  searchBtn?.addEventListener('click', openSearch);
+  nsoClose?.addEventListener('click', closeSearch);
+  nsoSubmit?.addEventListener('click', doSearch);
+  nsoInput?.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); doSearch(); } });
+  searchOverlay?.addEventListener('click', (e) => { if (e.target === searchOverlay) closeSearch(); });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { closeNav(); closeSearch(); }
+    if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA' && document.activeElement.tagName !== 'SELECT') {
+      const localSearch = document.getElementById('search');
+      if (localSearch) { e.preventDefault(); localSearch.focus(); }
+      else { e.preventDefault(); openSearch(); }
+    }
+  });
+}
+
+// ── SCROLL REVEAL ─────────────────────────────────────────────────────
+export function initScrollReveal() {
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('revealed'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal-on-scroll').forEach(el => io.observe(el));
+}
+
+// ── DYNAMIC THEME (TIME-OF-DAY OBSIDIAN SHIFT) ────────────────────────
+export function initDynamicTheme() {
+  const h = new Date().getHours();
+  const period = h >= 22 || h < 6 ? 'night' : h < 10 ? 'morning' : h < 18 ? 'day' : 'evening';
+  document.documentElement.setAttribute('data-time-period', period);
+}
+
+// ── FLIP FILTER ENGINE ────────────────────────────────────────────────
+// Returns a function: call flip(filterFn) to show/hide items with FLIP animation.
+// filterFn(el) => true to show, false to hide.
+export function initFlipFilter(containerSel, itemSel) {
+  return function flip(filterFn) {
+    const container = document.querySelector(containerSel);
+    if (!container) return;
+    const items = [...container.querySelectorAll(itemSel)];
+    // — First: record all positions before change —
+    const firsts = new Map(items.map(el => [el, el.getBoundingClientRect()]));
+    // — Last: apply visibility —
+    items.forEach(el => { el.style.display = filterFn(el) ? '' : 'none'; });
+    // — Invert + Play: animate from old position to new —
+    items.forEach(el => {
+      if (el.style.display === 'none') return;
+      const first = firsts.get(el);
+      const last  = el.getBoundingClientRect();
+      if (!first) return;
+      const dx = first.left - last.left;
+      const dy = first.top  - last.top;
+      if (Math.abs(dx) + Math.abs(dy) < 1) return;
+      el.animate(
+        [{ transform: `translate(${dx}px,${dy}px)` }, { transform: 'translate(0,0)' }],
+        { duration: 380, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'none' }
+      );
+    });
+  };
+}
+
+// ── CRYPTO PAYMENT WIDGET ─────────────────────────────────────────────
 export function buildCryptoPaymentHTML(uid = 'cp') {
   const coins = Object.entries(CRYPTO_WALLETS).map(([key, w]) =>
     `<div class='coin-pill${key==='btc'?' cp-active':''}' data-coin='${key}' data-uid='${uid}'>
@@ -195,4 +320,5 @@ export function initCryptoWidget(uid = 'cp', onMethodChange) {
 
   return { getMethod: () => activeTab === 'wire' ? 'wire' : activeCoin };
 }
+
 

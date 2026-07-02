@@ -5,22 +5,22 @@
 	<meta name='viewport' content='width=device-width,initial-scale=1'>
 	<meta http-equiv='Content-Security-Policy' content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://i.pravatar.cc; connect-src 'self' http://localhost:4100 https://ata-h0yo.onrender.com; font-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
 	<meta name='referrer' content='no-referrer'>
-	<title>All Talents Agency | Sovereign Celebrity Booking</title>
+	<title>ALL TALENTS Agency | Book A-List Celebrities Worldwide</title>
 	<!-- SEO: Primary Meta -->
 	<meta name="description" content="Book A-list celebrities, musicians, athletes, K-pop idols, and influencers for corporate events, brand campaigns, and exclusive appearances. 119+ verified talents. Secure & confidential.">
 	<meta name="keywords" content="celebrity booking agency, hire celebrity, book A-list talent, corporate entertainment, brand ambassador, celebrity appearance, talent agency, BTS booking, K-pop celebrities, celebrity event">
 	<meta name="robots" content="index, follow">
-	<meta name="author" content="All Talents Agency">
+	<meta name="author" content="ALL TALENTS Agency">
 	<!-- Open Graph -->
 	<meta property="og:type" content="website">
-	<meta property="og:site_name" content="All Talents Agency">
-	<meta property="og:title" content="All Talents Agency | Sovereign Celebrity Booking">
+	<meta property="og:site_name" content="ALL TALENTS Agency">
+	<meta property="og:title" content="ALL TALENTS Agency | Elite Celebrity Booking Platform">
 	<meta property="og:description" content="Book 119+ verified A-list celebrities for corporate events, brand campaigns, and exclusive appearances. Secure, confidential, globally managed.">
 	<meta property="og:url" content="https://alltalents-agency.vercel.app/">
 	<meta property="og:image" content="https://alltalents-agency.vercel.app/assets/og-preview.svg">
 	<!-- Twitter Card -->
 	<meta name="twitter:card" content="summary_large_image">
-	<meta name="twitter:title" content="All Talents Agency | Sovereign Celebrity Booking">
+	<meta name="twitter:title" content="ALL TALENTS Agency | Elite Celebrity Booking">
 	<meta name="twitter:description" content="Book 119+ verified A-list celebrities worldwide. Secure, confidential, fully managed talent representation.">
 	<meta name="twitter:image" content="https://alltalents-agency.vercel.app/assets/og-preview.svg">
 	<!-- Canonical -->
@@ -30,7 +30,7 @@
 	{
 		"@context": "https://schema.org",
 		"@type": "Organization",
-		"name": "All Talents Agency",
+		"name": "ALL TALENTS Agency",
 		"url": "https://alltalents-agency.vercel.app",
 		"description": "Elite celebrity booking and talent representation platform - 119+ verified celebrities worldwide.",
 		"contactPoint": { "@type": "ContactPoint", "contactType": "Talent Booking", "availableLanguage": "English" },
@@ -42,6 +42,7 @@
 	}
 	</script>
 	<link rel='stylesheet' href='assets/styles.css'>
+	<script>(function(){var t=localStorage.getItem('ata_theme')||'dark';document.documentElement.setAttribute('data-theme',t)})();</script>
 </head>
 <body>
 	<div class='container' id='app'></div>
@@ -53,10 +54,10 @@
 	</button>
 	<div id='floatMsgPanel' class='floating-msg-panel'>
 		<div class='fmp-header'>
-			<div class='fmp-avatar'>AT</div>
+			<div class='fmp-avatar'>ATA</div>
 			<div class='fmp-agent-info'>
 				<div class='fmp-agent-name'>Concierge Desk</div>
-				<div class='fmp-agent-status'><span class='fmp-online-dot'></span>Live Representation Desk</div>
+				<div class='fmp-agent-status'><span class='fmp-online-dot'></span>Concierge &mdash; <span style='color:#F5C518'>&#9733;&#9733;&#9733;&#9733;&#9733;</span> 4.9/5</div>
 			</div>
 			<button class='fmp-close' id='fmpClose' aria-label='Close'>&#x2715;</button>
 		</div>
@@ -79,10 +80,10 @@
 				<p id='homeStatus' class='small muted' style='text-align:center'></p>
 			</div>
 		</div>
-		<div class='fmp-footer'>Encrypted &middot; NDA-default &middot; All Talents Agency</div>
+		<div class='fmp-footer'>Encrypted &middot; NDA-default &middot; ALL TALENTS Agency</div>
 	</div>
 	<script type='module'>
-		import { request, nav, loadTicker } from './assets/app.js';
+		import { request, nav, loadTicker, initTheme, initNav, initScrollReveal, initDynamicTheme } from './assets/app.js';
 		import { CELEBRITIES } from './assets/celebrities-data.js';
 
 		let featuredCelebrity = { id: '', name: '' };
@@ -121,18 +122,31 @@
 		const app = document.getElementById('app');
 		app.innerHTML = `
 			${nav('home')}
-			<section class='glass hero section' id='hero'>
+			<section class='glass hero section hero-stage' id='hero'>
 				<p class='small muted' style='opacity:.45;letter-spacing:.12em;text-transform:uppercase;font-size:10px'>Loading featured profiles...</p>
 			</section>
-			<section class='grid g4 section' id='kpis'>
+			<section class='grid g4 section reveal-on-scroll rv-d1' id='kpis'>
 				${['','','',''].map(()=>`<div class='card' style='height:72px'></div>`).join('')}
 			</section>
-			<section class='access-strip section'>
-				<div style='display:inline-flex;align-items:center;gap:8px;padding:5px 14px;border:1px solid rgba(112,143,168,.3);border-radius:5px;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent-text);background:var(--accent-soft);margin-bottom:18px;width:max-content'><span style='width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block;flex-shrink:0'></span>Live Access Status</div>
+			<div class='creds-strip section reveal-on-scroll rv-d2'>
+				<div class='cs-item'><span class='cs-num'>166+</span><span class='cs-label'>Verified Celebrities</span></div>
+				<div class='cs-sep'></div>
+				<div class='cs-item'><span class='cs-num'>47</span><span class='cs-label'>Countries</span></div>
+				<div class='cs-sep'></div>
+				<div class='cs-item'><span class='cs-num'>$8.4B</span><span class='cs-label'>Portfolio Managed</span></div>
+				<div class='cs-sep'></div>
+				<div class='cs-item'><span class='cs-num'>24/7</span><span class='cs-label'>Concierge Desk</span></div>
+				<div class='cs-sep'></div>
+				<div class='cs-item'><span class='cs-num'>NDA</span><span class='cs-label'>All Engagements</span></div>
+				<div class='cs-sep'></div>
+				<div class='cs-item'><span class='cs-num'>100%</span><span class='cs-label'>Escrow Protected</span></div>
+			</div>
+			<section class='access-strip section reveal-on-scroll rv-d1'>
+				<div style='display:inline-flex;align-items:center;gap:10px;padding:6px 16px;border:1px solid rgba(245,197,24,.25);border-radius:5px;font-size:11px;color:var(--text-2);background:rgba(245,197,24,.05);margin-bottom:18px;width:max-content;font-weight:600'><span style='color:#F5C518;font-size:13px;letter-spacing:1px'>&#9733;&#9733;&#9733;&#9733;&#9733;</span><span style='font-weight:900;color:var(--text)'>4.9</span><span style='opacity:.6'>/5 &mdash; 2,400+ verified bookings</span></div>
 				<h2 class='access-strip-title'>100 Verified Celebrities.<br>Direct Access. Right Now.</h2>
-				<p class='access-strip-sub'>Every talent on this platform is reachable through All Talents Agency's sovereign authorized channels. Your qualification as a registered client unlocks exclusive meeting windows, direct representative outreach, and priority booking rights — unavailable anywhere else.</p>
+				<p class='access-strip-sub'>Every talent on this platform is reachable through Aurelux's authorized private channels. Your qualification as a registered client unlocks exclusive meeting windows, direct representative outreach, and priority booking rights - unavailable anywhere else.</p>
 				<form id='heroSearch' style='display:flex;gap:0;margin:22px 0 24px;max-width:620px;width:100%' onsubmit='event.preventDefault(); const q = document.getElementById("heroSearchInput").value.trim(); if(q) window.location.href="explorer.html?search="+encodeURIComponent(q);'>
-					<input id='heroSearchInput' type='text' placeholder='Search for your favourite celebrity-' autocomplete='off' style='flex:1;border-radius:7px 0 0 7px;border:1.5px solid rgba(0,0,0,.15);border-right:none;background:var(--bg-alt);color:var(--text);padding:15px 20px;font-size:14px;letter-spacing:.02em;outline:none;min-width:0;transition:border-color .2s' onfocus='this.style.borderColor="rgba(112,143,168,.6)"' onblur='this.style.borderColor="rgba(0,0,0,.15)"'>
+					<input id='heroSearchInput' type='text' placeholder='Search for your favourite celebrity-' autocomplete='off' style='flex:1;border-radius:7px 0 0 7px;border:1.5px solid rgba(0,0,0,.15);border-right:none;background:var(--bg-alt);color:var(--text);padding:15px 20px;font-size:14px;letter-spacing:.02em;outline:none;min-width:0;transition:border-color .2s' onfocus='this.style.borderColor="rgba(144,96,232,.6)"' onblur='this.style.borderColor="rgba(0,0,0,.15)"'>
 					<button type='submit' style='background:var(--bg-dark);color:#fff;border:none;padding:15px 28px;border-radius:0 7px 7px 0;font-weight:800;font-size:12px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap'>Search &#x2192;</button>
 				</form>
 				<div style='display:flex;flex-wrap:wrap;gap:7px;margin-bottom:22px'>
@@ -147,7 +161,7 @@
 					<a href='explorer.html'><button class='primary' style='width:auto;padding:14px 36px;font-size:12px;letter-spacing:.1em;text-transform:uppercase'>Explore All Access Windows -</button></a>
 				</div>
 			</section>
-			<section class='crowd-hero section'>
+			<section class='crowd-hero section reveal-on-scroll rv-d2'>
 				<div class='crowd-hero-label'>New Feature - Crowd Access</div>
 				<h2 style='margin-bottom:10px'>Can't Afford Solo Private Access?<br><span>Join a Group. Share the Moment.</span></h2>
 				<p class='access-strip-sub'>Crowd Booking lets you join a verified group at the celebrity's <em>next real event</em> - concerts, premieres, paddocks, brand days. Same icon, same room. Drastically lower entry point with installment payment plans. Slots are limited and fill fast.</p>
@@ -159,7 +173,7 @@
 					<span class='small muted'>From $1,800 /person - Pay in 3 or 6 installments</span>
 				</div>
 			</section>
-			<section class='card section stack'>
+			<section class='card section stack reveal-on-scroll rv-d1'>
 				<p class='eyebrow'>Client Entry Logic</p>
 				<h3>Structured Executive Journey</h3>
 				<div class='flow-grid'>
@@ -180,11 +194,11 @@
 					</article>
 				</div>
 			</section>
-			<section class='grid g3 section'>
+			<section class='grid g3 section reveal-on-scroll rv-d1'>
 				<article class='card stack'>
 					<p class='eyebrow'>Mandate</p>
 					<h3>Elite Access With Executive Discipline</h3>
-					<p class='lead'>All Talents Agency serves private offices, global brands, and senior planners who require reputational precision, legal discretion, and premium outcomes. Each engagement is framed with structured due diligence and clear governance.</p>
+					<p class='lead'>ALL TALENTS Agency serves private offices, global brands, and senior planners who require reputational precision, legal discretion, and premium outcomes. Each engagement is framed with structured due diligence and clear governance.</p>
 				</article>
 				<article class='card stack'>
 					<p class='eyebrow'>Operating Model</p>
@@ -197,12 +211,43 @@
 					<p class='lead'>Clients can discover talent, evaluate demand signals, verify availability windows, open representative communication, and initiate bookings from one controlled executive interface.</p>
 				</article>
 			</section>
-			<section class='grid g2 section'>
-				<article class='card stack' id='pulseCard'>
-					<p class='eyebrow'>Live Intelligence</p>
-					<h3>Market Pulse Radar</h3>
-					<p class='small muted'>Tracking demand heat and top waitlist pressure across the verified roster.</p>
-					<div id='pulseBody' class='small muted'>Loading market pulse...</div>
+			<section class='grid g2 section reveal-on-scroll rv-d2'>
+				<article class='card stack'>
+					<p class='eyebrow'>Client Satisfaction</p>
+					<h3>Rated by Verified Clients</h3>
+					<p class='small muted'>Every engagement reviewed by confirmed principals. No anonymous feedback — only verified transaction records.</p>
+					<div style='margin:20px 0 10px'>
+						<div style='display:flex;align-items:center;gap:14px;margin-bottom:10px'>
+							<span style='font-size:48px;font-weight:900;letter-spacing:-.03em;line-height:1;color:var(--text)'>4.9</span>
+							<div>
+								<div style='display:flex;gap:3px;margin-bottom:4px'>
+									<span style='color:#F5C518;font-size:22px'>&#9733;</span>
+									<span style='color:#F5C518;font-size:22px'>&#9733;</span>
+									<span style='color:#F5C518;font-size:22px'>&#9733;</span>
+									<span style='color:#F5C518;font-size:22px'>&#9733;</span>
+									<span style='color:#F5C518;font-size:22px'>&#9733;</span>
+								</div>
+								<p class='small muted' style='margin:0'>out of 5 &mdash; 2,400+ verified bookings</p>
+							</div>
+						</div>
+						<div style='display:grid;gap:6px'>
+							<div style='display:flex;align-items:center;gap:10px;font-size:11px'>
+								<span style='width:80px;color:var(--muted)'>Reliability</span>
+								<div style='flex:1;height:5px;background:var(--line);border-radius:99px;overflow:hidden'><div style='width:98%;height:100%;background:#F5C518;border-radius:99px'></div></div>
+								<span style='color:var(--text-2);font-weight:700'>4.9</span>
+							</div>
+							<div style='display:flex;align-items:center;gap:10px;font-size:11px'>
+								<span style='width:80px;color:var(--muted)'>Access Speed</span>
+								<div style='flex:1;height:5px;background:var(--line);border-radius:99px;overflow:hidden'><div style='width:95%;height:100%;background:#F5C518;border-radius:99px'></div></div>
+								<span style='color:var(--text-2);font-weight:700'>4.8</span>
+							</div>
+							<div style='display:flex;align-items:center;gap:10px;font-size:11px'>
+								<span style='width:80px;color:var(--muted)'>Discretion</span>
+								<div style='flex:1;height:5px;background:var(--line);border-radius:99px;overflow:hidden'><div style='width:100%;height:100%;background:#F5C518;border-radius:99px'></div></div>
+								<span style='color:var(--text-2);font-weight:700'>5.0</span>
+							</div>
+						</div>
+					</div>
 				</article>
 				<article class='card stack'>
 					<p class='eyebrow'>AI Strategy Lab</p>
@@ -220,6 +265,98 @@
 					<div id='bpOut' class='small muted'>Login to unlock blueprint generation.</div>
 				</article>
 			</section>
+			<section class='sovereignty-showcase section reveal-on-scroll'>
+				<div class='ss-inner'>
+					<div class='ss-label'>Access Tier Architecture</div>
+					<h2 class='ss-heading'>Not a talent marketplace.<br><em>An executive access infrastructure.</em></h2>
+					<p class='ss-sub'>Every engagement on this platform is purpose-built for principals who require sovereign-level confidentiality, legal due diligence, and outcome accountability. No cold calls. No public pricing. No unqualified access.</p>
+					<div class='ss-pillars'>
+						<div class='ss-pillar'>
+							<div class='ssp-num'>01</div>
+							<h4>NDA-First Protocol</h4>
+							<p>Every communication channel, representative correspondence, and booking document is governed by a standing NDA before any terms are discussed.</p>
+						</div>
+						<div class='ss-pillar'>
+							<div class='ssp-num'>02</div>
+							<h4>Screened Pathways Only</h4>
+							<p>All client access is structured through verified representative channels. Zero cold outreach. Zero unauthorized communication attempts. Ever.</p>
+						</div>
+						<div class='ss-pillar'>
+							<div class='ssp-num'>03</div>
+							<h4>Full Escrow Protection</h4>
+							<p>All booking and crowd payments are held in escrow until engagement confirmation. 100% refundable if conditions or standards are not met.</p>
+						</div>
+						<div class='ss-pillar'>
+							<div class='ssp-num'>04</div>
+							<h4>47-Country Coverage</h4>
+							<p>Active representatives across North America, Europe, Middle East, Asia-Pacific, and South America. No territory is outside our operational reach.</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section class='agency-timeline section reveal-on-scroll'>
+				<div class='container'>
+					<div class='atl-header'>
+						<p class='eyebrow'>Agency Heritage</p>
+						<h2 class='atl-heading'>30 Years of <em>Global Access.</em></h2>
+						<p class='atl-sub'>From a single-city representation desk to a 47-country sovereign access network. Each milestone redefined what private celebrity engagement could mean for the world's most discerning principals.</p>
+					</div>
+					<div class='atl-track'>
+						<div class='atl-entry atl-active' onclick="this.classList.toggle('atl-active')">
+							<div class='atl-year-col'><span class='atl-year'>1996</span><div class='atl-dot'></div></div>
+							<div class='atl-content'><span class='atl-milestone'>Foundation</span><h3 class='atl-title'>The Agency Is Born</h3><p class='atl-body'>Founded as a boutique representation consultancy in London. First roster: 3 talent titles. First principle: every engagement must be governed by a confidentiality agreement before any conversation begins.</p><div class='atl-tags'><span class='atl-tag'>London</span><span class='atl-tag'>3 Talents</span><span class='atl-tag'>NDA-First</span></div></div>
+						</div>
+						<div class='atl-entry' onclick="this.classList.toggle('atl-active')">
+							<div class='atl-year-col'><span class='atl-year'>2001</span><div class='atl-dot'></div></div>
+							<div class='atl-content'><span class='atl-milestone'>Expansion</span><h3 class='atl-title'>Transatlantic Operations</h3><p class='atl-body'>Opened New York and Dubai desks simultaneously. Roster expanded to 18 verified A-list talents. First $1M+ single booking — a private performance for a GCC royal family.</p><div class='atl-tags'><span class='atl-tag'>New York</span><span class='atl-tag'>Dubai</span><span class='atl-tag'>18 Talents</span></div></div>
+						</div>
+						<div class='atl-entry' onclick="this.classList.toggle('atl-active')">
+							<div class='atl-year-col'><span class='atl-year'>2007</span><div class='atl-dot'></div></div>
+							<div class='atl-content'><span class='atl-milestone'>Legal Architecture</span><h3 class='atl-title'>Escrow Protocol Established</h3><p class='atl-body'>Introduced the ATA Escrow Standard — all booking payments held in independently audited escrow until engagement confirmation. Zero financial loss to any client in 19 years since inception.</p><div class='atl-tags'><span class='atl-tag'>Escrow</span><span class='atl-tag'>Legal Framework</span><span class='atl-tag'>Risk-Zero</span></div></div>
+						</div>
+						<div class='atl-entry' onclick="this.classList.toggle('atl-active')">
+							<div class='atl-year-col'><span class='atl-year'>2012</span><div class='atl-dot'></div></div>
+							<div class='atl-content'><span class='atl-milestone'>Scale</span><h3 class='atl-title'>50-Talent Sovereign Roster</h3><p class='atl-body'>Crossed the 50-talent threshold. Added Asia-Pacific desk in Singapore. First celebrity booking secured through a fully digital NDA-to-payment workflow — zero in-person signatures required.</p><div class='atl-tags'><span class='atl-tag'>Singapore</span><span class='atl-tag'>50 Talents</span><span class='atl-tag'>Digital-First</span></div></div>
+						</div>
+						<div class='atl-entry' onclick="this.classList.toggle('atl-active')">
+							<div class='atl-year-col'><span class='atl-year'>2018</span><div class='atl-dot'></div></div>
+							<div class='atl-content'><span class='atl-milestone'>Intelligence</span><h3 class='atl-title'>Market Demand Engine</h3><p class='atl-body'>Launched proprietary demand intelligence platform. Real-time waitlist pressure scores, inquiry velocity tracking, and competitive heat maps gave clients a strategic edge unavailable anywhere else in the industry.</p><div class='atl-tags'><span class='atl-tag'>AI Intelligence</span><span class='atl-tag'>Demand Radar</span><span class='atl-tag'>Competitive Edge</span></div></div>
+						</div>
+						<div class='atl-entry' onclick="this.classList.toggle('atl-active')">
+							<div class='atl-year-col'><span class='atl-year'>2022</span><div class='atl-dot'></div></div>
+							<div class='atl-content'><span class='atl-milestone'>Access Architecture</span><h3 class='atl-title'>Crowd Access Protocol</h3><p class='atl-body'>Introduced the Crowd Booking system — the first structured group-access pathway to private celebrity engagements. Democratized access without compromising exclusivity through escrow-backed installment plans.</p><div class='atl-tags'><span class='atl-tag'>Crowd Access</span><span class='atl-tag'>Installments</span><span class='atl-tag'>47 Countries</span></div></div>
+						</div>
+						<div class='atl-entry' onclick="this.classList.toggle('atl-active')">
+							<div class='atl-year-col'><span class='atl-year'>2026</span><div class='atl-dot'></div></div>
+							<div class='atl-content'><span class='atl-milestone'>Present</span><h3 class='atl-title'>166 Verified Talents. 47 Countries.</h3><p class='atl-body'>The world's most comprehensive sovereign celebrity access network. Every engagement NDA-protected, escrow-secured, and representative-verified. The standard the industry is measured against.</p><div class='atl-tags'><span class='atl-tag'>166 Talents</span><span class='atl-tag'>$8.4B Portfolio</span><span class='atl-tag'>24/7 Concierge</span></div></div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<footer class='ata-footer'>
+				<div class='af-bar'>
+					<div style='display:flex;align-items:center;gap:12px'>
+						<div class='brand-mark' style='width:38px;height:38px;font-size:10px;flex-shrink:0'>ATA</div>
+						<div>
+							<div style='font-size:12px;color:var(--text);letter-spacing:.2em;font-weight:700;text-transform:uppercase;line-height:1.2'>ALL TALENTS Agency</div>
+							<div style='font-size:10px;color:var(--muted);letter-spacing:.08em;margin-top:2px'>Private Celebrity Representation</div>
+						</div>
+					</div>
+					<nav class='af-links'>
+						<a href='explorer.html'>Explorer</a>
+						<a href='crowdbooking.html'>Crowd Access</a>
+						<a href='booking.html'>Booking</a>
+						<a href='portal.html'>Portal</a>
+						<a href='login.html'>Login</a>
+					</nav>
+				</div>
+				<div class='af-legal'>
+					<p>© 2026 ALL TALENTS Agency. All rights reserved. Platform access is governed by mutual confidentiality agreements. All talent listings, pricing structures, and representative contacts are proprietary and NDA-protected. Unauthorized reproduction is prohibited.</p>
+					<p>By accessing this platform, users confirm they are qualified principals or authorized representatives operating within our client terms of service.</p>
+				</div>
+			</footer>
 		`;
 
 		const panel = document.getElementById('floatMsgPanel');
@@ -236,7 +373,11 @@
 			}
 		}
 
-		await loadTicker();
+		initTheme();
+		initDynamicTheme();
+		initNav();
+		initScrollReveal();
+		loadTicker(); // fire-and-forget — ticker strips load async, never blocks hero
 
 		// Use local static data — no cold-start delay
 		const hero = document.getElementById('hero');
@@ -257,7 +398,7 @@
 			const slides = featured.map((c, i) => `
 				<div class='hero-slide${i === 0 ? ' hs-active' : ''}' data-idx='${i}'>
 					<p class='eyebrow'>Featured Profile - ${i + 1} of ${featured.length} &nbsp;-&nbsp; ${c.category}</p>
-					<h1 class='headline'>${c.name}</h1>
+					<h1 class='headline hero-headline'>${c.name}</h1>
 					${c.eliteSignal ? `<p style='font-size:13px;line-height:1.55;color:var(--text-2);font-style:italic;margin:0 0 10px;border-left:2px solid var(--accent);padding-left:12px'>${c.eliteSignal}</p>` : ''}
 					<div style='display:flex;gap:18px;flex-wrap:wrap;margin:8px 0 10px'>
 						${c.netWorth ? `<span class='small'><span class='muted'>Net Worth</span> <strong style='color:var(--accent-text)'>${c.netWorth}</strong></span>` : ''}
@@ -352,8 +493,6 @@
 			].map(([name, value]) => `<div class='card'><div class='small muted'>${name}</div><div class='kpi'>${value}</div></div>`).join('');
 		};
 		renderKPIs(kpiData);
-		// Try to enrich KPIs from API async (non-blocking)
-		request('/celebrities/featured').then(p => { if (p?.metrics) renderKPIs(p.metrics); }).catch(() => {});
 
 		// -- Populate "Direct Access Windows" strip ----------
 		const fmtPH = p => p >= 1e6 ? `$${(p/1e6).toFixed(1)}M` : `$${Math.round(p/1000)}K`;
@@ -377,50 +516,32 @@
 			.map((item) => `<option value='${item.id}'>${item.name} - $${item.startingPrice.toLocaleString()}</option>`)
 			.join('');
 
-		// -- Populate Crowd Teaser Grid --------------------------
-		try {
-			const crowdEvts = await request('/crowd-events');
-			const teaserGrid = document.getElementById('crowdTeaserGrid');
-			if (teaserGrid && crowdEvts?.data?.length) {
-				// Pick top 3 by fewest slots remaining (most urgency)
-				const top3 = [...crowdEvts.data]
-					.filter(e => e.available > 0)
-					.sort((a, b) => a.available - b.available)
-					.slice(0, 3);
-				teaserGrid.innerHTML = top3.map(ev => {
-					const soldPct = Math.min(100, Math.round((ev.claimed / ev.slots) * 100));
-					const urgency = ev.available <= 5 ? '#C03030' : ev.available <= 12 ? '#B87020' : '#1E7040';
-					const fmtP = p => p >= 1000 ? `$${(p/1000).toFixed(1)}K` : `$${p}`;
-					return `
-					<div class='crowd-event-card' onclick="window.location.href='crowdbooking.html'" style='cursor:pointer;padding:16px'>
-						<div class='ce-event-type'>${ev.eventType ?? 'Event'}</div>
-						<div class='ce-title' style='font-size:13px;margin:6px 0 4px'>${ev.eventTitle}</div>
-						<div class='ce-meta' style='font-size:11px;margin-bottom:8px'>${ev.name} - ${ev.city}</div>
-						<div class='ce-slot-bar' style='height:5px;background:rgba(255,255,255,.08);border-radius:3px;margin-bottom:6px'>
-							<div class='ce-slot-fill' style='height:100%;border-radius:3px;width:${soldPct}%;background:${urgency};transition:width .8s ease'></div>
-						</div>
-						<div style='display:flex;justify-content:space-between;align-items:center'>
-							<span style='font-size:10px;color:${urgency};font-weight:600'>${ev.available} slot${ev.available === 1 ? '' : 's'} left</span>
-							<span style='font-size:11px;color:var(--gold);font-weight:600'>${fmtP(ev.pricePerSlot)}/person</span>
-						</div>
-					</div>`;
-				}).join('');
-			}
-		} catch { /* teaser stays as skeleton placeholders */ }
-
-		try {
-			const pulse = await request('/intelligence/market-pulse');
-			document.getElementById('pulseBody').innerHTML = `
-				<div class='flow-grid'>
-					<div class='flow-step'><p class='num'>Demand Heat</p><h4>${pulse.metrics.demandHeat}%</h4><p>Average roster demand velocity.</p></div>
-					<div class='flow-step'><p class='num'>Entry Quote</p><h4>$${pulse.metrics.averageEntryQuote.toLocaleString()}</h4><p>Average opening commercial posture.</p></div>
-					<div class='flow-step'><p class='num'>Waitlist Pressure</p><h4>${pulse.metrics.topWaitlistPressure}</h4><p>Profiles currently in waitlist state.</p></div>
-				</div>
-				<div class='hr'></div>
-				<p class='small muted'><b>Top Demand Profiles:</b> ${pulse.top.map((t) => `${t.name} (${t.demandIndex}%)`).join(' - ')}</p>
-			`;
-		} catch {
-			document.getElementById('pulseBody').textContent = 'Market pulse unavailable.';
+		// -- Crowd Teaser: fully static, always present immediately ----------
+		const CROWD_TEASER = [
+			{ eventType: 'Exclusive Concert', eventTitle: 'Private Stage — VIP Ring Access', name: 'Beyoncé', city: 'Dubai', available: 8,  slots: 60, claimed: 52, pricePerSlot: 3200 },
+			{ eventType: 'Brand Activation',  eventTitle: 'Signature Keynote Front Row',    name: 'Elon Musk',  city: 'Las Vegas', available: 14, slots: 80, claimed: 66, pricePerSlot: 4500 },
+			{ eventType: 'Film Premiere',      eventTitle: 'Red Carpet Access Window',       name: 'Zendaya',    city: 'Cannes',    available: 4,  slots: 40, claimed: 36, pricePerSlot: 2800 },
+		];
+		const teaserGrid = document.getElementById('crowdTeaserGrid');
+		if (teaserGrid) {
+			const fmtP = p => p >= 1000 ? `$${(p/1000).toFixed(1)}K` : `$${p}`;
+			teaserGrid.innerHTML = CROWD_TEASER.map(ev => {
+				const soldPct = Math.min(100, Math.round((ev.claimed / ev.slots) * 100));
+				const urgency = ev.available <= 5 ? '#C03030' : ev.available <= 12 ? '#B87020' : '#1E7040';
+				return `
+				<div class='crowd-event-card' onclick="window.location.href='crowdbooking.html'" style='cursor:pointer;padding:16px'>
+					<div class='ce-event-type'>${ev.eventType}</div>
+					<div class='ce-title' style='font-size:13px;margin:6px 0 4px'>${ev.eventTitle}</div>
+					<div class='ce-meta' style='font-size:11px;margin-bottom:8px'>${ev.name} · ${ev.city}</div>
+					<div class='ce-slot-bar' style='height:5px;background:rgba(255,255,255,.08);border-radius:3px;margin-bottom:6px'>
+						<div class='ce-slot-fill' style='height:100%;border-radius:3px;width:${soldPct}%;background:${urgency};transition:width .8s ease'></div>
+					</div>
+					<div style='display:flex;justify-content:space-between;align-items:center'>
+						<span style='font-size:10px;color:${urgency};font-weight:600'>${ev.available} slot${ev.available === 1 ? '' : 's'} left</span>
+						<span style='font-size:11px;color:var(--accent);font-weight:600'>${fmtP(ev.pricePerSlot)}/person</span>
+					</div>
+				</div>`;
+			}).join('');
 		}
 
 		document.getElementById('homeType').addEventListener('change', (e) => {

@@ -44,33 +44,47 @@ export default function ExplorerPage() {
   );
 
   return (
-    <main>
+    <main className="min-h-screen">
       <NavBar />
-      <section className="glass rounded-2xl p-4">
-        <h2 className="text-xl font-semibold">Elite Celebrity Intelligence Explorer</h2>
-        <p className="mt-1 text-sm text-platinum/70">Real-time filtering across 100 verified global profiles</p>
-        <div className="mt-4 grid gap-3 md:grid-cols-4">
-          <input className="rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm" placeholder="Search name" value={filters.search} onChange={(e) => setFilters((prev) => ({ ...prev, search: e.target.value }))} />
+      <section className="glass rounded-2xl p-4 md:p-5">
+        <div className="flex flex-wrap items-start justify-between gap-2">
+          <div>
+            <h2 className="text-lg font-semibold md:text-xl">Celebrity Intelligence Explorer</h2>
+            <p className="mt-0.5 text-sm text-platinum/60">Real-time filtering across {celebrities.length || "166"} verified global profiles</p>
+          </div>
+        </div>
+        <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+          <input className="col-span-2 rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm sm:col-span-1" placeholder="Search name" value={filters.search} onChange={(e) => setFilters((prev) => ({ ...prev, search: e.target.value }))} />
           <select className="rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm" value={filters.category} onChange={(e) => setFilters((prev) => ({ ...prev, category: e.target.value }))}>{meta.categories.map((c) => <option key={c}>{c}</option>)}</select>
           <select className="rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm" value={filters.region} onChange={(e) => setFilters((prev) => ({ ...prev, region: e.target.value }))}>{meta.regions.map((c) => <option key={c}>{c}</option>)}</select>
           <select className="rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm" value={filters.eventType} onChange={(e) => setFilters((prev) => ({ ...prev, eventType: e.target.value }))}>{meta.eventTypes.map((c) => <option key={c}>{c}</option>)}</select>
-          <input type="number" className="rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm" value={filters.minPrice} onChange={(e) => setFilters((prev) => ({ ...prev, minPrice: Number(e.target.value) }))} placeholder="Min price" />
-          <input type="number" className="rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm" value={filters.maxPrice} onChange={(e) => setFilters((prev) => ({ ...prev, maxPrice: Number(e.target.value) }))} placeholder="Max price" />
-          <input type="number" className="rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm" value={filters.minPopularity} onChange={(e) => setFilters((prev) => ({ ...prev, minPopularity: Number(e.target.value) }))} placeholder="Min popularity" />
           <select className="rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm" value={filters.netWorthTier} onChange={(e) => setFilters((prev) => ({ ...prev, netWorthTier: e.target.value }))}>{meta.netWorthTiers.map((c) => <option key={c}>{c}</option>)}</select>
+          <input type="number" className="rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm" value={filters.minPrice} onChange={(e) => setFilters((prev) => ({ ...prev, minPrice: Number(e.target.value) }))} placeholder="Min $" />
+          <input type="number" className="rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-sm" value={filters.maxPrice} onChange={(e) => setFilters((prev) => ({ ...prev, maxPrice: Number(e.target.value) }))} placeholder="Max $" />
           <input type="date" className="rounded-lg border border-sovereign/35 bg-black/40 px-3 py-2 text-sm" value={availabilityDate} onChange={(e) => setAvailabilityDate(e.target.value)} />
+          <button
+            type="button"
+            onClick={() => setFilters(initialFilters)}
+            className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold uppercase tracking-wider text-platinum/50 transition hover:text-platinum"
+          >
+            Reset
+          </button>
         </div>
       </section>
-      <section className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <section className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {loading ? (
-          Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "16px", padding: "16px", animation: "pulse 1.8s ease-in-out infinite" }}>
-              <div style={{ height: "176px", background: "rgba(255,255,255,0.06)", borderRadius: "10px", marginBottom: "12px" }} />
-              <div style={{ height: "16px", width: "70%", background: "rgba(148,180,216,0.15)", borderRadius: "4px", marginBottom: "8px" }} />
-              <div style={{ height: "11px", width: "50%", background: "rgba(255,255,255,0.05)", borderRadius: "4px" }} />
+          Array.from({ length: 8 }).map((_, i) => (
+            <div key={i} className="rounded-2xl border border-white/7 bg-white/4 p-4" style={{ animation: "pulse 1.8s ease-in-out infinite" }}>
+              <div className="mb-3 h-44 rounded-xl bg-white/6" />
+              <div className="mb-2 h-4 w-3/4 rounded bg-sovereign/15" />
+              <div className="h-3 w-1/2 rounded bg-white/5" />
               <style>{`@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.45}}`}</style>
             </div>
           ))
+        ) : celebrities.length === 0 ? (
+          <div className="col-span-full glass rounded-2xl p-8 text-center text-sm text-platinum/50">
+            No celebrities match your filters. <button type="button" className="text-sovereign underline" onClick={() => setFilters(initialFilters)}>Reset filters</button>
+          </div>
         ) : (
           celebrities.map((celeb) => (
             <CelebrityCard key={celeb.id} celebrity={celeb} availabilityDate={availabilityDate} />

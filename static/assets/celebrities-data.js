@@ -177,6 +177,7 @@ const PORTRAIT_MAP = {
   "Eva Elfie":              "/assets/portraits/c238.jpg",
   "Salma Hayek":            "/assets/portraits/c239.jpg",
   "Matt Rife":              "/assets/portraits/c240.jpg",
+  "Monica Bellucci":        "https://commons.wikimedia.org/wiki/Special:FilePath/Monica_Bellucci_2024_(cropped).jpg?width=640",
 };
 
 const _parseWorth = w => {
@@ -355,6 +356,15 @@ const _seeds = [
   { name:"Eva Elfie",         cat:"Influencer", region:"Europe",        price:  35000, worth:"$2M",    reach:10,  agency:"Independent", signal:"Award-winning performer and rising social media personality with global fanbase. Industry-leading social engagement metrics. European and international appearances via independent booking agents only." },
   { name:"Salma Hayek",       cat:"Film",       region:"Latin America", price: 400000, worth:"$200M",  reach:28,  agency:"CAA",         signal:"Oscar-nominated actress and Frida producer-star. Eternals and Magic Mike's Last Dance global releases. Kering Group board member and Gucci brand collaborator. Private events via CAA with confirmed 30-day advance and prestige brand alignment." },
   { name:"Matt Rife",         cat:"Influencer", region:"North America", price: 250000, worth:"$12M",   reach:32,  agency:"WME",         signal:"Fastest stand-up comedian to sell out arenas in history — ProbleMATTic World Tour 2024 grossed $100M in first week of sales. 18M TikTok followers. Private shows and brand events via WME with confirmed audience qualification and 21-day advance." },
+  { name:"Monica Bellucci",   cat:"Film",       region:"Europe",        price: 450000, worth:"$45M",   reach:6,   agency:"Independent", signal:"Italian cinema icon, Cannes and Venice red-carpet fixture, Cartier/Dolce & Gabbana luxury fashion presence and one of Europe's most elegant screen legends. Private appearances are best suited to couture dinners, fragrance launches, film salons and sovereign hospitality events with 30-day advance approval.",
+    preferredHotels:["Hotel de Crillon, Paris","Bulgari Hotel Milano","Aman Venice","Hotel de Russie, Rome","Hotel de Paris Monte-Carlo"],
+    reservationWindows:[
+      { date:"2026-07-18", place:"Hotel de Crillon, Paris", format:"Private couture dinner" },
+      { date:"2026-09-05", place:"Aman Venice, Venice", format:"Film festival salon" },
+      { date:"2026-10-10", place:"Bulgari Hotel Milano, Milan", format:"Luxury brand reception" },
+      { date:"2026-11-14", place:"Hotel de Russie, Rome", format:"Private cinema evening" },
+      { date:"2026-12-05", place:"Hotel de Paris Monte-Carlo, Monaco", format:"Sovereign gala dinner" },
+    ] },
 ];
 
 const _build = (s, i) => {
@@ -386,6 +396,8 @@ const _build = (s, i) => {
     securityTiers:          ["Standard","Enhanced","Executive","Sovereign"],
     recentBrandAlignment:   _partnerships[(i + 3) % _partnerships.length],
     eventCompatibility:     ["Summit","Gala","Launch","Private Dinner","Festival"].slice(0, 3 + (i % 3)),
+    preferredHotels:        s.preferredHotels || [],
+    reservationWindows:     s.reservationWindows || [],
   };
 };
 

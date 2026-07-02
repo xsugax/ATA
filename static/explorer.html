@@ -5,20 +5,20 @@
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <meta http-equiv='Content-Security-Policy' content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://i.pravatar.cc; connect-src 'self' http://localhost:4100 https://ata-h0yo.onrender.com; font-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
   <meta name='referrer' content='no-referrer'>
-  <title>Talent Directory | All Talents Agency</title>
+  <title>Celebrity Talent Directory | 119+ Verified Stars - ALL TALENTS Agency</title>
   <!-- SEO: Primary Meta -->
   <meta name="description" content="Search 119+ verified A-list celebrities - musicians, film stars, athletes, K-pop idols (BTS, BLACKPINK), influencers, and comedians. Filter by category, region, and availability for any event.">
   <meta name="keywords" content="celebrity directory, search celebrity talent, A-list stars, K-pop booking, BTS members, BLACKPINK Lisa Jennie, Korean actors, celebrity for hire, talent search, influencer booking">
   <meta name="robots" content="index, follow">
-  <meta name="author" content="All Talents Agency">
+  <meta name="author" content="ALL TALENTS Agency">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="All Talents Agency">
-  <meta property="og:title" content="Talent Directory | All Talents Agency">
+  <meta property="og:site_name" content="ALL TALENTS Agency">
+  <meta property="og:title" content="Celebrity Talent Directory - 119+ Verified Stars | ALL TALENTS Agency">
   <meta property="og:description" content="Browse and book 119+ verified celebrities across music, film, sports, K-pop, comedy, and influencer categories worldwide.">
   <meta property="og:url" content="https://alltalents-agency.vercel.app/explorer.html">
   <meta property="og:image" content="https://alltalents-agency.vercel.app/assets/og-preview.svg">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Talent Directory | All Talents Agency">
+  <meta name="twitter:title" content="Celebrity Talent Directory - ALL TALENTS Agency">
   <meta name="twitter:description" content="Search 119+ verified A-list celebrities. Filter by K-pop, Music, Film, Sports, Comedy & more.">
   <link rel='canonical' href='https://alltalents-agency.vercel.app/explorer.html'>
   <link rel='icon' href='/assets/favicon.svg' type='image/svg+xml'>
@@ -30,17 +30,18 @@
     "name": "Celebrity Talent Directory",
     "description": "Search 119+ verified celebrity talents across music, film, sports, comedy, and K-pop.",
     "url": "https://alltalents-agency.vercel.app/explorer.html",
-    "isPartOf": { "@type": "WebSite", "name": "All Talents Agency", "url": "https://alltalents-agency.vercel.app" }
+    "isPartOf": { "@type": "WebSite", "name": "ALL TALENTS Agency", "url": "https://alltalents-agency.vercel.app" }
   }
   </script>
   <link rel='stylesheet' href='assets/styles.css'>
+  <script>(function(){var t=localStorage.getItem('ata_theme')||'dark';document.documentElement.setAttribute('data-theme',t)})();</script>
   <style>
     /* Explorer filter bar */
     #search{background:var(--bg-alt);border:1px solid rgba(0,0,0,.12);color:var(--text);transition:all .2s ease}
-    #search:focus{border-color:rgba(112,143,168,.6);box-shadow:0 0 0 3px rgba(112,143,168,.1);background:#fff}
+    #search:focus{border-color:rgba(144,96,232,.6);box-shadow:0 0 0 3px rgba(144,96,232,.1);background:#fff}
     #search::placeholder{color:rgba(0,0,0,.35)}
     .filter-select{background:var(--bg-alt);border:1px solid rgba(0,0,0,.12);color:var(--text)}
-    .filter-select:focus{border-color:rgba(112,143,168,.5);outline:none}
+    .filter-select:focus{border-color:rgba(144,96,232,.5);outline:none}
     /* Animated result count */
     #resultsCount{transition:opacity .2s ease}
     #resultsCount.rc-updating{opacity:.4}
@@ -52,7 +53,7 @@
     #resultsCount.has-filter{color:var(--accent-text);font-weight:700}
     /* Load more button */
     #loadMoreBtn{background:var(--bg-alt);border:1px solid rgba(0,0,0,.12);color:var(--text);transition:all .22s ease}
-    #loadMoreBtn:hover{background:rgba(112,143,168,.08);border-color:var(--accent);box-shadow:0 8px 24px rgba(0,0,0,.06)}
+    #loadMoreBtn:hover{background:rgba(144,96,232,.08);border-color:var(--accent);box-shadow:0 8px 24px rgba(0,0,0,.06)}
     /* Empty state */
     .empty-state{grid-column:1/-1;text-align:center;padding:72px 20px}
     .empty-state-icon{font-size:48px;margin-bottom:16px;filter:grayscale(.4)}
@@ -67,6 +68,7 @@
   </style>
 </head>
 <body>
+  <div id='fluidAmbient'></div>
   <div class='container' id='app'></div>
   <div id='dossierBack' class='dossier-back' style='display:none'></div>
 
@@ -91,7 +93,7 @@
   </button>
   <div id='floatMsgPanel' class='floating-msg-panel'>
     <div class='fmp-header'>
-      <div class='fmp-avatar'>AT</div>
+      <div class='fmp-avatar'>ATA</div>
       <div class='fmp-agent-info'>
         <div class='fmp-agent-name'>Concierge Desk</div>
         <div class='fmp-agent-status'><span class='fmp-online-dot'></span>Private Representative Channel</div>
@@ -117,11 +119,11 @@
         <p id='meetStatus' class='small muted' style='text-align:center'></p>
       </div>
     </div>
-    <div class='fmp-footer'>Encrypted · NDA-default · All Talents Agency</div>
+    <div class='fmp-footer'>Encrypted · NDA-default · ALL TALENTS Agency</div>
   </div>
 
   <script type='module'>
-    import { request, nav, loadTicker } from './assets/app.js';
+    import { request, nav, loadTicker, initTheme, initNav, initScrollReveal, initDynamicTheme, initFlipFilter } from './assets/app.js';
     import { CELEBRITIES } from './assets/celebrities-data.js';
 
     let selectedCelebrity = { id: '', name: '' };
@@ -167,10 +169,10 @@
       document.getElementById('apPortraitImg').src = c.portrait;
       document.getElementById('apPortraitImg').alt = c.name;
       document.getElementById('apContentCol').innerHTML = `
-        <div class='ap-stamp'><div class='ap-stamp-dot'></div>All Talents Agency · Sovereign Private Access</div>
+        <div class='ap-stamp'><div class='ap-stamp-dot'></div>Aurelux Private Access - Authorized Channel</div>
         <h1 class='ap-celeb-name'>${c.name}</h1>
         <p class='ap-celeb-meta'>${c.category} &nbsp;-&nbsp; ${c.region} &nbsp;-&nbsp; ${c.agencyRepresentation}</p>
-        <p style='font-size:12.5px;line-height:1.6;color:rgba(255,255,255,.72);font-style:italic;margin:0 0 18px;padding:12px 14px;border-left:2px solid var(--accent);background:rgba(112,143,168,.08);border-radius:0 8px 8px 0'>"${c.eliteSignal}"</p>
+        <p style='font-size:12.5px;line-height:1.6;color:rgba(255,255,255,.72);font-style:italic;margin:0 0 18px;padding:12px 14px;border-left:2px solid var(--accent);background:rgba(144,96,232,.08);border-radius:0 8px 8px 0'>"${c.eliteSignal}"</p>
         <div class='ap-live-status'><div class='ap-live-dot'></div>Direct meeting access LIVE for qualified clients - closes in 72h</div>
         <div class='ap-brief-row'>${briefHtml}</div>
         <div class='ap-divider'></div>
@@ -240,19 +242,36 @@
     app.innerHTML = `
       ${nav('explorer')}
       <section class='glass card section' style='border-color:rgba(0,0,0,.09);box-shadow:0 4px 24px rgba(0,0,0,.06)'>
-        <div style='display:inline-flex;align-items:center;gap:8px;padding:5px 14px;border:1px solid rgba(112,143,168,.3);border-radius:6px;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent-text);background:var(--accent-soft);margin-bottom:14px;width:max-content'><span style='width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block;animation:apStampPulse 1.5s ease-in-out infinite'></span>Private Access Zone - Session Authorized</div>
+        <div style='display:inline-flex;align-items:center;gap:8px;padding:5px 14px;border:1px solid rgba(144,96,232,.3);border-radius:6px;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent-text);background:var(--accent-soft);margin-bottom:14px;width:max-content'><span style='width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block;animation:apStampPulse 1.5s ease-in-out infinite'></span>Private Access Zone - Session Authorized</div>
         <h2 style='font-size:clamp(26px,3.8vw,44px);font-weight:900;letter-spacing:-.02em;margin:0 0 10px'>Select Your Celebrity.<br>Claim Your Private Window.</h2>
-        <p class='lead'>You have direct access to 119+ verified talents through All Talents Agency's sovereign channel network. Tap any profile to open your private meeting portal — choose a venue, lock in your window, and initiate contact.</p>
+        <p class='lead'>You have direct access to 119+ verified talents through Aurelux's authorized channel network. Tap any profile to open your private meeting portal - choose a venue, lock in your window, and initiate contact.</p>
         <div style='display:flex;gap:10px;align-items:center;margin-bottom:8px'>
           <div class='search-wrap' style='flex:1'><input id='search' placeholder='Search celebrities…' style='width:100%'><span class='search-hint'>/</span></div>
           <button class='mob-filter-expand' id='filterToggle'>Filters ▾</button>
         </div>
         <div class='filter-selects' id='filterSelects'>
-          <select id='category' class='filter-select' style='flex:1;min-width:140px'><option>All</option><option>Film</option><option>Music</option><option>Sports</option><option>Fashion</option><option>Business</option><option>Influencer</option><option>Comedy</option><option>Entertainment</option></select>
-          <select id='region' class='filter-select' style='flex:1;min-width:140px'><option>All</option><option>North America</option><option>Europe</option><option>Middle East</option><option>Asia</option><option>Latin America</option><option>Africa</option><option>Australia</option></select>
-          <select id='availability' class='filter-select' style='flex:1;min-width:130px'><option>All</option><option>Open</option><option>Limited</option><option>Waitlist</option></select>
-          <input id='date' type='date' style='flex:1;min-width:140px'>
-          <button id='clearFilters' class='secondary' style='white-space:nowrap;padding:9px 16px;font-size:12px'>Clear</button>
+          <div class='filter-pill-bar' id='categoryPills'>
+            <button class='filter-pill filter-pill-all fp-active' data-cat='All'>All Talents</button>
+            <button class='filter-pill' data-cat='Film'>Film</button>
+            <button class='filter-pill' data-cat='Music'>Music</button>
+            <button class='filter-pill' data-cat='Sports'>Sports</button>
+            <button class='filter-pill' data-cat='Fashion'>Fashion</button>
+            <button class='filter-pill' data-cat='Business'>Business</button>
+            <button class='filter-pill' data-cat='Influencer'>Influencer</button>
+            <button class='filter-pill' data-cat='Comedy'>Comedy</button>
+            <button class='filter-pill' data-cat='Entertainment'>Entertainment</button>
+          </div>
+          <div style='display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:0 0 6px'>
+            <div class='filter-pill-bar' id='availPills' style='padding:0'>
+              <button class='filter-pill filter-pill-all fp-active' data-avail='All'>All Status</button>
+              <button class='filter-pill' data-avail='Open'>Open</button>
+              <button class='filter-pill' data-avail='Limited'>Limited</button>
+              <button class='filter-pill' data-avail='Waitlist'>Waitlist</button>
+            </div>
+            <select id='region' class='filter-select' style='flex:0;min-width:148px;padding:7px 12px;font-size:11px'><option>All</option><option>North America</option><option>Europe</option><option>Middle East</option><option>Asia</option><option>Latin America</option><option>Africa</option><option>Australia</option></select>
+            <input id='date' type='date' style='flex:0;min-width:150px;max-width:180px;padding:7px 12px;font-size:11px'>
+            <button id='clearFilters' class='secondary' style='white-space:nowrap;padding:7px 14px;font-size:11px;width:auto'>Clear All</button>
+          </div>
         </div>
         <div style='display:flex;align-items:center;padding:6px 2px;border-top:1px solid rgba(255,255,255,.07)'>
           <p id='resultsCount' class='small muted' style='margin:0'>Loading talents-</p>
@@ -297,7 +316,7 @@
         ${[1,2,3].map(()=>`<article class='card stack' style='height:280px'></article>`).join('')}
       </section>
       <section id='inquirySection' class='glass card section' style='border-color:rgba(0,0,0,.09);box-shadow:0 4px 24px rgba(0,0,0,.06);max-width:680px;margin:0 auto'>
-        <div style='display:inline-flex;align-items:center;gap:8px;padding:5px 14px;border:1px solid rgba(112,143,168,.3);border-radius:6px;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent-text);background:var(--accent-soft);margin-bottom:16px;width:max-content'><span style='width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block;animation:apStampPulse 1.5s ease-in-out infinite'></span>Celebrity Not Listed? Request Via Private Desk</div>
+        <div style='display:inline-flex;align-items:center;gap:8px;padding:5px 14px;border:1px solid rgba(144,96,232,.3);border-radius:6px;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent-text);background:var(--accent-soft);margin-bottom:16px;width:max-content'><span style='width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block;animation:apStampPulse 1.5s ease-in-out infinite'></span>Celebrity Not Listed? Request Via Private Desk</div>
         <h3 style='font-weight:800;margin:0 0 6px;font-size:clamp(20px,2.8vw,30px)'>Can't Find Who<br>You're Looking For?</h3>
         <p class='small muted' style='margin:0 0 22px;line-height:1.7'>Submit a private celebrity inquiry through our Concierge Desk. Our representation team will assess availability, negotiate terms, and revert within 48 hours under full NDA.</p>
         <form id='celebInquiryForm' style='display:flex;flex-direction:column;gap:14px'>
@@ -372,8 +391,17 @@
       const val = _urlParams.get(key);
       if (val) {
         filters[key] = val;
-        const el = document.getElementById(key);
-        if (el) el.value = val;
+        if (key === 'search') {
+          const el = document.getElementById('search'); if (el) el.value = val;
+        } else if (key === 'region') {
+          const el = document.getElementById('region'); if (el) el.value = val;
+        } else if (key === 'category' && val !== 'All') {
+          document.querySelectorAll('#categoryPills .filter-pill').forEach(p => p.classList.remove('fp-active'));
+          document.querySelector(`#categoryPills [data-cat="${val}"]`)?.classList.add('fp-active');
+        } else if (key === 'availability' && val !== 'All') {
+          document.querySelectorAll('#availPills .filter-pill').forEach(p => p.classList.remove('fp-active'));
+          document.querySelector(`#availPills [data-avail="${val}"]`)?.classList.add('fp-active');
+        }
       }
     });
     // -- debounced search; instant selects ------------------------------------
@@ -383,29 +411,42 @@
       clearTimeout(_searchDebounce);
       _searchDebounce = setTimeout(applyFilters, 280);
     });
-    ['category', 'region', 'availability'].forEach((id) =>
-      document.getElementById(id).addEventListener('input', () => {
-        filters[id] = document.getElementById(id).value;
+    // -- Category pills (silent search — no refresh) ----------------------
+    document.querySelectorAll('#categoryPills .filter-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        document.querySelectorAll('#categoryPills .filter-pill').forEach(p => p.classList.remove('fp-active'));
+        pill.classList.add('fp-active');
+        filters.category = pill.dataset.cat;
         applyFilters();
-      })
-    );
-
+      });
+    });
+    // -- Availability pills -----------------------------------------------
+    document.querySelectorAll('#availPills .filter-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        document.querySelectorAll('#availPills .filter-pill').forEach(p => p.classList.remove('fp-active'));
+        pill.classList.add('fp-active');
+        filters.availability = pill.dataset.avail;
+        applyFilters();
+      });
+    });
+    // -- Region select (retained for density of options) ------------------
+    document.getElementById('region').addEventListener('input', () => {
+      filters.region = document.getElementById('region').value;
+      applyFilters();
+    });
     document.getElementById('clearFilters').onclick = () => {
       filters.search = ''; filters.category = 'All'; filters.region = 'All'; filters.availability = 'All';
       document.getElementById('search').value = '';
-      document.getElementById('category').value = 'All';
       document.getElementById('region').value = 'All';
-      document.getElementById('availability').value = 'All';
+      document.querySelectorAll('#categoryPills .filter-pill').forEach(p => p.classList.remove('fp-active'));
+      document.querySelector('#categoryPills .filter-pill-all')?.classList.add('fp-active');
+      document.querySelectorAll('#availPills .filter-pill').forEach(p => p.classList.remove('fp-active'));
+      document.querySelector('#availPills .filter-pill-all')?.classList.add('fp-active');
       applyFilters();
     };
 
     // '/' keyboard shortcut - focus search from anywhere
-    document.addEventListener('keydown', (e) => {
-      if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
-        e.preventDefault();
-        document.getElementById('search').focus();
-      }
-    });
+    // '/' shortcut handled globally by initNav()
 
     function setMeetTemplate(mode, celebrityName) {
       const textarea = document.getElementById('meetBody');
@@ -466,7 +507,20 @@
     function applyFilters() {
       let data = allCelebrities;
       const s = filters.search.trim().toLowerCase();
-      if (s) data = data.filter(c => c.name.toLowerCase().includes(s));
+      if (s) {
+        const terms = s.split(/\s+/).filter(Boolean);
+        data = data.filter(c => {
+          const haystack = [
+            c.name,
+            c.category,
+            c.region,
+            c.availability,
+            c.agencyRepresentation || '',
+            c.eliteSignal || ''
+          ].join(' ').toLowerCase();
+          return terms.every(t => haystack.includes(t));
+        });
+      }
       if (filters.category !== 'All') data = data.filter(c => c.category === filters.category);
       if (filters.region !== 'All') data = data.filter(c => c.region === filters.region);
       if (filters.availability !== 'All') data = data.filter(c => c.availability === filters.availability);
@@ -497,10 +551,11 @@
       const batch = data.slice(PAGE_SIZE * (_page - 1), end);
       const hasMore = data.length > end;
       const fmtP = p => p >= 1e6 ? `$${(p/1e6).toFixed(1)}M` : `$${Math.round(p/1000)}K`;
-      const cardsHTML = batch.map((c) => `
+      const cardsHTML = batch.map((c, i) => `
         <article class='celeb-card tilt-card' data-id='${c.id}' style='contain:layout style'>
           <div class='celeb-portrait-wrap'>
-            <img src='${c.portrait}' alt='${c.name}' loading='lazy' decoding='async'/>
+            <div class='portrait-fallback' aria-hidden='true'>&#9670;</div>
+            <img src='${c.portrait}' alt='${c.name}'${i < 8 ? '' : " loading='lazy'"} onerror="this.style.display='none'"/>
             <div class='celeb-portrait-fade'></div>
             <div class='celeb-portrait-badges'>
               <span class='celeb-verified-badge'>- Verified</span>
@@ -530,7 +585,7 @@
                   <button class='secondary' data-a='dossier' data-id='${c.id}'>Private Dossier</button>
                   <button class='secondary' data-a='shortlist' data-id='${c.id}'>${shortlist.has(c.id) ? '- Shortlisted' : '- VIP Shortlist'}</button>
                   ${c.availability === 'Waitlist'
-                    ? `<button class='secondary' data-a='wl-reserve' data-id='${c.id}' data-name='${c.name}' style='border-color:rgba(240,195,107,.5);color:#f0c36b'>- Reserve Slot</button>`
+                    ? `<button class='secondary' data-a='wl-reserve' data-id='${c.id}' data-name='${c.name}' style='border-color:rgba(144,96,232,.5);color:#B08AFF'>- Reserve Slot</button>`
                     : `<button class='secondary' data-a='set-meet' data-id='${c.id}' data-name='${c.name}'>How to Meet</button>`}
                 </div>
               </div>
@@ -541,7 +596,22 @@
       `);
       const loadMoreHTML = hasMore ? `<div id='loadMoreWrap' style='grid-column:1/-1;text-align:center;padding:24px 0'><button id='loadMoreBtn' class='secondary' style='width:auto;padding:13px 40px;font-size:13px;letter-spacing:.07em'>Load More &middot; ${end} of ${data.length} shown</button></div>` : '';
       if (_page === 1) {
-        results.innerHTML = cardsHTML.join('') + loadMoreHTML;
+        const doUpdate = () => {
+          results.innerHTML = cardsHTML.join('') + loadMoreHTML;
+          results.classList.remove('results-morphing');
+        };
+        if (results.children.length > 0) {
+          results.classList.add('results-morphing');
+          const fadeOut = results.animate(
+            [{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(5px)' }],
+            { duration: 130, fill: 'forwards' }
+          );
+          fadeOut.onfinish = () => {
+            fadeOut.cancel(); // release fill:'forwards' hold so opacity doesn't stay at 0
+            doUpdate();
+            results.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 220, easing: 'cubic-bezier(.4,0,.2,1)' });
+          };
+        } else { doUpdate(); }
       } else {
         document.getElementById('loadMoreWrap')?.remove();
         const tmpl = document.createElement('template');
@@ -620,23 +690,32 @@
         }, { passive: true });
       }
 
-      // -- IntersectionObserver for pressure badges (created once, new cards only) -
+      // -- Pressure badges: fully static, deterministic from celebrity ID --
+      // No API call — always instant, always present
+      function getStaticPressure(id) {
+        const n = parseInt(id.replace('c', ''), 10) || 1;
+        const seed = (n * 17 + 3) % 100;
+        if (seed < 14) return { heatLevel: 'critical', urgencyMessage: 'All windows closed — waitlist only.',      lastInquiryMinutesAgo: 2  };
+        if (seed < 35) return { heatLevel: 'high',     urgencyMessage: 'Very high demand — book early.',           lastInquiryMinutesAgo: Math.max(4, (seed * 2) % 18) };
+        if (seed < 65) return { heatLevel: 'elevated', urgencyMessage: 'Active interest — limited open slots.',    lastInquiryMinutesAgo: Math.max(10, (seed * 3) % 45) };
+        return             { heatLevel: 'normal',   urgencyMessage: 'Access available — standard timeline.',   lastInquiryMinutesAgo: Math.max(25, (seed * 4) % 90) };
+      }
+
       if (!_pressureObserver) {
         _pressureObserver = new IntersectionObserver((entries) => {
           entries.forEach((entry) => {
             if (!entry.isIntersecting) return;
             _pressureObserver.unobserve(entry.target);
             const id = entry.target.dataset.pid;
-            request('/intelligence/pressure/' + id).then((p) => {
-              const el = document.getElementById('press-' + id);
-              if (!el) return;
-              el.innerHTML = `
-                <div class='pressure-dot pd-${p.heatLevel}'></div>
-                <span class='pressure-tag pt-${p.heatLevel}'>${p.heatLevel === 'critical' ? 'SOLD OUT' : p.heatLevel.toUpperCase()}</span>
-                <span class='pressure-msg'>${p.urgencyMessage}</span>
-                <span class='pressure-msg' style='margin-left:4px;opacity:.65'>- Last inquiry ${p.lastInquiryMinutesAgo}m ago</span>
-              `;
-            }).catch(() => {});
+            const p = getStaticPressure(id);
+            const el = document.getElementById('press-' + id);
+            if (!el) return;
+            el.innerHTML = `
+              <div class='pressure-dot pd-${p.heatLevel}'></div>
+              <span class='pressure-tag pt-${p.heatLevel}'>${p.heatLevel === 'critical' ? 'SOLD OUT' : p.heatLevel.toUpperCase()}</span>
+              <span class='pressure-msg'>${p.urgencyMessage}</span>
+              <span class='pressure-msg' style='margin-left:4px;opacity:.65'>· Last inquiry ${p.lastInquiryMinutesAgo}m ago</span>
+            `;
           });
         }, { rootMargin: '120px' });
       }
@@ -703,9 +782,30 @@
     };
 
     renderShortlistState();
+    init(); // render cards immediately — purely synchronous, no API needed
 
-    await loadTicker();
-    await init();
+    initTheme();
+    initDynamicTheme();
+    initNav();
+    initScrollReveal();
+    loadTicker(); // fire-and-forget — ticker loads in background, never blocks UI
+
+    // -- Fluid ambient background shift on talent hover --------------------
+    const fluidAmbient = document.getElementById('fluidAmbient');
+    if (fluidAmbient) {
+      document.addEventListener('mouseover', (e) => {
+        const card = e.target.closest('.celeb-card');
+        if (!card) return;
+        const rect = card.getBoundingClientRect();
+        const x = ((rect.left + rect.width / 2) / window.innerWidth * 100).toFixed(1);
+        const y = ((rect.top + rect.height / 2) / window.innerHeight * 100).toFixed(1);
+        fluidAmbient.style.background = `radial-gradient(ellipse at ${x}% ${y}%, rgba(144,96,232,.06) 0%, transparent 60%)`;
+      });
+      document.addEventListener('mouseout', (e) => {
+        if (!e.target.closest('.celeb-card')) return;
+        if (!e.relatedTarget?.closest('.celeb-card')) fluidAmbient.style.background = 'transparent';
+      });
+    }
 
     // -- Celebrity Inquiry Form handler ---------------------------------------
     document.getElementById('celebInquiryForm').addEventListener('submit', async (e) => {

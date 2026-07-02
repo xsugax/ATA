@@ -1,15 +1,17 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "AURELUX Sovereign",
-  description: "Private celebrity booking, verification, and disclosure workspace platform",
+  title: "All Talents Agency",
+  description: "Global celebrity booking and talent management",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>
-        <div className="mx-auto min-h-screen w-full max-w-[1440px] overflow-x-hidden px-4 py-4 sm:px-5 md:px-8 md:py-6">{children}</div>
+      <body className="overflow-x-hidden">
+        <div className="mx-auto w-full max-w-[1440px] px-4 py-4 sm:px-6 md:px-8 lg:px-10 md:py-6">
+          {children}
+        </div>
       </body>
     </html>
   );

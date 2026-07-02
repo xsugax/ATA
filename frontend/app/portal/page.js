@@ -45,11 +45,7 @@ export default function PortalPage() {
                     </div>
                     <span className="rounded-full border border-sovereign/30 bg-sovereign/10 px-3 py-1 text-[11px] text-sovereign">{booking.status}</span>
                   </div>
-                  <div className="mt-3 flex flex-wrap items-center gap-2 text-[11px] text-platinum/60">
-                    <span className="rounded-full bg-white/5 px-2.5 py-1">{booking.paymentMethod || "wire"}</span>
-                    {booking.contractId ? <span className="rounded-full bg-white/5 px-2.5 py-1">{booking.contractId}</span> : null}
-                  </div>
-                  {booking.verificationRequired ? <p className="mt-3 text-xs text-platinum/60">Awaiting admin verification before approval can proceed. A protected disclosure workspace opens automatically once the booking is approved.</p> : null}
+                  {booking.verificationRequired ? <p className="mt-3 text-xs text-platinum/60">Awaiting admin verification before approval can proceed.</p> : null}
                 </div>
               ))}
             </div>

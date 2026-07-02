@@ -9,26 +9,10 @@ import { authHeaders, fetchJson, getAuthToken } from "../../lib/api";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
 const CC = ["#94B4D8","#6B93BD","#4A74A0","#B8CDE0","#D0E1EF","#3A5A7E"];
-const STAGES = [
-  "Booking Submitted - Awaiting Admin Verification",
-  "Admin Verification In Progress",
-  "Admin Verified - Terms Review",
-  "Terms Negotiation",
-  "Contract Finalized",
-  "Escrow Secured",
-  "Approved - Disclosure Workspace Open",
-];
+const STAGES = ["Inquiry Received","Under Representation Review","Terms Negotiation","Contract Finalized","Escrow Secured","Confirmed"];
 const fmtMoney = (n) => n >= 1e6 ? `$${(n/1e6).toFixed(1)}M` : `$${Math.round(n/1000)}K`;
 const fmtD = (s) => s ? new Date(s).toLocaleString("en-GB",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}) : "-";
-const stageColor = (s) => ({
-  "Approved - Disclosure Workspace Open":"#4ade80",
-  "Escrow Secured":"#94B4D8",
-  "Contract Finalized":"#a78bfa",
-  "Terms Negotiation":"#fbbf24",
-  "Admin Verified - Terms Review":"#38bdf8",
-  "Admin Verification In Progress":"#fb923c",
-  "Booking Submitted - Awaiting Admin Verification":"#94a3b8",
-}[s]||"#94a3b8");
+const stageColor = (s) => ({"Confirmed":"#4ade80","Escrow Secured":"#94B4D8","Contract Finalized":"#a78bfa","Terms Negotiation":"#fbbf24","Under Representation Review":"#fb923c"}[s]||"#94a3b8");
 const availColor = (a) => ({Open:"#4ade80",Limited:"#fbbf24",Waitlist:"#fb923c"}[a]||"#94a3b8");
 
 const PALETTE_CMDS = [
@@ -45,7 +29,7 @@ const PALETTE_CMDS = [
 
 const S = {
   page: { minHeight: "100vh", background: "#070A14", color: "#E6ECF4", fontFamily: "'Inter', system-ui, sans-serif" },
-  header: { background: "rgba(148,180,216,0.04)", borderBottom: "1px solid rgba(148,180,216,0.12)", padding: "14px clamp(16px,3vw,28px)", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" },
+  header: { background: "rgba(148,180,216,0.04)", borderBottom: "1px solid rgba(148,180,216,0.12)", padding: "16px 28px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" },
   headerLeft: { display: "flex", alignItems: "center", gap: 14 },
   logo: { width: 36, height: 36, borderRadius: 10, background: "linear-gradient(135deg,#94B4D8,#4A74A0)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: 18, color: "#070A14", flexShrink: 0 },
   title: { fontSize: 14, fontWeight: 700, letterSpacing: "0.18em", color: "#94B4D8", textTransform: "uppercase" },
@@ -53,15 +37,15 @@ const S = {
   notifBell: { position: "relative", cursor: "pointer", background: "rgba(148,180,216,0.08)", border: "1px solid rgba(148,180,216,0.18)", borderRadius: 10, padding: "8px 12px", fontSize: 13, color: "#E6ECF4", display: "flex", alignItems: "center", gap: 7 },
   badge: { position: "absolute", top: -6, right: -6, background: "#ef4444", color: "#fff", borderRadius: "50%", width: 18, height: 18, fontSize: 10, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" },
   authBar: { fontSize: 12, color: "rgba(230,236,244,0.5)", display: "flex", alignItems: "center", gap: 8 },
-  body: { width: "100%", maxWidth: 1320, margin: "0 auto", padding: "20px clamp(12px,2.4vw,24px) 48px", overflowX: "hidden" },
-  tabs: { display: "flex", gap: 4, marginBottom: 20, borderBottom: "1px solid rgba(148,180,216,0.1)", paddingBottom: 0, flexWrap: "wrap" },
+  body: { maxWidth: 1400, margin: "0 auto", padding: "24px 24px 60px" },
+  tabs: { display: "flex", gap: 4, marginBottom: 28, borderBottom: "1px solid rgba(148,180,216,0.1)", paddingBottom: 0, flexWrap: "wrap" },
   tab: (active) => ({ padding: "10px 18px", fontSize: 11, letterSpacing: "0.14em", textTransform: "uppercase", fontWeight: 600, cursor: "pointer", border: "none", background: "none", color: active ? "#94B4D8" : "rgba(230,236,244,0.4)", borderBottom: active ? "2px solid #94B4D8" : "2px solid transparent", transition: "all .18s ease", marginBottom: -1 }),
-  kpiGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(145px,1fr))", gap: 12, marginBottom: 20 },
-  kpiCard: { background: "rgba(148,180,216,0.05)", border: "1px solid rgba(148,180,216,0.12)", borderRadius: 14, padding: "15px 16px" },
+  kpiGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(155px,1fr))", gap: 14, marginBottom: 28 },
+  kpiCard: { background: "rgba(148,180,216,0.05)", border: "1px solid rgba(148,180,216,0.12)", borderRadius: 14, padding: "18px 20px" },
   kpiLabel: { fontSize: 10, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(148,180,216,0.7)", marginBottom: 8 },
   kpiValue: { fontSize: 26, fontWeight: 700, color: "#94B4D8" },
-  chartGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,320px),1fr))", gap: 14, marginBottom: 20 },
-  chartCard: { background: "rgba(148,180,216,0.04)", border: "1px solid rgba(148,180,216,0.1)", borderRadius: 16, padding: "18px" },
+  chartGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(340px,1fr))", gap: 16, marginBottom: 28 },
+  chartCard: { background: "rgba(148,180,216,0.04)", border: "1px solid rgba(148,180,216,0.1)", borderRadius: 16, padding: "20px" },
   chartTitle: { fontSize: 10, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(148,180,216,0.7)", marginBottom: 16 },
   table: { width: "100%", borderCollapse: "collapse", fontSize: 12 },
   th: { textAlign: "left", padding: "10px 14px", fontSize: 10, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(148,180,216,0.6)", borderBottom: "1px solid rgba(148,180,216,0.1)" },
@@ -70,8 +54,8 @@ const S = {
   btn: { cursor: "pointer", border: "1px solid rgba(148,180,216,0.25)", borderRadius: 8, padding: "5px 12px", fontSize: 10, fontWeight: 600, letterSpacing: "0.06em", background: "rgba(148,180,216,0.07)", color: "#94B4D8", transition: "all .15s ease" },
   btnDanger: { cursor: "pointer", border: "1px solid rgba(239,68,68,0.3)", borderRadius: 8, padding: "5px 12px", fontSize: 10, fontWeight: 600, background: "rgba(239,68,68,0.07)", color: "#ef4444", transition: "all .15s ease" },
   btnGhost: { cursor: "pointer", border: "1px solid rgba(167,139,250,0.3)", borderRadius: 8, padding: "5px 12px", fontSize: 10, fontWeight: 600, background: "rgba(167,139,250,0.07)", color: "#a78bfa", transition: "all .15s ease" },
-  section: { background: "rgba(148,180,216,0.03)", border: "1px solid rgba(148,180,216,0.09)", borderRadius: 18, padding: "18px clamp(14px,2vw,22px)", marginBottom: 16 },
-  notifPanel: { position: "fixed", top: 0, right: 0, bottom: 0, width: "min(360px, calc(100vw - 24px))", background: "#0C1120", borderLeft: "1px solid rgba(148,180,216,0.15)", zIndex: 100, display: "flex", flexDirection: "column", boxShadow: "-20px 0 60px rgba(0,0,0,0.6)" },
+  section: { background: "rgba(148,180,216,0.03)", border: "1px solid rgba(148,180,216,0.09)", borderRadius: 18, padding: "22px 24px", marginBottom: 18 },
+  notifPanel: { position: "fixed", top: 0, right: 0, bottom: 0, width: 360, background: "#0C1120", borderLeft: "1px solid rgba(148,180,216,0.15)", zIndex: 100, display: "flex", flexDirection: "column", boxShadow: "-20px 0 60px rgba(0,0,0,0.6)" },
   notifHeader: { padding: "20px 20px 14px", borderBottom: "1px solid rgba(148,180,216,0.1)", display: "flex", justifyContent: "space-between", alignItems: "center" },
   paletteOverlay: { position: "fixed", inset: 0, background: "rgba(7,10,20,0.85)", backdropFilter: "blur(8px)", zIndex: 200, display: "flex", alignItems: "flex-start", justifyContent: "center", paddingTop: "18vh" },
   paletteBox: { background: "#0C1120", border: "1px solid rgba(148,180,216,0.25)", borderRadius: 16, width: "100%", maxWidth: 560, boxShadow: "0 24px 80px rgba(0,0,0,0.7)" },
@@ -175,14 +159,7 @@ export default function GodModeAdmin() {
   }, [authed]);
 
   // Actions
-  const advanceBooking   = async (id, stage) => {
-    try {
-      await fetchJson(`/admin/bookings/${id}/status`, { method:"PATCH", headers:authHeaders(), body:JSON.stringify({ stage }) });
-      loadBookings(); loadDash(); loadAudit();
-    } catch (error) {
-      alert(error.message);
-    }
-  };
+  const advanceBooking   = async (id, stage) => { await fetchJson(`/admin/bookings/${id}/status`, { method:"PATCH", headers:authHeaders(), body:JSON.stringify({ stage }) }); loadBookings(); loadDash(); };
   const cancelBooking    = async (id) => { if (!confirm("Cancel and delete this booking?")) return; await fetchJson(`/admin/bookings/${id}`, { method:"DELETE", headers:authHeaders() }); loadBookings(); loadDash(); };
   const suspendUser      = async (id, suspend) => { await fetchJson(`/admin/users/${id}/${suspend?"suspend":"unsuspend"}`, { method:"POST", headers:authHeaders() }); loadUsers(); };
   const flipAvailability = async (id) => { await fetchJson(`/admin/celebrities/${id}/availability`, { method:"PATCH", headers:authHeaders() }); loadCelebs(celebPage); };
@@ -206,7 +183,6 @@ export default function GodModeAdmin() {
     "NEW_BOOKING":                    { label:"NEW BOOKING",     color:"#4ade80" },
     "BOOKING_CANCELLED":              { label:"CANCELLED",       color:"#ef4444" },
     "BOOKING_STATUS_UPDATED":         { label:"STATUS CHANGE",   color:"#94B4D8" },
-    "DISCLOSURE_WORKSPACE_CREATED":   { label:"WORKSPACE OPENED", color:"#4ade80" },
     "USER_SUSPENDED":                 { label:"USER SUSPENDED",  color:"#fb923c" },
     "USER_UNSUSPENDED":               { label:"USER RESTORED",   color:"#a78bfa" },
     "BROADCAST":                      { label:"BROADCAST SENT",  color:"#fbbf24" },
@@ -264,7 +240,7 @@ export default function GodModeAdmin() {
           <div style={S.logo}>A</div>
           <div>
             <div style={S.title}>God Mode Command</div>
-            <div style={S.subtitle}>AURELUX Sovereign - Admin Panel</div>
+            <div style={S.subtitle}>All Talents Agency - Admin Panel</div>
           </div>
         </div>
         <div style={{ display:"flex", alignItems:"center", gap:10, flexWrap:"wrap" }}>
@@ -299,8 +275,6 @@ export default function GodModeAdmin() {
             <div style={S.kpiGrid}>
               <div style={S.kpiCard}><div style={S.kpiLabel}>Revenue YTD</div><div style={S.kpiValue}>{fmtMoney(dash.kpis.revenueYTD)}</div></div>
               <div style={S.kpiCard}><div style={S.kpiLabel}>Active Bookings</div><div style={S.kpiValue}>{bookings.length}</div></div>
-              <div style={S.kpiCard}><div style={S.kpiLabel}>Verification Queue</div><div style={S.kpiValue}>{dash.kpis.verificationQueue}</div></div>
-              <div style={S.kpiCard}><div style={S.kpiLabel}>Disclosure Workspaces</div><div style={S.kpiValue}>{dash.kpis.disclosureWorkspaces}</div></div>
               <div style={S.kpiCard}><div style={S.kpiLabel}>Avg Escrow %</div><div style={S.kpiValue}>{dash.kpis.avgEscrowPercent}%</div></div>
               <div style={S.kpiCard}><div style={S.kpiLabel}>Admin Sessions</div><div style={S.kpiValue}>{sessions}</div></div>
               <div style={S.kpiCard}><div style={S.kpiLabel}>Live Notifs</div><div style={S.kpiValue}>{notifications.length}</div></div>
@@ -393,7 +367,7 @@ export default function GodModeAdmin() {
                   <thead>
                     <tr>
                       <th style={S.th}><input type="checkbox" checked={selectedIds.size === bookings.length && bookings.length > 0} onChange={toggleAll} /></th>
-                      {["Celebrity","Client","Event","Date","Quote","Verification","Status","Workspace","Stage Jump","Actions"].map((h) => <th key={h} style={S.th}>{h}</th>)}
+                      {["Celebrity","Client","Event","Date","Quote","Status","Stage Jump","Actions"].map((h) => <th key={h} style={S.th}>{h}</th>)}
                     </tr>
                   </thead>
                   <tbody>
@@ -405,20 +379,7 @@ export default function GodModeAdmin() {
                         <td style={S.td}>{b.eventType}</td>
                         <td style={S.td}>{b.date}</td>
                         <td style={{ ...S.td, color:"#94B4D8", fontWeight:700 }}>{fmtMoney(b.pricing?.finalQuote || 0)}</td>
-                        <td style={S.td}>
-                          <span style={S.pill(b.verificationRequired ? "#fb923c" : "#4ade80")}>
-                            {b.verificationRequired ? "Required" : "Verified"}
-                          </span>
-                          {b.followUpTask ? <div style={{ marginTop:5, fontSize:10, color:"rgba(230,236,244,0.42)" }}>{b.followUpTask.status} task</div> : null}
-                        </td>
                         <td style={S.td}><span style={S.pill(stageColor(b.status))}>{b.status}</span></td>
-                        <td style={S.td}>
-                          {b.disclosureWorkspace ? (
-                            <span style={{ color:"#4ade80", fontSize:11, fontWeight:700 }}>{b.disclosureWorkspace.id}</span>
-                          ) : (
-                            <span style={{ color:"rgba(230,236,244,0.35)", fontSize:11 }}>Locked</span>
-                          )}
-                        </td>
                         <td style={S.td}>
                           <select style={S.select} value={b.status} onChange={(e) => advanceBooking(b.id, e.target.value)}>
                             {STAGES.map((s) => <option key={s} value={s}>{s}</option>)}
@@ -608,7 +569,6 @@ export default function GodModeAdmin() {
                     {n.type === "NEW_BOOKING"                    && `${n.payload?.celebrity} - ${n.payload?.client}`}
                     {n.type === "BOOKING_CANCELLED"              && `${n.payload?.celebrity} booking cancelled`}
                     {n.type === "BOOKING_STATUS_UPDATED"         && `Stage: ${n.payload?.stage}`}
-                    {n.type === "DISCLOSURE_WORKSPACE_CREATED"   && `Workspace ${n.payload?.workspaceId} opened`}
                     {n.type === "USER_SUSPENDED"                 && `User ${n.payload?.userId} suspended`}
                     {n.type === "USER_UNSUSPENDED"               && `User ${n.payload?.userId} restored`}
                     {n.type === "BROADCAST"                      && `"${n.payload?.message?.slice(0,60)}..."`}
