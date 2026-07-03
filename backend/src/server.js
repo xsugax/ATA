@@ -18,7 +18,7 @@ import { dirname, join } from "path";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const deployMarker = "2026-07-02-ux-theme-flow-complete";
+const deployMarker = "2026-07-03-crowd-board-redeploy-1";
 
 const app = express();
 
