@@ -57,6 +57,8 @@ router.get("/:id/dossier", (req, res) => {
       optimalLeadTime: leadTime,
       recommendedVenue: venue,
       talkingPoints,
+      riskBrief: `Engagement with ${cel.name} requires verified NDA execution, background-screened guest list, and representative pre-approval. Leverage level: ${leverage}. Recommended minimum lead time: ${leadTime}.`,
+      ndaStatus: "Required — standard ATA sovereign NDA applies to all engagements.",
     },
   });
 });

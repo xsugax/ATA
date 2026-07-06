@@ -452,8 +452,8 @@
           const payLabel = payMethod === 'wire' ? 'Wire Transfer' : payMethod.toUpperCase();
           modalContent.innerHTML = `
             <div style='text-align:center;padding:10px 0'>
-              <div style='font-size:48px;margin-bottom:12px'>?</div>
-              <p class='eyebrow'>Slot Secured</p>
+              <div style='font-size:48px;margin-bottom:12px'>&#10003;</div>
+              <p class='eyebrow' style='color:var(--success)'>Slot Secured</p>
               <h3 style='margin:8px 0 4px;color:var(--text)'>${ev.eventTitle}</h3>
               <p class='small muted' style='margin-bottom:14px'>${ev.city} · ${ev.name}</p>
               <div class='crowd-slot-code'>${res.booking.slotCode}</div>

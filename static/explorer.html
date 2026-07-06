@@ -226,8 +226,8 @@
           </div>
           <div class='dossier-section'>
             <h5>Risk Brief</h5>
-            <p class='small'>${d.riskBrief}</p>
-            <p class='small muted' style='margin-top:8px'><b>NDA Status:</b> ${d.ndaStatus}</p>
+            <p class='small'>${d.riskBrief || 'NDA-protected engagement — representative qualification required.'}</p>
+            <p class='small muted' style='margin-top:8px'><b>NDA Status:</b> ${d.ndaStatus || 'Required — standard ATA sovereign NDA applies.'}</p>
           </div>
           <div style='margin-top:16px;display:flex;gap:10px'>
             <a href='booking.html?id=${cel.id}' style='flex:1'><button class='primary' style='width:100%'>Initiate Engagement -</button></a>
