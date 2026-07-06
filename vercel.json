@@ -1,10 +1,24 @@
 {
   "version": 2,
-  "builds": [
-    { "src": "static/**", "use": "@vercel/static" }
+  "outputDirectory": "static",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" },
+        { "key": "X-Content-Type-Options", "value": "nosniff" }
+      ]
+    }
   ],
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/static/$1" }
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/explorer", "destination": "/explorer.html" },
+    { "source": "/booking", "destination": "/booking.html" },
+    { "source": "/crowdbooking", "destination": "/crowdbooking.html" },
+    { "source": "/portal", "destination": "/portal.html" },
+    { "source": "/login", "destination": "/login.html" },
+    { "source": "/admin", "destination": "/admin.html" }
   ]
 }

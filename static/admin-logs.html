@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset='UTF-8'>
+	<meta name='viewport' content='width=device-width,initial-scale=1'>
+	<meta http-equiv='Content-Security-Policy' content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' http://localhost:4100 https://ata-h0yo.onrender.com; font-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
+	<meta name='referrer' content='no-referrer'>
+	<title>Audit Logs | All Talents Agency Admin</title>
+	<meta name="robots" content="noindex, nofollow">
+	<link rel='icon' href='/assets/favicon.svg' type='image/svg+xml'>
+	<style>
+		*{box-sizing:border-box}
+		body{margin:0;font-family:'Inter var',Inter,system-ui,sans-serif;background:#05080F;color:#E6ECF4;min-height:100vh;-webkit-font-smoothing:antialiased}
+		a{color:inherit;text-decoration:none}
+		.header{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;border-bottom:1px solid rgba(148,180,216,.13);background:rgba(5,8,15,.92);position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}
+		.brand{display:flex;align-items:center;gap:10px}
+		.brand-mark{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#94B4D8,#b8962e);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;color:#05080F}
+		.brand-title{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#94B4D8}
+		.back-btn{padding:7px 14px;border-radius:8px;border:1px solid rgba(148,180,216,.25);background:transparent;color:rgba(148,180,216,.7);font-size:11px;cursor:pointer;letter-spacing:.05em;transition:all .2s}
+		.back-btn:hover{background:rgba(148,180,216,.08);color:#94B4D8}
+		.main{padding:24px 28px;max-width:1100px;margin:0 auto}
+		.page-title{font-size:24px;font-weight:800;color:#94B4D8;margin:0 0 4px}
+		.page-sub{font-size:12px;color:rgba(229,228,226,.4);margin:0 0 24px}
+		.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+		.ctrl-input{padding:8px 12px;border-radius:7px;border:1px solid rgba(148,180,216,.22);background:rgba(148,180,216,.06);color:#E6ECF4;font-size:11px;font-family:inherit;outline:none;transition:border-color .15s}
+		.ctrl-input:focus{border-color:rgba(148,180,216,.55)}
+		.export-btn{padding:8px 16px;border-radius:7px;border:1px solid rgba(148,180,216,.3);background:transparent;color:rgba(148,180,216,.8);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;margin-left:auto;transition:all .2s;width:auto}
+		.export-btn:hover{background:rgba(148,180,216,.08)}
+		.log-count{font-size:11px;color:rgba(229,228,226,.4);align-self:center;white-space:nowrap}
+		.log-table{border:1px solid rgba(148,180,216,.12);border-radius:12px;overflow:hidden}
+		table{width:100%;border-collapse:collapse;font-size:12px}
+		th{padding:10px 14px;text-align:left;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(229,228,226,.38);font-weight:700;border-bottom:1px solid rgba(148,180,216,.1);background:rgba(148,180,216,.03);white-space:nowrap}
+		td{padding:11px 14px;border-bottom:1px solid rgba(148,180,216,.06);vertical-align:middle}
+		tr:last-child td{border-bottom:none}
+		tr:hover td{background:rgba(148,180,216,.02)}
+		.action-pill{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap}
+		.a-booking{background:rgba(148,180,216,.12);color:#94B4D8;border:1px solid rgba(148,180,216,.25)}
+		.a-status{background:rgba(245,197,24,.1);color:#f5c518;border:1px solid rgba(245,197,24,.25)}
+		.a-cancel{background:rgba(240,128,128,.1);color:#f08080;border:1px solid rgba(240,128,128,.2)}
+		.a-celeb{background:rgba(159,230,176,.1);color:#9fe6b0;border:1px solid rgba(159,230,176,.25)}
+		.a-auth{background:rgba(148,148,255,.1);color:#a0a0ff;border:1px solid rgba(148,148,255,.2)}
+		.a-default{background:rgba(148,180,216,.07);color:rgba(229,228,226,.5);border:1px solid rgba(148,180,216,.12)}
+		.actor{font-weight:600;font-size:11px}
+		.detail{color:rgba(229,228,226,.55);font-size:11px}
+		.ts{color:rgba(229,228,226,.35);font-size:10px;white-space:nowrap}
+		.empty{text-align:center;padding:48px;color:rgba(229,228,226,.28);font-size:13px}
+		.login-gate{display:flex;align-items:center;justify-content:center;min-height:60vh}
+		.login-box{max-width:380px;width:100%;background:rgba(148,180,216,.04);border:1px solid rgba(148,180,216,.18);border-radius:16px;padding:32px 28px;text-align:center}
+		.login-box h2{margin:0 0 8px;font-size:20px;font-weight:800}
+		.login-box p{margin:0 0 20px;font-size:12px;color:rgba(229,228,226,.45)}
+		.login-box input{width:100%;padding:10px 13px;border-radius:7px;border:1px solid rgba(148,180,216,.22);background:rgba(148,180,216,.07);color:#E6ECF4;font-size:13px;font-family:inherit;margin-bottom:10px;outline:none}
+		.login-box input:focus{border-color:rgba(148,180,216,.55)}
+		.login-btn{width:100%;padding:12px;border-radius:8px;background:#94B4D8;border:none;color:#05080F;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;margin-top:4px}
+		.login-err{color:#f08080;font-size:11px;margin-top:8px;min-height:16px}
+		.pagination{display:flex;align-items:center;gap:8px;margin-top:14px;justify-content:flex-end}
+		.pg-btn{padding:6px 12px;border-radius:6px;border:1px solid rgba(148,180,216,.2);background:transparent;color:rgba(148,180,216,.7);font-size:10px;font-weight:700;cursor:pointer;transition:all .15s;width:auto}
+		.pg-btn:hover:not(:disabled){background:rgba(148,180,216,.08);color:#94B4D8}
+		.pg-btn:disabled{opacity:.3;cursor:not-allowed}
+	</style>
+</head>
+<body>
+	<header class='header'>
+		<div class='brand'>
+			<div class='brand-mark'>ATA</div>
+			<div>
+				<div class='brand-title'>Audit Logs</div>
+				<div style='font-size:10px;color:rgba(229,228,226,.35)'>All Talents Agency · Operations</div>
+			</div>
+		</div>
+		<div style='display:flex;align-items:center;gap:10px'>
+			<a href='admin.html' class='back-btn'>&larr; Back to Admin</a>
+		</div>
+	</header>
+
+	<div id='loginGate' class='login-gate'>
+		<div class='login-box'>
+			<h2>Admin Authentication</h2>
+			<p>Sign in to access audit logs</p>
+			<input type='email' id='lgEmail' placeholder='admin@alltalents.agency' autocomplete='username'>
+			<input type='password' id='lgPass' placeholder='············' autocomplete='current-password'>
+			<button class='login-btn' id='lgBtn'>Authenticate</button>
+			<p class='login-err' id='lgErr'></p>
+		</div>
+	</div>
+
+	<div class='main' id='mainContent' style='display:none'>
+		<h1 class='page-title'>Audit Log</h1>
+		<p class='page-sub'>Complete operational history — every admin action, booking event, and system change</p>
+
+		<div class='controls'>
+			<input class='ctrl-input' id='logSearch' placeholder='Search by action, actor, detail…' style='width:240px' oninput='applyFilters()'>
+			<select class='ctrl-input' id='logType' onchange='applyFilters()' style='width:160px'>
+				<option value=''>All Actions</option>
+				<option value='BOOKING'>Bookings</option>
+				<option value='CELEBRITY'>Celebrity Changes</option>
+				<option value='STATUS'>Status Updates</option>
+				<option value='CANCEL'>Cancellations</option>
+				<option value='AUTH'>Auth Events</option>
+			</select>
+			<input class='ctrl-input' id='logDate' type='date' onchange='applyFilters()'>
+			<span class='log-count' id='logCount'>— entries</span>
+			<button class='export-btn' onclick='exportCSV()'>Export CSV ↓</button>
+		</div>
+
+		<div class='log-table'>
+			<table>
+				<thead>
+					<tr>
+						<th>Action</th>
+						<th>Actor</th>
+						<th>Detail</th>
+						<th>Reference</th>
+						<th>Timestamp</th>
+					</tr>
+				</thead>
+				<tbody id='logBody'>
+					<tr><td colspan='5' class='empty'>Loading…</td></tr>
+				</tbody>
+			</table>
+		</div>
+		<div class='pagination' id='pagination'></div>
+	</div>
+
+	<script>
+		const API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+			? 'http://localhost:4100/api'
+			: 'https://ata-h0yo.onrender.com/api';
+
+		let _token = localStorage.getItem('adm_token') || '';
+		let _allLogs = [];
+		let _page = 1;
+		const PAGE_SIZE = 50;
+
+		const $ = id => document.getElementById(id);
+
+		async function api(path, opts = {}) {
+			const r = await fetch(`${API}${path}`, {
+				...opts,
+				headers: { 'Content-Type': 'application/json', ...(_token ? { Authorization: `Bearer ${_token}` } : {}), ...(opts.headers || {}) }
+			});
+			const j = await r.json().catch(() => ({}));
+			if (!r.ok) throw new Error(j.error || 'Request failed');
+			return j;
+		}
+
+		function fmtTime(iso) {
+			if (!iso) return '—';
+			return new Date(iso).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+		}
+
+		function actionClass(action) {
+			if (!action) return 'a-default';
+			const a = action.toUpperCase();
+			if (a.includes('BOOKING') && !a.includes('STATUS') && !a.includes('CANCEL')) return 'a-booking';
+			if (a.includes('STATUS')) return 'a-status';
+			if (a.includes('CANCEL') || a.includes('DELETE') || a.includes('REMOVED')) return 'a-cancel';
+			if (a.includes('CELEBRITY') || a.includes('CELEB')) return 'a-celeb';
+			if (a.includes('LOGIN') || a.includes('AUTH') || a.includes('ACCESS')) return 'a-auth';
+			return 'a-default';
+		}
+
+		function renderLogs(logs) {
+			$('logCount').textContent = `${logs.length.toLocaleString()} entries`;
+			const start = (_page - 1) * PAGE_SIZE;
+			const slice = logs.slice(start, start + PAGE_SIZE);
+			const totalPages = Math.max(1, Math.ceil(logs.length / PAGE_SIZE));
+
+			if (!logs.length) {
+				$('logBody').innerHTML = `<tr><td colspan='5' class='empty'>No log entries match your filters.</td></tr>`;
+				$('pagination').innerHTML = '';
+				return;
+			}
+
+			$('logBody').innerHTML = slice.map(l => `
+				<tr>
+					<td><span class='action-pill ${actionClass(l.action)}'>${(l.action || 'EVENT').replace(/_/g,' ')}</span></td>
+					<td class='actor'>${l.actor || '—'}</td>
+					<td class='detail'>${l.detail || '—'}</td>
+					<td style='font-family:monospace;font-size:10px;color:rgba(229,228,226,.3)'>${(l.referenceId || '').slice(0,12) || '—'}</td>
+					<td class='ts'>${fmtTime(l.timestamp)}</td>
+				</tr>
+			`).join('');
+
+			$('pagination').innerHTML = totalPages <= 1 ? '' : `
+				<button class='pg-btn' onclick='changePage(${_page - 1})' ${_page <= 1 ? 'disabled' : ''}>&larr; Prev</button>
+				<span style='font-size:11px;color:rgba(229,228,226,.4)'>Page ${_page} of ${totalPages}</span>
+				<button class='pg-btn' onclick='changePage(${_page + 1})' ${_page >= totalPages ? 'disabled' : ''}>Next &rarr;</button>
+			`;
+		}
+
+		function changePage(p) {
+			_page = p;
+			applyFilters();
+			window.scrollTo(0, 0);
+		}
+		window.changePage = changePage;
+
+		function applyFilters() {
+			const q = ($('logSearch').value || '').toLowerCase();
+			const type = $('logType').value.toUpperCase();
+			const date = $('logDate').value;
+
+			const filtered = _allLogs.filter(l => {
+				if (q && !JSON.stringify(l).toLowerCase().includes(q)) return false;
+				if (type && !(l.action || '').toUpperCase().includes(type)) return false;
+				if (date) {
+					const logDate = (l.timestamp || '').slice(0, 10);
+					if (logDate !== date) return false;
+				}
+				return true;
+			});
+			renderLogs(filtered);
+		}
+		window.applyFilters = applyFilters;
+
+		function exportCSV() {
+			const q = ($('logSearch').value || '').toLowerCase();
+			const type = $('logType').value.toUpperCase();
+			const filtered = _allLogs.filter(l => {
+				if (q && !JSON.stringify(l).toLowerCase().includes(q)) return false;
+				if (type && !(l.action || '').toUpperCase().includes(type)) return false;
+				return true;
+			});
+
+			const header = ['Action', 'Actor', 'Detail', 'Reference', 'Timestamp'];
+			const rows = filtered.map(l => [
+				l.action || '',
+				l.actor || '',
+				(l.detail || '').replace(/,/g, ';'),
+				l.referenceId || '',
+				l.timestamp || ''
+			].join(','));
+			const csv = [header.join(','), ...rows].join('\n');
+			const blob = new Blob([csv], { type: 'text/csv' });
+			const a = document.createElement('a');
+			a.href = URL.createObjectURL(blob);
+			a.download = `ata-audit-logs-${new Date().toISOString().slice(0,10)}.csv`;
+			a.click();
+		}
+		window.exportCSV = exportCSV;
+
+		async function loadLogs() {
+			try {
+				const d = await api('/admin/dashboard');
+				_allLogs = (d.auditLogs || []).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+				applyFilters();
+			} catch(e) {
+				$('logBody').innerHTML = `<tr><td colspan='5' class='empty' style='color:#f08080'>${e.message}</td></tr>`;
+			}
+		}
+
+		async function login() {
+			const email = $('lgEmail').value.trim();
+			const pass = $('lgPass').value;
+			$('lgErr').textContent = '';
+			$('lgBtn').textContent = 'Authenticating…';
+			try {
+				const res = await api('/auth/login', { method: 'POST', body: JSON.stringify({ email, password: pass }) });
+				if (res.user?.role !== 'admin') throw new Error('Admin access required');
+				_token = res.token;
+				localStorage.setItem('adm_token', _token);
+				showLogs();
+			} catch(e) {
+				$('lgErr').textContent = e.message;
+				$('lgBtn').textContent = 'Authenticate';
+			}
+		}
+
+		function showLogs() {
+			$('loginGate').style.display = 'none';
+			$('mainContent').style.display = 'block';
+			loadLogs();
+		}
+
+		$('lgBtn').onclick = login;
+		$('lgPass').onkeydown = e => { if (e.key === 'Enter') login(); };
+
+		// Check stored token
+		(async () => {
+			if (_token) {
+				try {
+					const me = await api('/auth/me');
+					if (me.user?.role === 'admin') { showLogs(); return; }
+				} catch {}
+				_token = '';
+				localStorage.removeItem('adm_token');
+			}
+			$('loginGate').style.display = 'flex';
+		})();
+	</script>
+</body>
+</html>

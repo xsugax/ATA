@@ -268,4 +268,95 @@ router.get("/audit", (_req, res) => {
   return res.json({ data: [...db.auditLogs].reverse(), total: db.auditLogs.length });
 });
 
+// ── Celebrity FULL CRUD (God Mode) ────────────────────────────────────────────
+router.post("/celebrities", (req, res) => {
+  const { name, category, region, startingPrice, netWorth, socialReachMillions, agencyRepresentation, eliteSignal, portrait, reservationWindows, meetingNotes, availability } = req.body;
+  if (!name?.trim() || !category || !region || !startingPrice || !eliteSignal?.trim()) {
+    return res.status(400).json({ error: "name, category, region, startingPrice, eliteSignal are required" });
+  }
+  const id = `cadmin-${Date.now()}-${Math.random().toString(36).slice(2,7)}`;
+  const price = Number(startingPrice);
+  const avail = availability || (price >= 1500000 ? "Waitlist" : price >= 600000 ? "Limited" : "Open");
+  const reach = Number(socialReachMillions) || 0;
+  const celeb = {
+    id, name: name.trim(), verified: true, category, region,
+    portrait: portrait || `https://i.pravatar.cc/300?u=${encodeURIComponent(name)}`,
+    eliteSignal: eliteSignal.trim(),
+    bookingTiers: [
+      { type: "Private Event",      multiplier: 1.0,  startPrice: price },
+      { type: "Corporate Keynote",  multiplier: 1.25, startPrice: Math.round(price*1.25) },
+      { type: "Brand Endorsement",  multiplier: 1.70, startPrice: Math.round(price*1.70) },
+      { type: "Virtual Appearance", multiplier: 0.65, startPrice: Math.round(price*0.65) },
+    ],
+    startingPrice: price, bookingPrice: price,
+    dynamicPriceRange: { min: Math.round(price*0.9), max: Math.round(price*1.4) },
+    averageEventRate: Math.round(price*1.15),
+    demandIndex: 75, popularityScore: 75,
+    netWorth: netWorth || "$10M", netWorthTier: "$10M",
+    availability: avail,
+    availabilityWindowDays: avail === "Waitlist" ? 90 : avail === "Limited" ? 45 : 21,
+    socialReachMillions: reach, socialReach: `${reach}M`,
+    agencyRepresentation: agencyRepresentation || "Independent",
+    agency: agencyRepresentation || "Independent",
+    partnerships: [], awards: [],
+    riskIndex: "medium", ndaDefault: true,
+    securityTiers: ["Standard","Enhanced","Executive","Sovereign"],
+    recentBrandAlignment: "",
+    eventCompatibility: ["Summit","Gala","Launch","Private Dinner","Festival"],
+    preferredHotels: [],
+    reservationWindows: reservationWindows || [],
+    meetingNotes: meetingNotes || "",
+    adminCreated: true,
+    brandValue: null,
+  };
+  celebrities.push(celeb);
+  db.auditLogs.push({ id: uuid(), actor: req.user.email, action: "CELEBRITY_ADDED", referenceId: id, detail: `${name} added to roster`, timestamp: new Date().toISOString() });
+  emitAdminEvent("CELEBRITY_ADDED", { id, name, category });
+  return res.status(201).json({ celebrity: celeb });
+});
+
+router.put("/celebrities/:id", (req, res) => {
+  const celeb = celebrities.find(c => c.id === req.params.id);
+  if (!celeb) return res.status(404).json({ error: "Celebrity not found" });
+  const { name, category, region, startingPrice, netWorth, socialReachMillions, agencyRepresentation, eliteSignal, portrait, reservationWindows, meetingNotes, availability, demandIndex, availabilityWindowDays } = req.body;
+  if (name) celeb.name = name.trim();
+  if (category) celeb.category = category;
+  if (region) celeb.region = region;
+  if (portrait) celeb.portrait = portrait;
+  if (eliteSignal) celeb.eliteSignal = eliteSignal.trim();
+  if (netWorth) celeb.netWorth = netWorth;
+  if (agencyRepresentation) { celeb.agencyRepresentation = agencyRepresentation; celeb.agency = agencyRepresentation; }
+  if (socialReachMillions !== undefined) { const r = Number(socialReachMillions); celeb.socialReachMillions = r; celeb.socialReach = `${r}M`; }
+  if (reservationWindows) celeb.reservationWindows = reservationWindows;
+  if (meetingNotes !== undefined) celeb.meetingNotes = meetingNotes;
+  if (demandIndex) celeb.demandIndex = Number(demandIndex);
+  if (availabilityWindowDays) celeb.availabilityWindowDays = Number(availabilityWindowDays);
+  if (availability) celeb.availability = availability;
+  if (startingPrice) {
+    const price = Number(startingPrice);
+    celeb.startingPrice = price; celeb.bookingPrice = price;
+    celeb.dynamicPriceRange = { min: Math.round(price*0.9), max: Math.round(price*1.4) };
+    celeb.averageEventRate = Math.round(price*1.15);
+    celeb.bookingTiers = [
+      { type: "Private Event",      multiplier: 1.0,  startPrice: price },
+      { type: "Corporate Keynote",  multiplier: 1.25, startPrice: Math.round(price*1.25) },
+      { type: "Brand Endorsement",  multiplier: 1.70, startPrice: Math.round(price*1.70) },
+      { type: "Virtual Appearance", multiplier: 0.65, startPrice: Math.round(price*0.65) },
+    ];
+    if (!availability) celeb.availability = price >= 1500000 ? "Waitlist" : price >= 600000 ? "Limited" : "Open";
+  }
+  db.auditLogs.push({ id: uuid(), actor: req.user.email, action: "CELEBRITY_UPDATED", referenceId: celeb.id, detail: `${celeb.name} profile updated`, timestamp: new Date().toISOString() });
+  emitAdminEvent("CELEBRITY_UPDATED", { id: celeb.id, name: celeb.name });
+  return res.json({ celebrity: celeb });
+});
+
+router.delete("/celebrities/:id", (req, res) => {
+  const idx = celebrities.findIndex(c => c.id === req.params.id);
+  if (idx === -1) return res.status(404).json({ error: "Celebrity not found" });
+  const [removed] = celebrities.splice(idx, 1);
+  db.auditLogs.push({ id: uuid(), actor: req.user.email, action: "CELEBRITY_REMOVED", referenceId: removed.id, detail: `${removed.name} removed from roster`, timestamp: new Date().toISOString() });
+  emitAdminEvent("CELEBRITY_REMOVED", { id: removed.id, name: removed.name });
+  return res.json({ ok: true, removed: removed.name });
+});
+
 export default router;

@@ -3,7 +3,7 @@
 <head>
 	<meta charset='UTF-8'>
 	<meta name='viewport' content='width=device-width,initial-scale=1'>
-	<meta http-equiv='Content-Security-Policy' content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.smartsuppchat.com https://*.smartsupp.com https://*.smartsuppchat.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://i.pravatar.cc https://commons.wikimedia.org https://upload.wikimedia.org https://static.smartsupp.com https://image.smartsupp.com https://image.smartsuppchat.com; connect-src 'self' http://localhost:4100 https://ata-h0yo.onrender.com https://www.smartsupp.com https://app.smartsupp.com wss://app.smartsupp.com https://www.smartsuppchat.com; font-src 'self'; frame-src https://www.smartsupp.com; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
+	<meta http-equiv='Content-Security-Policy' content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://i.pravatar.cc https://commons.wikimedia.org https://upload.wikimedia.org; connect-src 'self' http://localhost:4100 https://ata-h0yo.onrender.com; font-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
 	<meta name='referrer' content='no-referrer'>
 	<title>Admin | All Talents Agency</title>
 	<meta name="robots" content="noindex, nofollow">
@@ -24,6 +24,53 @@
 		@keyframes pulse-green{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.85)}}
 		.adm-logout{padding:7px 16px;border-radius:8px;border:1px solid rgba(148,180,216,.3);background:transparent;color:rgba(148,180,216,.7);font-size:11px;cursor:pointer;letter-spacing:.06em;transition:all .2s;width:auto}
 		.adm-logout:hover{background:rgba(148,180,216,.08);color:#94B4D8;border-color:rgba(148,180,216,.6)}
+		/* -- Admin Tabs -- */
+		.adm-tabs{display:flex;gap:2px;align-items:center;background:rgba(148,180,216,.06);border:1px solid rgba(148,180,216,.12);border-radius:9px;padding:3px}
+		.adm-tab{padding:6px 14px;border-radius:7px;border:none;background:transparent;color:rgba(229,228,226,.5);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:all .18s ease;white-space:nowrap}
+		.adm-tab:hover{color:rgba(229,228,226,.8)}
+		.adm-tab.active{background:#94B4D8;color:#05080F;box-shadow:0 2px 8px rgba(148,180,216,.3)}
+		.adm-tab-link{text-decoration:none;padding:6px 14px;border-radius:7px;color:rgba(229,228,226,.45);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;transition:all .18s ease;white-space:nowrap}
+		.adm-tab-link:hover{color:rgba(229,228,226,.8)}
+		/* -- Roster Section -- */
+		.roster-controls{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:18px}
+		.adm-input{padding:8px 12px;border-radius:7px;border:1px solid rgba(148,180,216,.22);background:rgba(148,180,216,.06);color:#E6ECF4;font-size:11px;font-family:inherit;outline:none;transition:border-color .15s}
+		.adm-input:focus{border-color:rgba(148,180,216,.6)}
+		.roster-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+		.rc{border:1px solid rgba(148,180,216,.14);border-radius:10px;background:rgba(148,180,216,.03);overflow:hidden;transition:border-color .2s}
+		.rc:hover{border-color:rgba(148,180,216,.3)}
+		.rc-img{width:100%;height:120px;object-fit:cover;object-position:center 20%;display:block;background:#0d1218}
+		.rc-img-placeholder{width:100%;height:120px;display:flex;align-items:center;justify-content:center;background:rgba(148,180,216,.08);font-size:28px;color:rgba(148,180,216,.3)}
+		.rc-body{padding:10px 12px}
+		.rc-name{font-size:13px;font-weight:700;color:#E6ECF4;margin:0 0 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+		.rc-meta{font-size:10px;color:rgba(229,228,226,.42);letter-spacing:.04em}
+		.rc-price{font-size:12px;font-weight:700;color:#94B4D8;margin:5px 0 0}
+		.rc-avail{display:inline-block;padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
+		.rc-avail-open{background:rgba(30,112,64,.2);color:#9fe6b0}
+		.rc-avail-limited{background:rgba(184,112,32,.2);color:#f5c518}
+		.rc-avail-waitlist{background:rgba(184,40,40,.2);color:#f08080}
+		.rc-actions{display:flex;gap:6px;margin-top:8px;padding-top:8px;border-top:1px solid rgba(148,180,216,.09)}
+		.rc-btn{flex:1;padding:6px 10px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;transition:all .15s;border:1px solid rgba(148,180,216,.2);background:transparent;color:rgba(148,180,216,.75)}
+		.rc-btn:hover{background:rgba(148,180,216,.1);color:#94B4D8}
+		.rc-btn-del{border-color:rgba(240,128,128,.25);color:rgba(240,128,128,.65)}
+		.rc-btn-del:hover{background:rgba(240,128,128,.1);color:#f08080}
+		/* -- Celebrity Modal -- */
+		.cm-back{position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.88);backdrop-filter:blur(14px);display:none;overflow-y:auto;padding:20px 16px}
+		.cm-back.open{display:block}
+		.cm-box{max-width:680px;margin:0 auto;background:#0D1218;border:1px solid rgba(148,180,216,.22);border-radius:14px;padding:28px 26px}
+		.cm-title{font-size:18px;font-weight:800;color:#94B4D8;margin:0 0 20px;letter-spacing:.02em}
+		.cm-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+		.cm-full{grid-column:1/-1}
+		.cm-label{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(148,180,216,.7);font-weight:700;margin-bottom:5px;display:block}
+		.cm-field input,.cm-field select,.cm-field textarea{width:100%;padding:9px 12px;border-radius:7px;border:1px solid rgba(148,180,216,.22);background:rgba(148,180,216,.07);color:#E6ECF4;font-size:12px;font-family:inherit;outline:none;transition:border-color .15s;resize:vertical;box-sizing:border-box}
+		.cm-field input:focus,.cm-field select:focus,.cm-field textarea:focus{border-color:rgba(148,180,216,.6)}
+		.cm-field select option{background:#0D1218;color:#E6ECF4}
+		.cm-portrait-preview{width:100%;height:100px;object-fit:cover;object-position:center 20%;border-radius:7px;border:1px solid rgba(148,180,216,.15);display:none;margin-top:6px}
+		.cm-actions{display:flex;gap:10px;margin-top:20px;justify-content:flex-end}
+		.cm-save{padding:10px 24px;background:#94B4D8;border:none;border-radius:8px;color:#05080F;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:background .18s;width:auto}
+		.cm-save:hover{background:#BAD0EC}
+		.cm-cancel{padding:10px 18px;background:transparent;border:1px solid rgba(148,180,216,.25);border-radius:8px;color:rgba(148,180,216,.7);font-size:12px;font-weight:700;cursor:pointer;width:auto}
+		.cm-cancel:hover{border-color:rgba(148,180,216,.5);color:#94B4D8}
+		.cm-status{font-size:11px;margin-top:8px;text-align:center;min-height:16px}
 		/* -- Login -- */
 		.adm-login-wrap{display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 65px);padding:20px}
 		.adm-login-box{width:100%;max-width:400px;background:rgba(148,180,216,.04);border:1px solid rgba(148,180,216,.18);border-radius:18px;padding:36px 32px}
@@ -92,10 +139,15 @@
 			<div class='adm-brand-mark'>AT</div>
 			<div>
 				<div class='adm-brand-title'>Request Manager</div>
-				<div class='adm-brand-sub'>All Talents Agency · Sovereign Admin</div>
+				<div class='adm-brand-sub'>All Talents Agency ï¿½ Sovereign Admin</div>
 			</div>
 		</div>
 		<div style='display:flex;align-items:center;gap:16px'>
+			<div class='adm-tabs' id='adminTabs' style='display:none'>
+				<button class='adm-tab active' id='tabBookings' onclick='switchTab("bookings")'>Bookings</button>
+				<button class='adm-tab' id='tabRoster' onclick='switchTab("roster")'>Celebrity Roster</button>
+				<a class='adm-tab-link' href='admin-logs.html'>Audit Logs â†’</a>
+			</div>
 			<div class='adm-live' id='liveStatus' style='display:none'>
 				<span class='adm-live-dot'></span>Live
 			</div>
@@ -114,7 +166,7 @@
 			</div>
 			<div class='adm-field'>
 				<label class='adm-label' for='adPass'>Password</label>
-				<input id='adPass' type='password' placeholder='••••••••' autocomplete='current-password'>
+				<input id='adPass' type='password' placeholder='ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½' autocomplete='current-password'>
 			</div>
 			<button class='primary' style='margin-top:8px' id='loginBtn'>Sign In</button>
 			<p class='adm-err' id='loginErr'></p>
@@ -125,10 +177,10 @@
 	<main class='adm-main' id='dashboard' style='display:none'>
 		<!-- Stats -->
 		<div class='adm-stats' id='statsStrip'>
-			<div class='adm-stat-card'><div class='adm-stat-label'>Total Requests</div><div class='adm-stat-val' id='statTotal'>–</div><div class='adm-stat-sub'>All time</div></div>
-			<div class='adm-stat-card'><div class='adm-stat-label'>Pending Review</div><div class='adm-stat-val' id='statPending'>–</div><div class='adm-stat-sub'>Awaiting action</div></div>
-			<div class='adm-stat-card'><div class='adm-stat-label'>Confirmed</div><div class='adm-stat-val' id='statConfirmed'>–</div><div class='adm-stat-sub'>Fully booked</div></div>
-			<div class='adm-stat-card'><div class='adm-stat-label'>Total Value</div><div class='adm-stat-val' id='statValue'>–</div><div class='adm-stat-sub'>Sum of quotes</div></div>
+			<div class='adm-stat-card'><div class='adm-stat-label'>Total Requests</div><div class='adm-stat-val' id='statTotal'>ï¿½</div><div class='adm-stat-sub'>All time</div></div>
+			<div class='adm-stat-card'><div class='adm-stat-label'>Pending Review</div><div class='adm-stat-val' id='statPending'>ï¿½</div><div class='adm-stat-sub'>Awaiting action</div></div>
+			<div class='adm-stat-card'><div class='adm-stat-label'>Confirmed</div><div class='adm-stat-val' id='statConfirmed'>ï¿½</div><div class='adm-stat-sub'>Fully booked</div></div>
+			<div class='adm-stat-card'><div class='adm-stat-label'>Total Value</div><div class='adm-stat-val' id='statValue'>ï¿½</div><div class='adm-stat-sub'>Sum of quotes</div></div>
 		</div>
 
 		<!-- Bookings -->
@@ -154,7 +206,7 @@
 						</tr>
 					</thead>
 					<tbody id='bookingsBody'>
-						<tr><td colspan='7' class='adm-empty'>Loading…</td></tr>
+						<tr><td colspan='7' class='adm-empty'>Loadingï¿½</td></tr>
 					</tbody>
 				</table>
 			</div>
@@ -163,13 +215,118 @@
 		<!-- Audit Log -->
 		<div>
 			<div class='adm-section-head'>
-				<span class='adm-section-title'>Activity Log</span>
+				<span class='adm-section-title'>Recent Activity</span>
+				<a href='admin-logs.html' style='font-size:11px;color:#94B4D8;text-decoration:none;letter-spacing:.06em'>View Full Logs â†’</a>
 			</div>
 			<div class='adm-log-list' id='auditLog'>
-				<div class='adm-log-item'><div class='adm-log-dot'></div><div><div class='adm-log-action'>Loading…</div></div></div>
+				<div class='adm-log-item'><div class='adm-log-dot'></div><div><div class='adm-log-action'>Loadingâ€¦</div></div></div>
 			</div>
 		</div>
 	</main>
+
+	<!-- CELEBRITY ROSTER VIEW -->
+	<div id='rosterView' style='display:none;padding:24px 28px;max-width:1320px;margin:0 auto'>
+		<div class='roster-controls'>
+			<div>
+				<h2 style='margin:0;font-size:20px;font-weight:800;color:#94B4D8'>Celebrity Roster â€” God Panel</h2>
+				<p style='margin:3px 0 0;font-size:11px;color:rgba(229,228,226,.38)'>Full control over every celebrity on the platform. Add Â· Edit Â· Remove Â· Set meeting windows.</p>
+			</div>
+			<div style='display:flex;gap:8px;flex-wrap:wrap;align-items:center'>
+				<input class='adm-input' id='rSearch' placeholder='Search by nameâ€¦' style='width:160px' oninput='filterRoster()'>
+				<select class='adm-input' id='rCat' onchange='filterRoster()' style='width:130px'>
+					<option value=''>All Categories</option>
+					<option>Music</option><option>Film</option><option>Sports</option><option>Business</option>
+					<option>Comedy</option><option>Fashion</option><option>Influencer</option><option>Entertainment</option>
+				</select>
+				<select class='adm-input' id='rAvail' onchange='filterRoster()' style='width:120px'>
+					<option value=''>All Status</option>
+					<option>Open</option><option>Limited</option><option>Waitlist</option>
+				</select>
+				<button onclick='openCelebModal()' style='padding:8px 18px;background:#94B4D8;border:none;border-radius:8px;color:#05080F;font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;white-space:nowrap'>+ Add Celebrity</button>
+			</div>
+		</div>
+		<div class='adm-stats' id='rosterStats' style='margin-bottom:18px'>
+			<div class='adm-stat-card'><div class='adm-stat-label'>Total on Roster</div><div class='adm-stat-val' id='rs-total'>â€”</div></div>
+			<div class='adm-stat-card'><div class='adm-stat-label'>Open Windows</div><div class='adm-stat-val' id='rs-open'>â€”</div></div>
+			<div class='adm-stat-card'><div class='adm-stat-label'>Limited</div><div class='adm-stat-val' id='rs-limited'>â€”</div></div>
+			<div class='adm-stat-card'><div class='adm-stat-label'>Waitlist Only</div><div class='adm-stat-val' id='rs-waitlist'>â€”</div></div>
+		</div>
+		<div class='roster-grid' id='rosterGrid'></div>
+	</div>
+
+	<!-- CELEBRITY EDIT / ADD MODAL -->
+	<div class='cm-back' id='celebModalBack'>
+		<div class='cm-box'>
+			<div style='display:flex;align-items:center;justify-content:space-between;margin-bottom:18px'>
+				<h2 class='cm-title' id='cmTitle' style='margin:0'>Add Celebrity</h2>
+				<button class='cm-cancel' onclick='closeCelebModal()' style='padding:6px 12px'>&#x2715;</button>
+			</div>
+			<input type='hidden' id='cmId'>
+			<div class='cm-grid'>
+				<div class='cm-field cm-full'>
+					<label class='cm-label'>Full Name *</label>
+					<input id='cmName' placeholder='e.g. Taylor Swift'>
+				</div>
+				<div class='cm-field'>
+					<label class='cm-label'>Category *</label>
+					<select id='cmCat'>
+						<option>Music</option><option>Film</option><option>Sports</option><option>Business</option>
+						<option>Comedy</option><option>Fashion</option><option>Influencer</option><option>Entertainment</option>
+					</select>
+				</div>
+				<div class='cm-field'>
+					<label class='cm-label'>Region *</label>
+					<select id='cmRegion'>
+						<option>North America</option><option>Europe</option><option>Asia</option>
+						<option>Latin America</option><option>Africa</option><option>Middle East</option><option>Australia</option>
+					</select>
+				</div>
+				<div class='cm-field'>
+					<label class='cm-label'>Starting Price (USD) *</label>
+					<input id='cmPrice' type='number' min='1000' placeholder='500000'>
+				</div>
+				<div class='cm-field'>
+					<label class='cm-label'>Net Worth</label>
+					<input id='cmWorth' placeholder='$50M'>
+				</div>
+				<div class='cm-field'>
+					<label class='cm-label'>Social Reach (millions)</label>
+					<input id='cmReach' type='number' placeholder='25'>
+				</div>
+				<div class='cm-field'>
+					<label class='cm-label'>Agency / Representation</label>
+					<input id='cmAgency' placeholder='CAA, WME, Independentâ€¦'>
+				</div>
+				<div class='cm-field cm-full'>
+					<label class='cm-label'>Portrait URL</label>
+					<input id='cmPortrait' placeholder='https://...' oninput='previewPortrait(this.value)'>
+					<img id='cmPortraitPreview' class='cm-portrait-preview' alt='portrait preview'>
+				</div>
+				<div class='cm-field cm-full'>
+					<label class='cm-label'>Bio / Elite Signal *</label>
+					<textarea id='cmSignal' rows='3' placeholder='Compelling description of this celebrityâ€™s profile and engagement termsâ€¦'></textarea>
+				</div>
+				<div class='cm-field cm-full'>
+					<label class='cm-label'>Meeting / Logistics Notes</label>
+					<textarea id='cmNotes' rows='2' placeholder='Preferred meeting formats, locations, logistics, security requirementsâ€¦'></textarea>
+				</div>
+				<div class='cm-field cm-full'>
+					<label class='cm-label'>Availability Override</label>
+					<select id='cmAvail'>
+						<option value=''>Auto (calculated from price)</option>
+						<option value='Open'>Open</option>
+						<option value='Limited'>Limited</option>
+						<option value='Waitlist'>Waitlist</option>
+					</select>
+				</div>
+			</div>
+			<div class='cm-actions'>
+				<button class='cm-cancel' onclick='closeCelebModal()'>Cancel</button>
+				<button class='cm-save' id='cmSaveBtn' onclick='saveCeleb()'>Save Celebrity</button>
+			</div>
+			<p class='cm-status' id='cmStatus'></p>
+		</div>
+	</div>
 
 	<!-- Live feed toast -->
 	<div class='adm-feed' id='liveFeed'></div>
@@ -199,11 +356,11 @@
 	}
 
 	function fmtDate(iso) {
-		if (!iso) return '–';
+		if (!iso) return 'ï¿½';
 		return new Date(iso).toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
 	}
 	function fmtMoney(n) {
-		if (!n) return '–';
+		if (!n) return 'ï¿½';
 		if (n >= 1e6) return `$${(n/1e6).toFixed(1)}M`;
 		return `$${Math.round(n/1000)}K`;
 	}
@@ -217,7 +374,7 @@
 		const email = $('adEmail').value.trim();
 		const pass = $('adPass').value;
 		$('loginErr').textContent = '';
-		$('loginBtn').textContent = 'Signing in…';
+		$('loginBtn').textContent = 'Signing inï¿½';
 		try {
 			const res = await api('/auth/login', { method: 'POST', body: JSON.stringify({ email, password: pass }) });
 			if (res.user?.role !== 'admin') throw new Error('Not an admin account');
@@ -263,15 +420,15 @@
 		$('bookingsBody').innerHTML = list.map(b => `
 			<tr id='row-${b.id}'>
 				<td>
-					<div class='adm-tbl-name'>${b.celebrityName || '–'}</div>
+					<div class='adm-tbl-name'>${b.celebrityName || 'ï¿½'}</div>
 					<div class='adm-tbl-meta'>${b.contractId || b.id.slice(0,8).toUpperCase()}</div>
 				</td>
 				<td>
-					<div style='font-size:12px;font-weight:600'>${b.userName || '–'}</div>
+					<div style='font-size:12px;font-weight:600'>${b.userName || 'ï¿½'}</div>
 					<div class='adm-tbl-meta'>${b.userEmail || ''}</div>
 				</td>
 				<td>
-					<div style='font-size:12px'>${b.eventType || '–'}</div>
+					<div style='font-size:12px'>${b.eventType || 'ï¿½'}</div>
 					<div class='adm-tbl-meta'>${b.location || ''}</div>
 				</td>
 				<td style='font-size:12px;white-space:nowrap'>${fmtDate(b.date)}</td>
@@ -303,7 +460,7 @@
 		try {
 			await api(`/admin/bookings/${id}`, { method: 'DELETE' });
 			document.getElementById(`row-${id}`)?.remove();
-			showToast(`Booking cancelled — ${name}`);
+			showToast(`Booking cancelled ï¿½ ${name}`);
 			await loadBookings();
 		} catch(e) {
 			alert('Failed: ' + e.message);
@@ -323,7 +480,7 @@
 				<div class='adm-log-dot'></div>
 				<div>
 					<div class='adm-log-action'>${l.action.replace(/_/g,' ')}</div>
-					<div class='adm-log-meta'>${l.actor} &nbsp;·&nbsp; ${fmtTime(l.timestamp)}</div>
+					<div class='adm-log-meta'>${l.actor} &nbsp;ï¿½&nbsp; ${fmtTime(l.timestamp)}</div>
 				</div>
 			</div>
 		`).join('');
@@ -381,17 +538,191 @@
 		$('loginScreen').style.display = 'none';
 		$('dashboard').style.display = 'block';
 		$('logoutBtn').style.display = '';
+		$('adminTabs').style.display = 'flex';
 		await loadBookings();
 		await loadDashboard();
 		connectSSE();
 		$('refreshBtn').onclick = async () => {
-			$('refreshBtn').textContent = '? Loading…';
+			$('refreshBtn').textContent = 'ðŸ”„ Loadingâ€¦';
 			await loadBookings();
 			await loadDashboard();
 			$('newBadge').style.display = 'none';
-			$('refreshBtn').textContent = '? Refresh';
+			$('refreshBtn').textContent = 'ðŸ”„ Refresh';
 		};
 	}
+
+	// -- TABS ------------------------------------------------------------------
+	function switchTab(tab) {
+		const bookings = $('dashboard'), roster = $('rosterView');
+		const tbB = $('tabBookings'), tbR = $('tabRoster');
+		if (tab === 'bookings') {
+			bookings.style.display = 'block'; roster.style.display = 'none';
+			tbB.classList.add('active'); tbR.classList.remove('active');
+		} else {
+			bookings.style.display = 'none'; roster.style.display = 'block';
+			tbR.classList.add('active'); tbB.classList.remove('active');
+			if (!window._rosterLoaded) { loadRoster(); window._rosterLoaded = true; }
+		}
+	}
+	window.switchTab = switchTab;
+
+	// -- CELEBRITY ROSTER ------------------------------------------------------
+	let _allCelebs = [];
+
+	async function loadRoster() {
+		try {
+			const res = await api('/admin/celebrities?limit=500');
+			_allCelebs = res.data || [];
+			updateRosterStats(_allCelebs);
+			renderRoster(_allCelebs);
+		} catch(e) {
+			$('rosterGrid').innerHTML = `<p style='color:#f08080;font-size:12px'>${e.message}</p>`;
+		}
+	}
+
+	function updateRosterStats(list) {
+		$('rs-total').textContent = list.length;
+		$('rs-open').textContent = list.filter(c => c.availability === 'Open').length;
+		$('rs-limited').textContent = list.filter(c => c.availability === 'Limited').length;
+		$('rs-waitlist').textContent = list.filter(c => c.availability === 'Waitlist').length;
+	}
+
+	function renderRoster(list) {
+		if (!list.length) {
+			$('rosterGrid').innerHTML = `<p style='color:rgba(229,228,226,.4);font-size:12px;grid-column:1/-1'>No celebrities match.</p>`;
+			return;
+		}
+		$('rosterGrid').innerHTML = list.map(c => {
+			const availClass = c.availability === 'Open' ? 'rc-avail-open' : c.availability === 'Limited' ? 'rc-avail-limited' : 'rc-avail-waitlist';
+			const imgHtml = c.portrait ? `<img class='rc-img' src='${c.portrait}' alt='${c.name}' loading='lazy' onerror="this.style.display='none';this.nextSibling.style.display='flex'"><div class='rc-img-placeholder' style='display:none'>&#9670;</div>` : `<div class='rc-img-placeholder'>&#9670;</div>`;
+			return `
+				<div class='rc'>
+					${imgHtml}
+					<div class='rc-body'>
+						<span class='rc-avail ${availClass}'>${c.availability}</span>
+						<p class='rc-name'>${c.name}</p>
+						<p class='rc-meta'>${c.category} Â· ${c.region}</p>
+						<p class='rc-price'>From $${(c.startingPrice||0).toLocaleString()}</p>
+						<div class='rc-actions'>
+							<button class='rc-btn' onclick='editCeleb("${c.id}")'>Edit</button>
+							<button class='rc-btn rc-btn-del' onclick='deleteCeleb("${c.id}","${c.name.replace(/"/g,'\\"')}")'>Delete</button>
+						</div>
+					</div>
+				</div>`;
+		}).join('');
+	}
+
+	function filterRoster() {
+		const q = ($('rSearch').value || '').toLowerCase();
+		const cat = $('rCat').value;
+		const avail = $('rAvail').value;
+		const filtered = _allCelebs.filter(c => {
+			if (q && !c.name.toLowerCase().includes(q)) return false;
+			if (cat && c.category !== cat) return false;
+			if (avail && c.availability !== avail) return false;
+			return true;
+		});
+		renderRoster(filtered);
+	}
+	window.filterRoster = filterRoster;
+
+	// -- Celebrity Modal -------------------------------------------------------
+	function openCelebModal(c = null) {
+		$('cmId').value = c ? c.id : '';
+		$('cmTitle').textContent = c ? `Edit: ${c.name}` : 'Add New Celebrity';
+		$('cmName').value = c ? c.name : '';
+		$('cmCat').value = c ? c.category : 'Music';
+		$('cmRegion').value = c ? c.region : 'North America';
+		$('cmPrice').value = c ? c.startingPrice : '';
+		$('cmWorth').value = c ? c.netWorth : '';
+		$('cmReach').value = c ? c.socialReachMillions : '';
+		$('cmAgency').value = c ? (c.agencyRepresentation || '') : '';
+		$('cmPortrait').value = c ? (c.portrait || '') : '';
+		$('cmSignal').value = c ? c.eliteSignal : '';
+		$('cmNotes').value = c ? (c.meetingNotes || '') : '';
+		$('cmAvail').value = c ? '' : '';
+		$('cmStatus').textContent = '';
+		$('cmSaveBtn').textContent = 'Save Celebrity';
+		$('cmSaveBtn').disabled = false;
+		previewPortrait($('cmPortrait').value);
+		$('celebModalBack').classList.add('open');
+		$('cmName').focus();
+	}
+	function closeCelebModal() { $('celebModalBack').classList.remove('open'); }
+	window.openCelebModal = openCelebModal;
+	window.closeCelebModal = closeCelebModal;
+
+	function previewPortrait(url) {
+		const img = $('cmPortraitPreview');
+		if (url && url.startsWith('http')) {
+			img.src = url; img.style.display = 'block';
+			img.onerror = () => img.style.display = 'none';
+		} else {
+			img.style.display = 'none';
+		}
+	}
+	window.previewPortrait = previewPortrait;
+
+	async function saveCeleb() {
+		const id = $('cmId').value;
+		const name = $('cmName').value.trim();
+		const signal = $('cmSignal').value.trim();
+		const price = Number($('cmPrice').value);
+		if (!name || !signal || !price) {
+			$('cmStatus').textContent = 'Name, Bio and Starting Price are required.';
+			$('cmStatus').style.color = '#f08080';
+			return;
+		}
+		const payload = {
+			name, category: $('cmCat').value, region: $('cmRegion').value,
+			startingPrice: price, netWorth: $('cmWorth').value,
+			socialReachMillions: Number($('cmReach').value) || 0,
+			agencyRepresentation: $('cmAgency').value,
+			portrait: $('cmPortrait').value,
+			eliteSignal: signal,
+			meetingNotes: $('cmNotes').value,
+		};
+		const avail = $('cmAvail').value;
+		if (avail) payload.availability = avail;
+
+		$('cmSaveBtn').disabled = true;
+		$('cmSaveBtn').textContent = 'Savingâ€¦';
+		try {
+			if (id) {
+				await api(`/admin/celebrities/${id}`, { method: 'PUT', body: JSON.stringify(payload) });
+				showToast(`âœ“ ${name} updated`);
+			} else {
+				await api('/admin/celebrities', { method: 'POST', body: JSON.stringify(payload) });
+				showToast(`âœ“ ${name} added to roster`);
+			}
+			closeCelebModal();
+			window._rosterLoaded = false;
+			await loadRoster();
+		} catch(e) {
+			$('cmStatus').textContent = e.message;
+			$('cmStatus').style.color = '#f08080';
+			$('cmSaveBtn').disabled = false;
+			$('cmSaveBtn').textContent = 'Save Celebrity';
+		}
+	}
+	window.saveCeleb = saveCeleb;
+
+	function editCeleb(id) {
+		const c = _allCelebs.find(x => x.id === id);
+		if (c) openCelebModal(c);
+	}
+	window.editCeleb = editCeleb;
+
+	async function deleteCeleb(id, name) {
+		if (!confirm(`Permanently remove ${name} from the roster?\n\nThis cannot be undone.`)) return;
+		try {
+			await api(`/admin/celebrities/${id}`, { method: 'DELETE' });
+			showToast(`âœ— ${name} removed`);
+			window._rosterLoaded = false;
+			await loadRoster();
+		} catch(e) { alert('Failed: ' + e.message); }
+	}
+	window.deleteCeleb = deleteCeleb;
 
 	// -- INIT: check existing token --------------------------------------------
 	(async () => {
@@ -407,18 +738,6 @@
 	})();
 </script>
 
-<!-- Smartsupp Live Chat -->
-<script type="text/javascript">
-var _smartsupp = _smartsupp || {};
-_smartsupp.key = '6e6f3dc1f0339246c6154810bc08ac75d4aeddda';
-window.smartsupp||(function(d) {
-  var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
-  s=d.getElementsByTagName('script')[0];c=d.createElement('script');
-  c.type='text/javascript';c.charset='utf-8';c.async=true;
-  c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
-})(document);
-</script>
-<noscript>Powered by <a href="https://www.smartsupp.com" target="_blank">Smartsupp</a></noscript>
 </body>
 </html>
 
@@ -582,17 +901,5 @@ window.smartsupp||(function(d) {
 		}
 	</script>
 
-<!-- Smartsupp Live Chat -->
-<script type="text/javascript">
-var _smartsupp = _smartsupp || {};
-_smartsupp.key = '6e6f3dc1f0339246c6154810bc08ac75d4aeddda';
-window.smartsupp||(function(d) {
-  var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
-  s=d.getElementsByTagName('script')[0];c=d.createElement('script');
-  c.type='text/javascript';c.charset='utf-8';c.async=true;
-  c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
-})(document);
-</script>
-<noscript>Powered by <a href="https://www.smartsupp.com" target="_blank">Smartsupp</a></noscript>
 </body>
 </html>
