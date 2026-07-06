@@ -18,7 +18,7 @@ import { dirname, join } from "path";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const deployMarker = "2026-07-05-full-rebuild-all-features";
+const deployMarker = "2026-07-05-new-celebs-smartsupp-fix";
 
 const app = express();
 
