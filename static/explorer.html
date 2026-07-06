@@ -1,9 +1,9 @@
-ï»¿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset='UTF-8'>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
-  <meta http-equiv='Content-Security-Policy' content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://i.pravatar.cc; connect-src 'self' http://localhost:4100 https://ata-h0yo.onrender.com; font-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
+  <meta http-equiv='Content-Security-Policy' content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.smartsuppchat.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://i.pravatar.cc https://commons.wikimedia.org https://upload.wikimedia.org https://static.smartsupp.com; connect-src 'self' http://localhost:4100 https://ata-h0yo.onrender.com https://app.smartsupp.com wss://app.smartsupp.com; font-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
   <meta name='referrer' content='no-referrer'>
   <title>Celebrity Talent Directory | 119+ Verified Stars - ALL TALENTS Agency</title>
   <!-- SEO: Primary Meta -->
@@ -103,7 +103,7 @@
     <div class='fmp-body'>
       <p class='fmp-hint'>Use this panel to send How-to-Meet requests or representative messages for any celebrity.</p>
       <div class='floating-msg-grid'>
-        <div><span class='fmp-label'>Selected Celebrity</span><input id='meetTarget' readonly placeholder='Choose via card buttonâ€¦'></div>
+        <div><span class='fmp-label'>Selected Celebrity</span><input id='meetTarget' readonly placeholder='Choose via card button…'></div>
         <div class='floating-msg-row'>
           <div><span class='fmp-label'>Full Name</span><input id='meetName' placeholder='Your full name'></div>
           <div><span class='fmp-label'>Organization</span><input id='meetOrg' placeholder='Company / Office'></div>
@@ -114,12 +114,12 @@
             <option value='msg'>General Representative Message</option>
           </select>
         </div>
-        <div><span class='fmp-label'>Message</span><textarea id='meetBody' rows='4' placeholder='Describe your request, timeline, and intentâ€¦'></textarea></div>
+        <div><span class='fmp-label'>Message</span><textarea id='meetBody' rows='4' placeholder='Describe your request, timeline, and intent…'></textarea></div>
         <button id='meetSend' class='primary'>Send via Secure Channel &#x2192;</button>
         <p id='meetStatus' class='small muted' style='text-align:center'></p>
       </div>
     </div>
-    <div class='fmp-footer'>Encrypted Â· NDA-default Â· ALL TALENTS Agency</div>
+    <div class='fmp-footer'>Encrypted · NDA-default · ALL TALENTS Agency</div>
   </div>
 
   <script type='module'>
@@ -226,8 +226,8 @@
           </div>
           <div class='dossier-section'>
             <h5>Risk Brief</h5>
-            <p class='small'>${d.riskBrief || 'NDA-protected engagement â€” representative qualification required.'}</p>
-            <p class='small muted' style='margin-top:8px'><b>NDA Status:</b> ${d.ndaStatus || 'Required â€” standard ATA sovereign NDA applies.'}</p>
+            <p class='small'>${d.riskBrief || 'NDA-protected engagement — representative qualification required.'}</p>
+            <p class='small muted' style='margin-top:8px'><b>NDA Status:</b> ${d.ndaStatus || 'Required — standard ATA sovereign NDA applies.'}</p>
           </div>
           <div style='margin-top:16px;display:flex;gap:10px'>
             <a href='booking.html?id=${cel.id}' style='flex:1'><button class='primary' style='width:100%'>Initiate Engagement -</button></a>
@@ -246,7 +246,7 @@
         <h2 style='font-size:clamp(26px,3.8vw,44px);font-weight:900;letter-spacing:-.02em;margin:0 0 10px'>Select Your Celebrity.<br>Claim Your Private Window.</h2>
         <p class='lead'>You have direct access to 119+ verified talents through Aurelux's authorized channel network. Tap any profile to open your private meeting portal - choose a venue, lock in your window, and initiate contact.</p>
         <div style='display:flex;gap:10px;align-items:center;margin-bottom:8px'>
-          <div class='search-wrap' style='flex:1'><input id='search' placeholder='Search celebritiesâ€¦' style='width:100%'><span class='search-hint'>/</span></div>
+          <div class='search-wrap' style='flex:1'><input id='search' placeholder='Search celebrities…' style='width:100%'><span class='search-hint'>/</span></div>
           <button class='mob-filter-expand' id='filterToggle'>Filters ?</button>
         </div>
         <div class='filter-selects' id='filterSelects'>
@@ -411,7 +411,7 @@
       clearTimeout(_searchDebounce);
       _searchDebounce = setTimeout(applyFilters, 280);
     });
-    // -- Category pills (silent search â€” no refresh) ----------------------
+    // -- Category pills (silent search — no refresh) ----------------------
     document.querySelectorAll('#categoryPills .filter-pill').forEach(pill => {
       pill.addEventListener('click', () => {
         document.querySelectorAll('#categoryPills .filter-pill').forEach(p => p.classList.remove('fp-active'));
@@ -691,14 +691,14 @@
       }
 
       // -- Pressure badges: fully static, deterministic from celebrity ID --
-      // No API call â€” always instant, always present
+      // No API call — always instant, always present
       function getStaticPressure(id) {
         const n = parseInt(id.replace('c', ''), 10) || 1;
         const seed = (n * 17 + 3) % 100;
-        if (seed < 14) return { heatLevel: 'critical', urgencyMessage: 'All windows closed â€” waitlist only.',      lastInquiryMinutesAgo: 2  };
-        if (seed < 35) return { heatLevel: 'high',     urgencyMessage: 'Very high demand â€” book early.',           lastInquiryMinutesAgo: Math.max(4, (seed * 2) % 18) };
-        if (seed < 65) return { heatLevel: 'elevated', urgencyMessage: 'Active interest â€” limited open slots.',    lastInquiryMinutesAgo: Math.max(10, (seed * 3) % 45) };
-        return             { heatLevel: 'normal',   urgencyMessage: 'Access available â€” standard timeline.',   lastInquiryMinutesAgo: Math.max(25, (seed * 4) % 90) };
+        if (seed < 14) return { heatLevel: 'critical', urgencyMessage: 'All windows closed — waitlist only.',      lastInquiryMinutesAgo: 2  };
+        if (seed < 35) return { heatLevel: 'high',     urgencyMessage: 'Very high demand — book early.',           lastInquiryMinutesAgo: Math.max(4, (seed * 2) % 18) };
+        if (seed < 65) return { heatLevel: 'elevated', urgencyMessage: 'Active interest — limited open slots.',    lastInquiryMinutesAgo: Math.max(10, (seed * 3) % 45) };
+        return             { heatLevel: 'normal',   urgencyMessage: 'Access available — standard timeline.',   lastInquiryMinutesAgo: Math.max(25, (seed * 4) % 90) };
       }
 
       if (!_pressureObserver) {
@@ -714,7 +714,7 @@
               <div class='pressure-dot pd-${p.heatLevel}'></div>
               <span class='pressure-tag pt-${p.heatLevel}'>${p.heatLevel === 'critical' ? 'SOLD OUT' : p.heatLevel.toUpperCase()}</span>
               <span class='pressure-msg'>${p.urgencyMessage}</span>
-              <span class='pressure-msg' style='margin-left:4px;opacity:.65'>Â· Last inquiry ${p.lastInquiryMinutesAgo}m ago</span>
+              <span class='pressure-msg' style='margin-left:4px;opacity:.65'>· Last inquiry ${p.lastInquiryMinutesAgo}m ago</span>
             `;
           });
         }, { rootMargin: '120px' });
@@ -780,7 +780,7 @@
           <p class='small'><b>Rationale:</b> ${result.recommendation.rationale}</p>
           <p class='small'><b>Ranking:</b> ${result.compared.map((r, i) => `${i + 1}. ${r.name} (Score ${r.valueScore})`).join(' - ')}</p>
           <div style='display:flex;gap:8px;flex-wrap:wrap;margin-top:10px'>
-            <a href='booking.html?id=${winnerId}'><button class='primary' style='width:auto;padding:10px 16px;font-size:11px'>Book Top Candidate â†’</button></a>
+            <a href='booking.html?id=${winnerId}'><button class='primary' style='width:auto;padding:10px 16px;font-size:11px'>Book Top Candidate ?</button></a>
             <button class='secondary' id='compareOpenDossier' style='width:auto;padding:10px 16px;font-size:11px'>Open Dossier</button>
           </div>
         `;
@@ -791,13 +791,13 @@
     };
 
     renderShortlistState();
-    init(); // render cards immediately â€” purely synchronous, no API needed
+    init(); // render cards immediately — purely synchronous, no API needed
 
     initTheme();
     initDynamicTheme();
     initNav();
     initScrollReveal();
-    loadTicker(); // fire-and-forget â€” ticker loads in background, never blocks UI
+    loadTicker(); // fire-and-forget — ticker loads in background, never blocks UI
 
     // -- Fluid ambient background shift on talent hover --------------------
     const fluidAmbient = document.getElementById('fluidAmbient');
@@ -846,6 +846,19 @@
       }
     });
   </script>
+
+<!-- Smartsupp Live Chat -->
+<script type="text/javascript">
+var _smartsupp = _smartsupp || {};
+_smartsupp.key = '6e6f3dc1f0339246c6154810bc08ac75d4aeddda';
+window.smartsupp||(function(d) {
+  var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
+  s=d.getElementsByTagName('script')[0];c=d.createElement('script');
+  c.type='text/javascript';c.charset='utf-8';c.async=true;
+  c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
+})(document);
+</script>
+<noscript>Powered by <a href="https://www.smartsupp.com" target="_blank">Smartsupp</a></noscript>
 </body>
 </html>
 

@@ -1,9 +1,9 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
 	<meta charset='UTF-8'>
 	<meta name='viewport' content='width=device-width,initial-scale=1'>
-	<meta http-equiv='Content-Security-Policy' content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://i.pravatar.cc; connect-src 'self' http://localhost:4100 https://ata-h0yo.onrender.com; font-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
+	<meta http-equiv='Content-Security-Policy' content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.smartsuppchat.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://i.pravatar.cc https://commons.wikimedia.org https://upload.wikimedia.org https://static.smartsupp.com; connect-src 'self' http://localhost:4100 https://ata-h0yo.onrender.com https://app.smartsupp.com wss://app.smartsupp.com; font-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
 	<meta name='referrer' content='no-referrer'>
 	<title>Admin | All Talents Agency</title>
 	<meta name="robots" content="noindex, nofollow">
@@ -13,7 +13,7 @@
 	<style>
 		body{margin:0;font-family:inherit}
 		.adm-shell{min-height:100vh;background:#05080F;color:#E6ECF4}
-		/* ── Header ── */
+		/* -- Header -- */
 		.adm-header{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;border-bottom:1px solid rgba(148,180,216,.13);background:rgba(5,8,15,.92);position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}
 		.adm-brand{display:flex;align-items:center;gap:10px}
 		.adm-brand-mark{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#94B4D8,#b8962e);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;color:#05080F;letter-spacing:-.03em;flex-shrink:0}
@@ -24,7 +24,7 @@
 		@keyframes pulse-green{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.85)}}
 		.adm-logout{padding:7px 16px;border-radius:8px;border:1px solid rgba(148,180,216,.3);background:transparent;color:rgba(148,180,216,.7);font-size:11px;cursor:pointer;letter-spacing:.06em;transition:all .2s;width:auto}
 		.adm-logout:hover{background:rgba(148,180,216,.08);color:#94B4D8;border-color:rgba(148,180,216,.6)}
-		/* ── Login ── */
+		/* -- Login -- */
 		.adm-login-wrap{display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 65px);padding:20px}
 		.adm-login-box{width:100%;max-width:400px;background:rgba(148,180,216,.04);border:1px solid rgba(148,180,216,.18);border-radius:18px;padding:36px 32px}
 		.adm-login-box h2{margin:0 0 4px;font-size:22px;font-weight:800}
@@ -32,10 +32,10 @@
 		.adm-field{margin-bottom:14px}
 		.adm-label{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(148,180,216,.7);margin-bottom:6px;font-weight:700}
 		.adm-err{color:#f08080;font-size:12px;margin-top:10px;text-align:center;min-height:18px}
-		/* ── Main layout ── */
+		/* -- Main layout -- */
 		.adm-main{padding:24px 28px;max-width:1280px;margin:0 auto}
 		@media(max-width:640px){.adm-main{padding:16px 14px}.adm-header{padding:12px 16px}}
-		/* ── Stats strip ── */
+		/* -- Stats strip -- */
 		.adm-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
 		@media(max-width:900px){.adm-stats{grid-template-columns:repeat(2,1fr)}}
 		@media(max-width:480px){.adm-stats{grid-template-columns:1fr 1fr}}
@@ -43,12 +43,12 @@
 		.adm-stat-label{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(229,228,226,.38);margin-bottom:6px;font-weight:700}
 		.adm-stat-val{font-size:26px;font-weight:800;color:#94B4D8;line-height:1}
 		.adm-stat-sub{font-size:10px;color:rgba(229,228,226,.35);margin-top:4px}
-		/* ── Section heading ── */
+		/* -- Section heading -- */
 		.adm-section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
 		.adm-section-title{font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:rgba(148,180,216,.9)}
 		.adm-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.06em}
 		.adm-badge-new{background:rgba(159,230,176,.12);border:1px solid rgba(159,230,176,.4);color:#9fe6b0}
-		/* ── Bookings table ── */
+		/* -- Bookings table -- */
 		.adm-table-wrap{overflow-x:auto;border-radius:12px;border:1px solid rgba(148,180,216,.12)}
 		table.adm-table{width:100%;border-collapse:collapse;font-size:12px}
 		.adm-table th{padding:10px 14px;text-align:left;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(229,228,226,.38);font-weight:700;border-bottom:1px solid rgba(148,180,216,.1);white-space:nowrap;background:rgba(148,180,216,.03)}
@@ -62,7 +62,7 @@
 		.adm-del-btn{padding:5px 10px;border-radius:7px;border:1px solid rgba(240,128,128,.35);background:transparent;color:#f08080;font-size:11px;cursor:pointer;width:auto;white-space:nowrap}
 		.adm-del-btn:hover{background:rgba(240,128,128,.1)}
 		.adm-empty{text-align:center;padding:48px 20px;color:rgba(229,228,226,.35);font-size:13px}
-		/* ── Status badges ── */
+		/* -- Status badges -- */
 		.sb{display:inline-block;padding:3px 8px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:.06em}
 		.sb-received{background:rgba(148,180,216,.12);color:#94B4D8}
 		.sb-review{background:rgba(240,195,107,.1);color:#f0c36b}
@@ -70,16 +70,16 @@
 		.sb-contract{background:rgba(159,230,176,.1);color:#9fe6b0}
 		.sb-escrow{background:rgba(255,200,100,.12);color:#ffc864}
 		.sb-confirmed{background:rgba(159,230,176,.2);color:#9fe6b0}
-		/* ── Audit log ── */
+		/* -- Audit log -- */
 		.adm-log-list{display:grid;gap:8px;max-height:380px;overflow-y:auto}
 		.adm-log-item{display:flex;gap:12px;align-items:flex-start;padding:10px 14px;background:rgba(148,180,216,.03);border:1px solid rgba(148,180,216,.08);border-radius:10px}
 		.adm-log-dot{width:8px;height:8px;border-radius:50%;background:#94B4D8;flex-shrink:0;margin-top:4px}
 		.adm-log-action{font-size:12px;font-weight:600;letter-spacing:.04em;color:rgba(229,228,226,.85)}
 		.adm-log-meta{font-size:10px;color:rgba(229,228,226,.38);margin-top:2px}
-		/* ── Live feed badge ── */
+		/* -- Live feed badge -- */
 		.adm-feed{position:fixed;bottom:24px;right:24px;background:rgba(10,14,22,.95);border:1px solid rgba(159,230,176,.4);border-radius:12px;padding:10px 16px;font-size:11px;color:#9fe6b0;max-width:300px;display:none;z-index:200;box-shadow:0 8px 32px rgba(0,0,0,.6);animation:slideupfeed .3s ease}
 		@keyframes slideupfeed{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-		/* ── Refresh btn ── */
+		/* -- Refresh btn -- */
 		.adm-refresh{padding:7px 14px;border-radius:8px;border:1px solid rgba(148,180,216,.25);background:transparent;color:rgba(148,180,216,.6);font-size:11px;cursor:pointer;width:auto;transition:all .2s}
 		.adm-refresh:hover{background:rgba(148,180,216,.08);color:#94B4D8}
 	</style>
@@ -92,7 +92,7 @@
 			<div class='adm-brand-mark'>AT</div>
 			<div>
 				<div class='adm-brand-title'>Request Manager</div>
-				<div class='adm-brand-sub'>All Talents Agency · Sovereign Admin</div>
+				<div class='adm-brand-sub'>All Talents Agency � Sovereign Admin</div>
 			</div>
 		</div>
 		<div style='display:flex;align-items:center;gap:16px'>
@@ -114,7 +114,7 @@
 			</div>
 			<div class='adm-field'>
 				<label class='adm-label' for='adPass'>Password</label>
-				<input id='adPass' type='password' placeholder='••••••••' autocomplete='current-password'>
+				<input id='adPass' type='password' placeholder='��������' autocomplete='current-password'>
 			</div>
 			<button class='primary' style='margin-top:8px' id='loginBtn'>Sign In</button>
 			<p class='adm-err' id='loginErr'></p>
@@ -125,10 +125,10 @@
 	<main class='adm-main' id='dashboard' style='display:none'>
 		<!-- Stats -->
 		<div class='adm-stats' id='statsStrip'>
-			<div class='adm-stat-card'><div class='adm-stat-label'>Total Requests</div><div class='adm-stat-val' id='statTotal'>–</div><div class='adm-stat-sub'>All time</div></div>
-			<div class='adm-stat-card'><div class='adm-stat-label'>Pending Review</div><div class='adm-stat-val' id='statPending'>–</div><div class='adm-stat-sub'>Awaiting action</div></div>
-			<div class='adm-stat-card'><div class='adm-stat-label'>Confirmed</div><div class='adm-stat-val' id='statConfirmed'>–</div><div class='adm-stat-sub'>Fully booked</div></div>
-			<div class='adm-stat-card'><div class='adm-stat-label'>Total Value</div><div class='adm-stat-val' id='statValue'>–</div><div class='adm-stat-sub'>Sum of quotes</div></div>
+			<div class='adm-stat-card'><div class='adm-stat-label'>Total Requests</div><div class='adm-stat-val' id='statTotal'>�</div><div class='adm-stat-sub'>All time</div></div>
+			<div class='adm-stat-card'><div class='adm-stat-label'>Pending Review</div><div class='adm-stat-val' id='statPending'>�</div><div class='adm-stat-sub'>Awaiting action</div></div>
+			<div class='adm-stat-card'><div class='adm-stat-label'>Confirmed</div><div class='adm-stat-val' id='statConfirmed'>�</div><div class='adm-stat-sub'>Fully booked</div></div>
+			<div class='adm-stat-card'><div class='adm-stat-label'>Total Value</div><div class='adm-stat-val' id='statValue'>�</div><div class='adm-stat-sub'>Sum of quotes</div></div>
 		</div>
 
 		<!-- Bookings -->
@@ -136,8 +136,8 @@
 			<div class='adm-section-head'>
 				<span class='adm-section-title'>Incoming Booking Requests</span>
 				<div style='display:flex;gap:8px;align-items:center'>
-					<span class='adm-badge adm-badge-new' id='newBadge' style='display:none'>● New</span>
-					<button class='adm-refresh' id='refreshBtn'>↻ Refresh</button>
+					<span class='adm-badge adm-badge-new' id='newBadge' style='display:none'>? New</span>
+					<button class='adm-refresh' id='refreshBtn'>? Refresh</button>
 				</div>
 			</div>
 			<div class='adm-table-wrap'>
@@ -154,7 +154,7 @@
 						</tr>
 					</thead>
 					<tbody id='bookingsBody'>
-						<tr><td colspan='7' class='adm-empty'>Loading…</td></tr>
+						<tr><td colspan='7' class='adm-empty'>Loading�</td></tr>
 					</tbody>
 				</table>
 			</div>
@@ -166,7 +166,7 @@
 				<span class='adm-section-title'>Activity Log</span>
 			</div>
 			<div class='adm-log-list' id='auditLog'>
-				<div class='adm-log-item'><div class='adm-log-dot'></div><div><div class='adm-log-action'>Loading…</div></div></div>
+				<div class='adm-log-item'><div class='adm-log-dot'></div><div><div class='adm-log-action'>Loading�</div></div></div>
 			</div>
 		</div>
 	</main>
@@ -199,11 +199,11 @@
 	}
 
 	function fmtDate(iso) {
-		if (!iso) return '–';
+		if (!iso) return '�';
 		return new Date(iso).toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
 	}
 	function fmtMoney(n) {
-		if (!n) return '–';
+		if (!n) return '�';
 		if (n >= 1e6) return `$${(n/1e6).toFixed(1)}M`;
 		return `$${Math.round(n/1000)}K`;
 	}
@@ -212,12 +212,12 @@
 		return new Date(iso).toLocaleString('en-GB', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
 	}
 
-	// ── LOGIN ────────────────────────────────────────────────────────────────
+	// -- LOGIN ----------------------------------------------------------------
 	$('loginBtn').onclick = async () => {
 		const email = $('adEmail').value.trim();
 		const pass = $('adPass').value;
 		$('loginErr').textContent = '';
-		$('loginBtn').textContent = 'Signing in…';
+		$('loginBtn').textContent = 'Signing in�';
 		try {
 			const res = await api('/auth/login', { method: 'POST', body: JSON.stringify({ email, password: pass }) });
 			if (res.user?.role !== 'admin') throw new Error('Not an admin account');
@@ -232,7 +232,7 @@
 	};
 	$('adPass').onkeydown = e => { if (e.key === 'Enter') $('loginBtn').click(); };
 
-	// ── LOGOUT ───────────────────────────────────────────────────────────────
+	// -- LOGOUT ---------------------------------------------------------------
 	$('logoutBtn').onclick = () => {
 		_token = '';
 		localStorage.removeItem('adm_token');
@@ -242,7 +242,7 @@
 		$('liveStatus').style.display = 'none';
 	};
 
-	// ── BOOKINGS RENDER ───────────────────────────────────────────────────────
+	// -- BOOKINGS RENDER -------------------------------------------------------
 	function renderBookings(list) {
 		_bookings = list;
 		const total = list.length;
@@ -263,15 +263,15 @@
 		$('bookingsBody').innerHTML = list.map(b => `
 			<tr id='row-${b.id}'>
 				<td>
-					<div class='adm-tbl-name'>${b.celebrityName || '–'}</div>
+					<div class='adm-tbl-name'>${b.celebrityName || '�'}</div>
 					<div class='adm-tbl-meta'>${b.contractId || b.id.slice(0,8).toUpperCase()}</div>
 				</td>
 				<td>
-					<div style='font-size:12px;font-weight:600'>${b.userName || '–'}</div>
+					<div style='font-size:12px;font-weight:600'>${b.userName || '�'}</div>
 					<div class='adm-tbl-meta'>${b.userEmail || ''}</div>
 				</td>
 				<td>
-					<div style='font-size:12px'>${b.eventType || '–'}</div>
+					<div style='font-size:12px'>${b.eventType || '�'}</div>
 					<div class='adm-tbl-meta'>${b.location || ''}</div>
 				</td>
 				<td style='font-size:12px;white-space:nowrap'>${fmtDate(b.date)}</td>
@@ -291,7 +291,7 @@
 	async function updateStatus(id, stage) {
 		try {
 			await api(`/admin/bookings/${id}/status`, { method: 'PATCH', body: JSON.stringify({ stage }) });
-			showToast(`Status updated → ${stage}`);
+			showToast(`Status updated ? ${stage}`);
 		} catch(e) {
 			alert('Failed: ' + e.message);
 			loadBookings();
@@ -303,7 +303,7 @@
 		try {
 			await api(`/admin/bookings/${id}`, { method: 'DELETE' });
 			document.getElementById(`row-${id}`)?.remove();
-			showToast(`Booking cancelled — ${name}`);
+			showToast(`Booking cancelled � ${name}`);
 			await loadBookings();
 		} catch(e) {
 			alert('Failed: ' + e.message);
@@ -312,7 +312,7 @@
 	window.updateStatus = updateStatus;
 	window.cancelBooking = cancelBooking;
 
-	// ── AUDIT LOG ─────────────────────────────────────────────────────────────
+	// -- AUDIT LOG -------------------------------------------------------------
 	function renderAuditLog(logs) {
 		if (!logs?.length) {
 			$('auditLog').innerHTML = `<div class='adm-log-item'><div class='adm-log-dot'></div><div class='adm-log-action' style='color:rgba(229,228,226,.35)'>No activity yet.</div></div>`;
@@ -323,13 +323,13 @@
 				<div class='adm-log-dot'></div>
 				<div>
 					<div class='adm-log-action'>${l.action.replace(/_/g,' ')}</div>
-					<div class='adm-log-meta'>${l.actor} &nbsp;·&nbsp; ${fmtTime(l.timestamp)}</div>
+					<div class='adm-log-meta'>${l.actor} &nbsp;�&nbsp; ${fmtTime(l.timestamp)}</div>
 				</div>
 			</div>
 		`).join('');
 	}
 
-	// ── LOAD DATA ─────────────────────────────────────────────────────────────
+	// -- LOAD DATA -------------------------------------------------------------
 	async function loadBookings() {
 		try {
 			const res = await api('/admin/bookings');
@@ -346,7 +346,7 @@
 		} catch { /* silent */ }
 	}
 
-	// ── SSE ───────────────────────────────────────────────────────────────────
+	// -- SSE -------------------------------------------------------------------
 	function connectSSE() {
 		const es = new EventSource(`${API}/admin/events?token=${encodeURIComponent(_token)}`);
 		es.onopen = () => { $('liveStatus').style.display = 'flex'; };
@@ -360,7 +360,7 @@
 						? `New booking: ${ev.payload?.celebrity || 'Unknown'}`
 						: ev.type === 'BOOKING_CANCELLED'
 							? `Booking cancelled`
-							: `Status updated → ${ev.payload?.stage || ''}`);
+							: `Status updated ? ${ev.payload?.stage || ''}`);
 					loadBookings();
 					loadDashboard();
 				}
@@ -376,7 +376,7 @@
 		el._t = setTimeout(() => { el.style.display = 'none'; }, 4000);
 	}
 
-	// ── SHOW DASHBOARD ────────────────────────────────────────────────────────
+	// -- SHOW DASHBOARD --------------------------------------------------------
 	async function showDashboard() {
 		$('loginScreen').style.display = 'none';
 		$('dashboard').style.display = 'block';
@@ -385,15 +385,15 @@
 		await loadDashboard();
 		connectSSE();
 		$('refreshBtn').onclick = async () => {
-			$('refreshBtn').textContent = '↻ Loading…';
+			$('refreshBtn').textContent = '? Loading�';
 			await loadBookings();
 			await loadDashboard();
 			$('newBadge').style.display = 'none';
-			$('refreshBtn').textContent = '↻ Refresh';
+			$('refreshBtn').textContent = '? Refresh';
 		};
 	}
 
-	// ── INIT: check existing token ────────────────────────────────────────────
+	// -- INIT: check existing token --------------------------------------------
 	(async () => {
 		if (_token) {
 			try {
@@ -406,6 +406,19 @@
 		$('loginScreen').style.display = 'flex';
 	})();
 </script>
+
+<!-- Smartsupp Live Chat -->
+<script type="text/javascript">
+var _smartsupp = _smartsupp || {};
+_smartsupp.key = '6e6f3dc1f0339246c6154810bc08ac75d4aeddda';
+window.smartsupp||(function(d) {
+  var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
+  s=d.getElementsByTagName('script')[0];c=d.createElement('script');
+  c.type='text/javascript';c.charset='utf-8';c.async=true;
+  c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
+})(document);
+</script>
+<noscript>Powered by <a href="https://www.smartsupp.com" target="_blank">Smartsupp</a></noscript>
 </body>
 </html>
 
@@ -568,5 +581,18 @@
 			document.getElementById('portfolioKpis').innerHTML = `<div class='card' style='grid-column:1/-1'><p class='small muted'>Login as admin to view live portfolio financials. ${e.message}</p></div>`;
 		}
 	</script>
+
+<!-- Smartsupp Live Chat -->
+<script type="text/javascript">
+var _smartsupp = _smartsupp || {};
+_smartsupp.key = '6e6f3dc1f0339246c6154810bc08ac75d4aeddda';
+window.smartsupp||(function(d) {
+  var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
+  s=d.getElementsByTagName('script')[0];c=d.createElement('script');
+  c.type='text/javascript';c.charset='utf-8';c.async=true;
+  c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
+})(document);
+</script>
+<noscript>Powered by <a href="https://www.smartsupp.com" target="_blank">Smartsupp</a></noscript>
 </body>
 </html>

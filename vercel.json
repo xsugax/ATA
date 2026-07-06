@@ -1,5 +1,10 @@
 {
-  "buildCommand": "npm run build --prefix frontend",
-  "outputDirectory": "frontend/.next",
-  "installCommand": "npm install --prefix frontend"
+  "version": 2,
+  "builds": [
+    { "src": "static/**", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/static/$1" }
+  ]
 }

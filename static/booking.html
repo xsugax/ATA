@@ -1,9 +1,9 @@
-ï»¿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
 	<meta charset='UTF-8'>
 	<meta name='viewport' content='width=device-width,initial-scale=1'>
-	<meta http-equiv='Content-Security-Policy' content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://i.pravatar.cc; connect-src 'self' http://localhost:4100 https://ata-h0yo.onrender.com; font-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
+	<meta http-equiv='Content-Security-Policy' content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.smartsuppchat.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://i.pravatar.cc https://commons.wikimedia.org https://upload.wikimedia.org https://static.smartsupp.com; connect-src 'self' http://localhost:4100 https://ata-h0yo.onrender.com https://app.smartsupp.com wss://app.smartsupp.com; font-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
 	<meta name='referrer' content='no-referrer'>
 	<title>Sovereign Booking | All Talents Agency</title>
 	<meta name="robots" content="noindex, nofollow">
@@ -108,7 +108,7 @@
 				</select>
 				<textarea id='rider'>Private lounge protocol + secure arrival corridor + controlled media perimeter.</textarea>
 				<div class='flow-grid'>
-					<div class='flow-step'><p class='num'>Location Logic</p><h4 id='locationSummary'>Hotel Suite Â· Dubai</h4><p id='locationSummaryHint'>Standard private access venue.</p></div>
+					<div class='flow-step'><p class='num'>Location Logic</p><h4 id='locationSummary'>Hotel Suite · Dubai</h4><p id='locationSummaryHint'>Standard private access venue.</p></div>
 					<div class='flow-step'><p class='num'>Logistics Lane</p><h4 id='logisticsSummary'>Standard</h4><p id='logisticsSummaryHint'>Chauffeur ground transfer with check-in desk.</p></div>
 					<div class='flow-step'><p class='num'>Readiness Score</p><h4 id='readinessScore'>72/100</h4><p id='readinessHint'>Baseline brief complete.</p></div>
 				</div>
@@ -133,7 +133,7 @@
 					<p class='eyebrow' style='margin-bottom:6px'>What Happens Next</p>
 					<p class='small muted' style='margin:0 0 8px'>Your representative team typically responds within <b>48-72 hours</b> after qualification checks.</p>
 					<div style='display:flex;gap:8px;flex-wrap:wrap'>
-						<a href='portal.html'><button class='secondary' style='width:auto;padding:9px 14px;font-size:11px'>Track in Portal â†’</button></a>
+						<a href='portal.html'><button class='secondary' style='width:auto;padding:9px 14px;font-size:11px'>Track in Portal ?</button></a>
 						<a href='explorer.html'><button class='secondary' style='width:auto;padding:9px 14px;font-size:11px'>Book Another Profile</button></a>
 					</div>
 				</div>
@@ -178,7 +178,7 @@
 				virtual: ['Virtual Secure Call', 'Encrypted link with moderated participant access.'],
 				custom: ['Custom Location', 'Bespoke logistics requiring full site recon and route planning.'],
 			};
-			document.getElementById('locationSummary').textContent = `${labels[mode][0]} Â· ${locationInput.value || 'TBD'}`;
+			document.getElementById('locationSummary').textContent = `${labels[mode][0]} · ${locationInput.value || 'TBD'}`;
 			document.getElementById('locationSummaryHint').textContent = labels[mode][1];
 		};
 
@@ -211,7 +211,7 @@
 			const venue = (document.getElementById('customVenue')?.value || '').trim();
 			const addr = (document.getElementById('customAddress')?.value || '').trim();
 			const notes = (document.getElementById('customLocationNotes')?.value || '').trim();
-			return [venue, addr, notes].filter(Boolean).join(' Â· ') || locationInput.value;
+			return [venue, addr, notes].filter(Boolean).join(' · ') || locationInput.value;
 		};
 
 		const buildLogisticsBrief = () => {
@@ -282,7 +282,7 @@
 		document.getElementById('genLogistics').onclick = () => {
 			const logOut = document.getElementById('logisticsOut');
 			const eta = arrivalMethodInput.value === 'private-jet' ? 'T-180 min' : arrivalMethodInput.value === 'helicopter' ? 'T-120 min' : 'T-90 min';
-			logOut.innerHTML = `<b>Logistics Brief:</b> ${buildLogisticsBrief()} Â· Client Checkpoint ETA ${eta} Â· Primary coordinator assigned.`;
+			logOut.innerHTML = `<b>Logistics Brief:</b> ${buildLogisticsBrief()} · Client Checkpoint ETA ${eta} · Primary coordinator assigned.`;
 		};
 
 		document.getElementById('submit').onclick = async () => {
@@ -313,6 +313,19 @@
 			}
 		};
 	</script>
+
+<!-- Smartsupp Live Chat -->
+<script type="text/javascript">
+var _smartsupp = _smartsupp || {};
+_smartsupp.key = '6e6f3dc1f0339246c6154810bc08ac75d4aeddda';
+window.smartsupp||(function(d) {
+  var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
+  s=d.getElementsByTagName('script')[0];c=d.createElement('script');
+  c.type='text/javascript';c.charset='utf-8';c.async=true;
+  c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
+})(document);
+</script>
+<noscript>Powered by <a href="https://www.smartsupp.com" target="_blank">Smartsupp</a></noscript>
 </body>
 </html>
 
