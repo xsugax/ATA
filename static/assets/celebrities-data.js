@@ -178,6 +178,17 @@ const PORTRAIT_MAP = {
   "Salma Hayek":            "/assets/portraits/c239.jpg",
   "Matt Rife":              "/assets/portraits/c240.jpg",
   "Monica Bellucci":        "https://commons.wikimedia.org/wiki/Special:FilePath/Monica_Bellucci_2024_(cropped).jpg?width=640",
+  "Sofia Vergara":          "https://i.pravatar.cc/400?u=SofiaVergara",
+  "Kate Beckinsale":        "https://i.pravatar.cc/400?u=KateBeckinsale",
+  "Elon Musk":              "https://i.pravatar.cc/400?u=ElonMusk",
+  "Jeff Bezos":             "https://i.pravatar.cc/400?u=JeffBezos",
+  "Warren Buffett":         "https://i.pravatar.cc/400?u=WarrenBuffett",
+  "Larry Ellison":          "https://i.pravatar.cc/400?u=LarryEllison",
+  "Bernard Arnault":        "https://i.pravatar.cc/400?u=BernardArnault",
+  "Richard Branson":        "https://i.pravatar.cc/400?u=RichardBranson",
+  "Mark Cuban":             "https://i.pravatar.cc/400?u=MarkCuban",
+  "Steven Tyler":           "https://i.pravatar.cc/400?u=StevenTyler",
+  "Riley Green":            "https://i.pravatar.cc/400?u=RileyGreen",
 };
 
 const _parseWorth = w => {
@@ -365,6 +376,17 @@ const _seeds = [
       { date:"2026-11-14", place:"Hotel de Russie, Rome", format:"Private cinema evening" },
       { date:"2026-12-05", place:"Hotel de Paris Monte-Carlo, Monaco", format:"Sovereign gala dinner" },
     ] },
+  { name:"Sofia Vergara",    cat:"Film",       region:"Latin America", price: 350000, worth:"$180M",  reach:34,  agency:"CAA",         signal:"Modern Family global icon and Forbes highest-paid TV actress nine consecutive years. Toty co-founder and Latin media powerhouse. Private events via CAA with confirmed 21-day advance, prestige brand alignment and NDA." },
+  { name:"Kate Beckinsale",  cat:"Film",       region:"Europe",        price: 300000, worth:"$25M",   reach:14,  agency:"WME",         signal:"Underworld franchise lead, Burberry and L'Oreal ambassador and British screen icon. Luxury hospitality and fashion-circuit private appearances via WME UK desk with 21-day advance and press embargo." },
+  { name:"Elon Musk",        cat:"Business",   region:"North America", price:3000000, worth:"$200B",  reach:220, agency:"Independent", signal:"Tesla, SpaceX, X and xAI founder — the world's wealthiest individual. Appearances are exclusively structured as summit keynotes, innovation forums or investment roundtables. All inquiries via X Corp media desk with 90-day executive advance and fully executed NDA." },
+  { name:"Jeff Bezos",       cat:"Business",   region:"North America", price:2500000, worth:"$160B",  reach:28,  agency:"Independent", signal:"Amazon and Blue Origin founder and Washington Post owner. World's second-wealthiest individual. Engagements are exclusively board-level summits, space-industry forums or philanthropy keynotes. All access via Amazon Worldwide desk with 90-day advance." },
+  { name:"Warren Buffett",   cat:"Business",   region:"North America", price:2000000, worth:"$120B",  reach:12,  agency:"Independent", signal:"Oracle of Omaha and Berkshire Hathaway chairman — most successful investor in history. Private appearances exclusively at investment summits and charity galas. All bookings via Berkshire Hathaway communications with 90-day lead." },
+  { name:"Larry Ellison",    cat:"Business",   region:"North America", price:1800000, worth:"$140B",  reach:8,   agency:"Independent", signal:"Oracle founder and America's Cup yacht racing champion. Third-wealthiest American. Private keynotes at enterprise technology forums, sovereign investment events and sailing regattas. Bookings via Oracle Corporate Affairs with 60-day advance." },
+  { name:"Bernard Arnault",  cat:"Business",   region:"Europe",        price:2500000, worth:"$155B",  reach:6,   agency:"Independent", signal:"LVMH chairman and CEO — steward of 75 luxury houses including Louis Vuitton, Dior and Moët & Chandon. Europe's wealthiest individual. Appearances exclusively for luxury-sector summits, museum openings and sovereign hospitality. Contact via LVMH Paris headquarters with 90-day advance." },
+  { name:"Richard Branson",  cat:"Business",   region:"Europe",        price:1000000, worth:"$2.5B",  reach:22,  agency:"WME",         signal:"Virgin Group founder across 400+ companies and Virgin Galactic space pioneer. Adventurer, bestselling author and Necker Island private host. Corporate keynotes, innovation summits and entrepreneurship events via WME Business desk with 45-day advance." },
+  { name:"Mark Cuban",       cat:"Business",   region:"North America", price: 600000, worth:"$5.7B",  reach:18,  agency:"WME",         signal:"Shark Tank investor, Dallas Mavericks former owner and Cost Plus Drugs founder. Prolific keynote speaker at entrepreneurship, sports-business and venture-capital forums. Events via WME with confirmed C-suite audience brief and 30-day advance." },
+  { name:"Steven Tyler",     cat:"Music",      region:"North America", price: 500000, worth:"$130M",  reach:14,  agency:"WME",         signal:"Aerosmith lead vocalist — rock and roll hall of fame icon with 150M records sold. Dream On and Walk This Way cemented a five-decade legacy. Limited private concert events and keynotes via WME with full production rider, confirmed 45-day advance and NDA." },
+  { name:"Riley Green",      cat:"Music",      region:"North America", price: 180000, worth:"$8M",    reach:8,   agency:"WME",         signal:"Rising country star and country radio chart-topper. Different 'Round Here and I Wish Grandpas Never Died certified platinum. Private concert events and brand partnerships via WME Nashville desk with 21-day advance and fan-safe protocols." },
 ];
 
 const _build = (s, i) => {
