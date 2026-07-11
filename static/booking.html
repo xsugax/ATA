@@ -3,7 +3,7 @@
 <head>
 	<meta charset='UTF-8'>
 	<meta name='viewport' content='width=device-width,initial-scale=1'>
-	<meta http-equiv='Content-Security-Policy' content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.smartsuppchat.com https://*.smartsupp.com https://*.smartsuppchat.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://i.pravatar.cc https://commons.wikimedia.org https://upload.wikimedia.org https://static.smartsupp.com https://image.smartsupp.com https://image.smartsuppchat.com; connect-src 'self' http://localhost:4100 https://ata-h0yo.onrender.com https://www.smartsupp.com https://app.smartsupp.com wss://app.smartsupp.com https://www.smartsuppchat.com; font-src 'self'; frame-src https://www.smartsupp.com; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
+	<meta http-equiv='Content-Security-Policy' content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.smartsuppchat.com https://*.smartsupp.com https://*.smartsuppchat.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://i.pravatar.cc https://commons.wikimedia.org https://upload.wikimedia.org https://static.smartsupp.com https://image.smartsupp.com https://image.smartsuppchat.com; connect-src 'self' http://localhost:4000 https://ata-h0yo.onrender.com https://www.smartsupp.com https://app.smartsupp.com wss://app.smartsupp.com https://www.smartsuppchat.com; font-src 'self'; frame-src https://www.smartsupp.com https://app.smartsupp.com; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
 	<meta name='referrer' content='no-referrer'>
 	<title>Sovereign Booking | All Talents Agency</title>
 	<meta name="robots" content="noindex, nofollow">
@@ -15,7 +15,7 @@
 <body>
 	<div class='container' id='app'></div>
 	<script type='module'>
-		import { request, nav, currentUser, loadTicker, buildCryptoPaymentHTML, initCryptoWidget, initTheme, initNav, initScrollReveal, initDynamicTheme } from './assets/app.js';
+		import { request, nav, currentUser, loadTicker, buildCryptoPaymentHTML, initCryptoWidget, initTheme, initNav, initScrollReveal, initDynamicTheme, triggerConfirmPulse, initScrollProgress } from './assets/app.js';
 
 		const app = document.getElementById('app');
 		const id = new URLSearchParams(location.search).get('id');
@@ -34,6 +34,7 @@
 		initNav();
 		initScrollReveal();
 		initDynamicTheme();
+		initScrollProgress();
 
 		// Build 30-day availability calendar
 		function buildCalendar(celebrity) {
@@ -90,9 +91,9 @@
 				</select>
 				<input id='location' value='Dubai - Four Seasons Jumeirah' placeholder='Primary location / city'>
 				<div id='customLocationWrap' style='display:none;gap:8px'>
-					<input id='customVenue' placeholder='Venue Name (e.g., Royal Palm Private Villa)'>
-					<input id='customAddress' placeholder='Full Address / Coordinates'>
-					<textarea id='customLocationNotes' rows='2' placeholder='Custom access notes, floor, gate, contact, parking, helipad, etc.'></textarea>
+					<input id='customVenue' placeholder='Venue name (e.g. Royal Palm Private Villa)'>
+					<input id='customAddress' placeholder='Full address (e.g. 123 Royal Palm Estate, Dubai Marina)'>
+					<textarea id='customLocationNotes' rows='2' placeholder='Access notes: floor, gate code, parking, helipad, security contactâ€¦'></textarea>
 				</div>
 				<select id='security'>${c.securityTiers.map(s => `<option>${s}</option>`).join('')}</select>
 				<select id='logisticsTier'>
@@ -108,7 +109,7 @@
 				</select>
 				<textarea id='rider'>Private lounge protocol + secure arrival corridor + controlled media perimeter.</textarea>
 				<div class='flow-grid'>
-					<div class='flow-step'><p class='num'>Location Logic</p><h4 id='locationSummary'>Hotel Suite · Dubai</h4><p id='locationSummaryHint'>Standard private access venue.</p></div>
+					<div class='flow-step'><p class='num'>Location Logic</p><h4 id='locationSummary'>Hotel Suite Â· Dubai</h4><p id='locationSummaryHint'>Standard private access venue.</p></div>
 					<div class='flow-step'><p class='num'>Logistics Lane</p><h4 id='logisticsSummary'>Standard</h4><p id='logisticsSummaryHint'>Chauffeur ground transfer with check-in desk.</p></div>
 					<div class='flow-step'><p class='num'>Readiness Score</p><h4 id='readinessScore'>72/100</h4><p id='readinessHint'>Baseline brief complete.</p></div>
 				</div>
@@ -178,7 +179,7 @@
 				virtual: ['Virtual Secure Call', 'Encrypted link with moderated participant access.'],
 				custom: ['Custom Location', 'Bespoke logistics requiring full site recon and route planning.'],
 			};
-			document.getElementById('locationSummary').textContent = `${labels[mode][0]} · ${locationInput.value || 'TBD'}`;
+			document.getElementById('locationSummary').textContent = `${labels[mode][0]} ï¿½ ${locationInput.value || 'TBD'}`;
 			document.getElementById('locationSummaryHint').textContent = labels[mode][1];
 		};
 
@@ -211,7 +212,7 @@
 			const venue = (document.getElementById('customVenue')?.value || '').trim();
 			const addr = (document.getElementById('customAddress')?.value || '').trim();
 			const notes = (document.getElementById('customLocationNotes')?.value || '').trim();
-			return [venue, addr, notes].filter(Boolean).join(' · ') || locationInput.value;
+			return [venue, addr, notes].filter(Boolean).join(' ï¿½ ') || locationInput.value;
 		};
 
 		const buildLogisticsBrief = () => {
@@ -282,7 +283,7 @@
 		document.getElementById('genLogistics').onclick = () => {
 			const logOut = document.getElementById('logisticsOut');
 			const eta = arrivalMethodInput.value === 'private-jet' ? 'T-180 min' : arrivalMethodInput.value === 'helicopter' ? 'T-120 min' : 'T-90 min';
-			logOut.innerHTML = `<b>Logistics Brief:</b> ${buildLogisticsBrief()} · Client Checkpoint ETA ${eta} · Primary coordinator assigned.`;
+			logOut.innerHTML = `<b>Logistics Brief:</b> ${buildLogisticsBrief()} ï¿½ Client Checkpoint ETA ${eta} ï¿½ Primary coordinator assigned.`;
 		};
 
 		document.getElementById('submit').onclick = async () => {
@@ -307,6 +308,9 @@
 				const payLabel = payMethod === 'wire' ? 'Wire Transfer' : payMethod.toUpperCase();
 				document.getElementById('msg').innerHTML = `- Submission accepted. Booking <b>${r.booking.id.slice(0,8)}</b> - Contract <b>${r.booking.contractId}</b> - Payment via <b>${payLabel}</b> - Location <b>${finalLocation}</b>.`;
 				document.getElementById('nextStepsBox').style.display = 'block';
+				// Trigger confirmation pulse animation
+				triggerConfirmPulse(document.getElementById('submit'));
+				triggerConfirmPulse(document.getElementById('nextStepsBox'));
 			} catch (e) {
 				document.getElementById('msg').textContent = e.message + ' (login first)';
 				document.getElementById('nextStepsBox').style.display = 'none';
@@ -328,5 +332,3 @@ window.smartsupp||(function(d) {
 <noscript>Powered by <a href="https://www.smartsupp.com" target="_blank">Smartsupp</a></noscript>
 </body>
 </html>
-
-

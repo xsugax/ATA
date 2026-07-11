@@ -3,7 +3,7 @@
 <head>
 	<meta charset='UTF-8'>
 	<meta name='viewport' content='width=device-width,initial-scale=1'>
-	<meta http-equiv='Content-Security-Policy' content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.smartsuppchat.com https://*.smartsupp.com https://*.smartsuppchat.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://i.pravatar.cc https://commons.wikimedia.org https://upload.wikimedia.org https://static.smartsupp.com https://image.smartsupp.com https://image.smartsuppchat.com; connect-src 'self' http://localhost:4100 https://ata-h0yo.onrender.com https://www.smartsupp.com https://app.smartsupp.com wss://app.smartsupp.com https://www.smartsuppchat.com; font-src 'self'; frame-src https://www.smartsupp.com; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
+ <meta http-equiv='Content-Security-Policy' content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.smartsuppchat.com https://*.smartsupp.com https://*.smartsuppchat.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://i.pravatar.cc https://commons.wikimedia.org https://upload.wikimedia.org https://static.smartsupp.com https://image.smartsupp.com https://image.smartsuppchat.com; connect-src 'self' http://localhost:4000 https://ata-h0yo.onrender.com https://www.smartsupp.com https://app.smartsupp.com wss://app.smartsupp.com https://www.smartsuppchat.com; font-src 'self'; frame-src https://www.smartsupp.com https://app.smartsupp.com; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
 	<meta name='referrer' content='no-referrer'>
 	<title>Sovereign Client Portal | All Talents Agency</title>
 	<meta name="robots" content="noindex, nofollow">
@@ -15,137 +15,41 @@
 <body>
 	<div class='container' id='app'></div>
 	<script type='module'>
-		import { request, nav, loadTicker, initTheme, initNav, initScrollReveal, initDynamicTheme } from './assets/app.js';
-
+		import { request, nav, currentUser, loadTicker, initTheme, initNav, initScrollReveal, initDynamicTheme } from './assets/app.js';
 		const app = document.getElementById('app');
 		app.innerHTML = `${nav('portal')}<section id='p' class='section'></section>`;
-
 		await loadTicker();
 		initTheme();
 		initNav();
 		initScrollReveal();
 		initDynamicTheme();
-
-		const PHASES = [
-			'Inquiry Received',
-			'Representative Qualification',
-			'Commercial Negotiation',
-			'Contract Finalization',
-			'Escrow Confirmation',
-			'Engagement Confirmed',
-		];
-
-		function renderPhaseTimeline(currentStatus) {
-			const activeIdx = PHASES.findIndex(p => p === currentStatus);
-			const nodes = PHASES.map((phase, i) => {
-				const cls = i < activeIdx ? 'ph-done' : i === activeIdx ? 'ph-active' : '';
-				const dot = i < activeIdx ? '-' : i + 1;
-				return `<div class='phase-node ${cls}'><div class='phase-dot'>${dot}</div><div class='phase-lbl'>${phase}</div></div>`;
-			}).join('');
-			return `<div class='phase-strip'>${nodes}</div>`;
-		}
-
 		try {
-			const user = JSON.parse(localStorage.getItem('aurelux_user') || 'null');
+			const user = currentUser();
 			if (!user) {
-				document.getElementById('p').innerHTML = `
-					<div class='card' style='max-width:520px;margin:0 auto;padding:40px 32px;text-align:center'>
-						<p class='eyebrow' style='color:var(--danger)'>Authentication Required</p>
-						<h2 style='margin:12px 0 8px'>Client Portal Access</h2>
-						<p class='small muted' style='margin-bottom:24px'>This page requires an authenticated session. Please log in to view your bookings, messages, and client standing.</p>
-						<a href='login.html'><button class='primary' style='width:auto;padding:14px 32px;font-size:12px;letter-spacing:.08em;text-transform:uppercase'>Go to Secure Login ?</button></a>
-						<div style='margin-top:24px;padding:16px;background:var(--bg-alt);border:1px solid var(--line);border-radius:10px;text-align:left'>
-							<p class='small muted' style='margin-bottom:10px;font-weight:700'>Demo access (click to auto-fill on login page):</p>
-							<div style='display:grid;gap:8px;font-size:11px'>
-								<a href="login.html" style='color:var(--accent-text);text-decoration:none'><div style='padding:8px 10px;border:1px solid var(--line);border-radius:6px;cursor:pointer;transition:background .15s'><strong>Client:</strong> client@alltalents.agency / Client@123</div></a>
-								<a href="login.html" style='color:var(--accent-text);text-decoration:none'><div style='padding:8px 10px;border:1px solid var(--line);border-radius:6px;cursor:pointer;transition:background .15s'><strong>Manager:</strong> manager@alltalents.agency / Manager@123</div></a>
-								<a href="login.html" style='color:var(--accent-text);text-decoration:none'><div style='padding:8px 10px;border:1px solid var(--line);border-radius:6px;cursor:pointer;transition:background .15s'><strong>Admin:</strong> admin@alltalents.agency / Admin@123</div></a>
-							</div>
-						</div>
+				document.getElementById('p').innerHTML = `<div class='card' style='max-width:560px;margin:0 auto;padding:40px 32px;text-align:center'>
+					<p class='eyebrow' style='color:var(--danger)'>Authentication Required</p>
+					<h2 style='margin:12px 0 8px'>Client Portal Access</h2>
+					<p class='small muted' style='margin-bottom:20px'>Log in to view bookings, representative messages, and client standing.</p>
+					<div class='card' style='padding:14px;margin-bottom:20px;text-align:left'>
+						<p class='small muted' style='margin:0 0 8px'>Demo credentials</p>
+						<p class='small'><b>Client:</b> client@aurelux.com / Client@123</p>
+						<p class='small'><b>Manager:</b> manager@aurelux.com / Manager@123</p>
 					</div>
-				`;
+					<a href='login.html'><button class='primary' style='width:auto;padding:14px 32px;font-size:12px;letter-spacing:.08em;text-transform:uppercase'>Go to Secure Login →</button></a>
+				</div>`;
 				return;
 			}
-
 			const [d, standing] = await Promise.all([
 				request('/portal/overview'),
 				request('/portal/standing').catch(() => null),
 			]);
-
-			const gaugeHTML = (() => {
-				if (!standing) return '';
-				const C = 314.159; const ARC = C * (240 / 360); // 209.44
-				const filled = (standing.score / 99) * ARC;
-				const pct = Math.round((standing.score / 99) * 100);
-				return `
-				<div class='grid g2 section'>
-					<div class='card stack'>
-						<p class='eyebrow'>Client Standing</p>
-						<h3>Relationship Score</h3>
-						<p class='small muted'>Your standing determines access tier, slot priority, and dedicated manager assignment.</p>
-						<div class='gauge-wrap' style='padding:10px 0'>
-							<svg class='gauge-svg' width='130' height='130' viewBox='0 0 130 130'>
-								<defs>
-									<linearGradient id='gaugeGrad' x1='0' y1='1' x2='1' y2='0'>
-										<stop offset='0%' stop-color='#c49b2e'/>
-										<stop offset='100%' stop-color='#C8DCEE'/>
-									</linearGradient>
-								</defs>
-								<circle cx='65' cy='65' r='50' class='gauge-ring-bg' stroke-width='9'
-									stroke-dasharray='${ARC.toFixed(2)} 10000' transform='rotate(150 65 65)'/>
-								<circle cx='65' cy='65' r='50' class='gauge-ring-fill' stroke-width='9'
-									stroke-dasharray='0 10000' transform='rotate(150 65 65)'
-									id='gaugeArc'/>
-								<text x='65' y='65' text-anchor='middle' class='gauge-val' dy='.35em'>${standing.score}</text>
-								<text x='65' y='88' text-anchor='middle' class='gauge-lbl'>/ 99 standing</text>
-							</svg>
-							<span class='tier-pill'>${standing.tier}</span>
-						</div>
-						${standing.nextTier ? `<p class='standing-next'> ${standing.nextTierThreshold - standing.score} more points to reach <b>${standing.nextTier}</b> tier</p>` : `<p class='standing-next'>- Maximum tier achieved - Sovereign access active.</p>`}
-					</div>
-					<div class='card stack'>
-						<p class='eyebrow'>Active Privileges</p>
-						<h3>${standing.tier} Access Rights</h3>
-						<ul class='privilege-list'>
-							${standing.privileges.map(p => `<li>${p}</li>`).join('')}
-						</ul>
-						<div class='hr' style='margin:10px 0'></div>
-						<p class='small muted'>Score breakdown: Base 42 - Bookings +${standing.breakdown.bookingContribution} - Messages +${standing.breakdown.messageContribution} - Role +${standing.breakdown.roleBonus}</p>
-					</div>
-				</div>`;
-			})();
-
 			document.getElementById('p').innerHTML = `
 				<div class='card stack'>
 					<p class='eyebrow'>Sovereign Command Center</p>
 					<h2>All Talents Client Portal</h2>
-					<p class='lead'>This command layer consolidates active opportunities, contract posture, payment records, and representative communications within one secure operating environment.</p>
+					<p class='lead'>Welcome, ${user.name || user.email}. Your session is active.</p>
 					<p class='small muted'>Membership Tier: ${d.membershipTier}</p>
 				</div>
-
-				${gaugeHTML}
-
-				<div class='card section stack'>
-					<p class='eyebrow'>Operational Logic</p>
-					<div class='flow-grid'>
-						<article class='flow-step'>
-							<p class='num'>Layer 01</p>
-							<h4>Portfolio Visibility</h4>
-							<p>Track booking files and contract stages with decision-ready visibility.</p>
-						</article>
-						<article class='flow-step'>
-							<p class='num'>Layer 02</p>
-							<h4>Commercial Control</h4>
-							<p>Monitor payment posture and escrow continuity across active engagements.</p>
-						</article>
-						<article class='flow-step'>
-							<p class='num'>Layer 03</p>
-							<h4>Service Continuity</h4>
-							<p>Maintain representative message history for timeline and compliance clarity.</p>
-						</article>
-					</div>
-				</div>
-
 				<div class='card section stack'>
 					<p class='eyebrow'>Active Booking Files</p>
 					<h3>Contract & Engagement Tracker</h3>
@@ -155,36 +59,20 @@
 								<div><p class='eyebrow'>Contract ${b.contractId}</p><h4 style='margin:4px 0'>${b.celebrityName}</h4></div>
 								<span class='badge'>${b.status}</span>
 							</div>
-							<p class='small muted'>${b.eventType} - ${b.date || 'Date TBD'} - ${b.location} - Security: ${b.securityLevel}</p>
-							<p class='small muted'>Quote: <b style='color:#94B4D8'>$${b.pricing.finalQuote.toLocaleString()}</b> - Escrow: $${b.pricing.escrow.toLocaleString()}</p>
-							<p class='eyebrow' style='margin-top:8px'>Engagement Phase Tracker</p>
-							${renderPhaseTimeline(b.status)}
+							<p class='small muted'>${b.eventType} - ${b.date || 'Date TBD'} - ${b.location}</p>
 						</div>
 					`).join('')}
 				</div>
-
 				<div class='card section stack'>
 					<p class='eyebrow'>Representative Communications</p>
 					<h3>Client Message Archive</h3>
-					<p class='small muted'>All messages are preserved as part of engagement audit continuity and support timeline clarity between inquiry and confirmation phases.</p>
 					${d.messages.map(m => `<p class='small'><b>${m.from}:</b> ${m.body}</p>`).join('') || '<p class="small muted">No messages currently available.</p>'}
 				</div>
 			`;
-
-			// Animate gauge arc
-			if (standing) {
-				const ARC2 = 314.159 * (240 / 360);
-				const filled = (standing.score / 99) * ARC2;
-				setTimeout(() => {
-					const arc = document.getElementById('gaugeArc');
-					if (arc) arc.setAttribute('stroke-dasharray', `${filled.toFixed(2)} 10000`);
-				}, 300);
-			}
 		} catch (e) {
 			document.getElementById('p').innerHTML = `<div class='card'>${e.message}. Login first.</div>`;
 		}
 	</script>
-
 <!-- Smartsupp Live Chat -->
 <script type="text/javascript">
 var _smartsupp = _smartsupp || {};
@@ -199,5 +87,3 @@ window.smartsupp||(function(d) {
 <noscript>Powered by <a href="https://www.smartsupp.com" target="_blank">Smartsupp</a></noscript>
 </body>
 </html>
-
-

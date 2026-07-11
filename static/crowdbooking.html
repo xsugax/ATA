@@ -3,32 +3,50 @@
 <head>
   <meta charset='UTF-8'>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
-  <meta http-equiv='Content-Security-Policy' content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.smartsuppchat.com https://*.smartsupp.com https://*.smartsuppchat.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://i.pravatar.cc https://commons.wikimedia.org https://upload.wikimedia.org https://static.smartsupp.com https://image.smartsupp.com https://image.smartsuppchat.com; connect-src 'self' http://localhost:4100 https://ata-h0yo.onrender.com https://www.smartsupp.com https://app.smartsupp.com wss://app.smartsupp.com https://www.smartsuppchat.com; font-src 'self'; frame-src https://www.smartsupp.com; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
+  <meta http-equiv='Content-Security-Policy' content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://i.pravatar.cc https://upload.wikimedia.org; connect-src 'self' http://localhost:4000 https://ata-h0yo.onrender.com; font-src 'self' https://fonts.gstatic.com; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
   <meta name='referrer' content='no-referrer'>
-  <title>Celebrity Crowd Events | VIP Access Tickets - ALL TALENTS Agency</title>
-  <meta name="description" content="Join exclusive celebrity events as part of a curated group. VIP concerts, galas, and private appearances. Flexible payment plans available.">
+  <title>Crowd Access | All Talents Agency (ATA)</title>
+  <meta name="application-name" content="All Talents Agency">
+  <meta name="apple-mobile-web-app-title" content="ATA">
+  <meta name="theme-color" content="#060809">
+  <meta name="msapplication-TileColor" content="#A8BDD9">
+  <link rel='apple-touch-icon' href='/assets/ata-mark.svg'>
+  <!-- SEO: Primary Meta -->
+  <meta name="description" content="Buy crowd access tickets to exclusive celebrity events - VIP concerts, gala dinners, and private appearances. Flexible payment plans. Join world-famous celebrities at unforgettable events.">
+  <meta name="keywords" content="celebrity event tickets, VIP celebrity experience, exclusive celebrity events, celebrity concert tickets, star-studded gala, celebrity meet and greet, crowd booking">
   <meta name="robots" content="index, follow">
-  <meta name="author" content="ALL TALENTS Agency">
+  <meta name="author" content="All Talents Agency">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Crowd Access | All Talents Agency">
+  <meta property="og:description" content="Attend private concerts, galas, and VIP events alongside world-famous celebrities. Flexible payment plans available.">
+  <meta property="og:url" content="https://alltalentsagency.com/crowdbooking.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Crowd Access | All Talents Agency">
+  <meta name="twitter:description" content="VIP crowd access to private celebrity events worldwide. Concerts, galas, and exclusive appearances.">
+  <link rel="canonical" href="https://alltalentsagency.com/crowdbooking.html">
   <link rel='icon' href='/assets/favicon.svg' type='image/svg+xml'>
   <link rel='shortcut icon' href='/assets/favicon.svg'>
-  <link rel='stylesheet' href='assets/styles.css'>
-  <script>(function(){var t=localStorage.getItem('ata_theme')||'sovereign';document.documentElement.setAttribute('data-theme',t)})();</script>
+  <link rel='stylesheet' href='assets/styles.css?v=20260619'>
 </head>
 <body>
   <div class='container' id='app'></div>
 
+  <!-- -- CROWD CONFIRM MODAL --- -->
   <div id='crowdModalBack' class='crowd-modal-back'>
-    <div class='crowd-modal' id='crowdModalContent' style='position:relative'></div>
+    <div class='crowd-modal' id='crowdModalContent'></div>
   </div>
 
   <script type='module'>
-    import { request, nav, loadTicker, initTheme, initNav, initScrollReveal, buildCryptoPaymentHTML, initCryptoWidget } from './assets/app.js';
+    import { request, nav, buildCryptoPaymentHTML, initCryptoWidget, initNav, initTheme, requireAuth, trackEvent, initCommandPalette, initDynamicTheme } from './assets/app.js?v=20260619';
+    import { CELEBRITIES } from './assets/celebrities-data.js';
 
     (async () => {
 
     const app = document.getElementById('app');
     const modalBack = document.getElementById('crowdModalBack');
     const modalContent = document.getElementById('crowdModalContent');
+
+    // Pre-select celeb from URL param
     const urlParam = new URLSearchParams(window.location.search).get('celeb');
 
     modalBack.addEventListener('click', (e) => { if (e.target === modalBack) closeModal(); });
@@ -40,7 +58,7 @@
       <section class='crowd-hero section'>
         <div class='crowd-hero-label'>Live Crowd Events</div>
         <h2>Join a Group.<br><span>Access an Icon.</span></h2>
-        <p class='lead' style='max-width:620px;margin:10px 0 0'>Private celebrity access — without the private price tag. Join a curated group of qualified clients and attend the <em>same real event</em> as your chosen celebrity. Concerts, premieres, paddocks, brand studios. Real access. Shared investment.</p>
+        <p class='lead' style='max-width:620px;margin:10px 0 0'>Private celebrity access - without the private price tag. Join a curated group of qualified clients and attend the <em>same real event</em> as your chosen celebrity. Concerts, premieres, paddocks, brand studios. Real access. Shared investment.</p>
         <div class='crowd-how'>
           <div class='crowd-how-step'>
             <p class='ch-num'>Step 01</p>
@@ -60,18 +78,18 @@
           <div class='crowd-how-step'>
             <p class='ch-num'>Step 04</p>
             <h4>Attend & Experience</h4>
-            <p>Show up. Be in the room. Your slot guarantees the listed access items — photo, signed item, backstage or VIP tier.</p>
+            <p>Show up. Be in the room. Your slot guarantees the listed access items - photo, signed item, backstage or VIP tier.</p>
           </div>
         </div>
       </section>
 
-      <section class='crowd-market card section'>
-        <div class='crowd-market-head'>
+      <section class='card section stack' style='padding:14px 18px'>
+        <div style='display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px'>
           <div>
             <p class='eyebrow'>Upcoming Verified Events</p>
-            <p class='small muted' style='margin-top:2px'>All events NDA-protected · Escrow-secured · Slot codes issued 14 days prior</p>
+            <p class='small muted' style='margin-top:2px'>All events NDA-protected - Escrow-secured - Slot codes issued 14 days before</p>
           </div>
-          <div class='crowd-filters'>
+          <div style='display:flex;gap:8px;flex-wrap:wrap'>
             <select id='filterCat' style='width:auto;padding:8px 12px;font-size:11px'>
               <option value='All'>All Categories</option>
               <option value='Music'>Music</option>
@@ -89,152 +107,35 @@
             </select>
           </div>
         </div>
-        <div class='crowd-market-intro'>
-          <div class='cmi-left'>
-            <div class='cmi-kicker'>Crowd Booking Board</div>
-            <div class='cmi-title'>Choose an event, read the capacity, compare payment lanes, and claim a slot with one clean flow.</div>
-          </div>
-          <div class='cmi-pulse-row'>
-            <div class='cmi-pulse'><span>Live</span><b>6 events</b></div>
-            <div class='cmi-pulse'><span>Open slots</span><b>81 total</b></div>
-            <div class='cmi-pulse'><span>Next window</span><b>17 May 2026</b></div>
-          </div>
-        </div>
-        <div class='crowd-market-metrics' id='crowdMetrics'>
-          <div class='cmm-item'><div class='cmm-label'>Visible Events</div><div class='cmm-value'>6</div></div>
-          <div class='cmm-item'><div class='cmm-label'>Open Slots</div><div class='cmm-value'>81</div></div>
-          <div class='cmm-item'><div class='cmm-label'>Average Entry</div><div class='cmm-value'>$2,740</div></div>
-          <div class='cmm-item'><div class='cmm-label'>Next Event Window</div><div class='cmm-value'>17 May 2026</div></div>
-        </div>
       </section>
 
-      <section class='crowd-board section' id='eventsGrid'>
-        ${[1,2,3,4,5,6].map(() => `<div class='card' style='height:360px;opacity:.4'></div>`).join('')}
+      <section class='grid g3 section' id='eventsGrid'>
+        ${[1,2,3,4,5,6].map(() => `<div class='card' style='height:340px;background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.05)'></div>`).join('')}
       </section>
 
       <section class='card section' style='text-align:center;padding:32px'>
         <p class='eyebrow'>Prefer Exclusive Private Access?</p>
         <h3 style='margin:8px 0 8px'>Book a Sole Private Meeting</h3>
-        <p class='small muted' style='max-width:480px;margin:0 auto 16px'>Crowd Access is designed for maximum value. If your engagement requires total privacy, a sole event, or sovereign-tier presence — explore private bookings.</p>
-        <a href='explorer.html'><button class='primary' style='width:auto;padding:12px 28px;font-size:11px;letter-spacing:.08em;text-transform:uppercase'>Open Explorer ?</button></a>
+        <p class='small muted' style='max-width:480px;margin:0 auto 16px'>Crowd Access is designed for maximum value. If your engagement requires total privacy, a sole event, or sovereign-tier presence - explore private bookings in Explorer.</p>
+        <a href='explorer.html'><button class='primary' style='width:auto;padding:12px 28px;font-size:11px;letter-spacing:.08em;text-transform:uppercase'>Open Explorer -</button></a>
       </section>
     `;
 
-    await loadTicker();
     initTheme();
     initNav();
-    initScrollReveal();
+    initDynamicTheme();
+    initCommandPalette(CELEBRITIES);
 
-    // -- Static events — always visible instantly -----------------------
-    const STATIC_EVENTS = [
-      {
-        id:'evt-001', celebId:'beyonce',
-        eventType:'Private Concert + Meet',
-        eventTitle:'An Evening with Beyoncé — Renaissance II Residency',
-        city:'Dubai', date:'2026-06-14', name:'Beyoncé',
-        category:'Music', slots:40, claimed:33, soldPct:82,
-        pricePerSlot:3400,
-        installments:[{months:3,monthly:1140},{months:6,monthly:590}],
-        includes:['VIP Floor Access','Backstage Meet & Greet','Signed Album','Professional Photograph','Post-show Cocktail Reception']
-      },
-      {
-        id:'evt-002', celebId:'roger-federer',
-        eventType:'Private Clinic + Gala Dinner',
-        eventTitle:'Federer Foundation Intimate Tennis Clinic',
-        city:'Geneva', date:'2026-05-22', name:'Roger Federer',
-        category:'Sports', slots:24, claimed:18, soldPct:75,
-        pricePerSlot:2900,
-        installments:[{months:3,monthly:975},{months:6,monthly:500}],
-        includes:['On-court Session (45 min)','Personal Coaching Tip','Signed Racket Frame','Gala Dinner Seat','Official Credential & Gift Set']
-      },
-      {
-        id:'evt-003', celebId:'zendaya',
-        eventType:'Film Premiere + After-party',
-        eventTitle:'Zendaya — Cannes Film Festival Exclusive',
-        city:'Cannes', date:'2026-05-17', name:'Zendaya',
-        category:'Film', slots:30, claimed:27, soldPct:90,
-        pricePerSlot:3600,
-        installments:[{months:3,monthly:1210},{months:6,monthly:622}],
-        includes:['Red Carpet Access','Signed Premiere Poster','Photo Opportunity','After-party Invitation','Official Lanyard & Badge']
-      },
-      {
-        id:'evt-004', celebId:'drake',
-        eventType:'Studio Session Access',
-        eventTitle:'Drake — OVO Sound Exclusive Studio Night',
-        city:'Toronto', date:'2026-08-09', name:'Drake',
-        category:'Music', slots:20, claimed:11, soldPct:55,
-        pricePerSlot:2500,
-        installments:[{months:3,monthly:840},{months:6,monthly:432}],
-        includes:['Studio Floor Access','Brief Personal Greeting','Signed Merch Pack','Behind-the-scenes Tour','NDA-protected Environment Access']
-      },
-      {
-        id:'evt-005', celebId:'serena-williams',
-        eventType:'Private Keynote + Dinner',
-        eventTitle:'Serena Williams — Leaders Summit New York',
-        city:'New York', date:'2026-09-25', name:'Serena Williams',
-        category:'Business', slots:35, claimed:14, soldPct:40,
-        pricePerSlot:2200,
-        installments:[{months:3,monthly:740},{months:6,monthly:382}],
-        includes:['Front-row Keynote Seat','Private Q&A Access (10 min)','Signed Book','Executive Networking Dinner','VIP Credentials Pack']
-      },
-      {
-        id:'evt-006', celebId:'neymar',
-        eventType:'Training Ground Access',
-        eventTitle:'Neymar Jr. — Foundation Training Open Day',
-        city:'Riyadh', date:'2026-07-19', name:'Neymar Jr.',
-        category:'Sports', slots:28, claimed:20, soldPct:71,
-        pricePerSlot:1850,
-        installments:[{months:3,monthly:622},{months:6,monthly:319}],
-        includes:['Training Ground Visit','On-pitch Photo Session','Signed Match Jersey','Post-session Meet','Foundation Certificate']
-      }
-    ];
-
-    function normalizeEvent(raw, idx) {
-      const safeSlots = Number(raw?.slots ?? 0) || 0;
-      const safeClaimed = Number(raw?.claimed ?? 0) || 0;
-      const safeSoldPct = Number(raw?.soldPct ?? (safeSlots > 0 ? Math.round((safeClaimed / safeSlots) * 100) : 0)) || 0;
-      const safePrice = Number(raw?.pricePerSlot ?? 0) || 0;
-      const safeIncludes = Array.isArray(raw?.includes)
-        ? raw.includes.filter(Boolean)
-        : typeof raw?.includes === 'string'
-          ? raw.includes.split(',').map(s => s.trim()).filter(Boolean)
-          : ['VIP credential', 'On-site concierge support'];
-      const safeInstallments = Array.isArray(raw?.installments)
-        ? raw.installments.filter(Boolean).map(inst => ({
-            months: Number(inst.months) || 0,
-            monthly: Number(inst.monthly) || 0,
-          })).filter(inst => inst.months > 0 && inst.monthly > 0)
-        : [];
-
-      return {
-        id: raw?.id || `evt-fallback-${idx}`,
-        celebId: raw?.celebId || '',
-        eventType: raw?.eventType || 'Private Access Event',
-        eventTitle: raw?.eventTitle || raw?.name || 'Verified Celebrity Event',
-        city: raw?.city || 'TBD',
-        date: raw?.date || new Date().toISOString().slice(0, 10),
-        name: raw?.name || 'Guest Celebrity',
-        category: raw?.category || 'All',
-        slots: safeSlots,
-        claimed: safeClaimed,
-        soldPct: Math.max(0, Math.min(100, safeSoldPct)),
-        pricePerSlot: safePrice,
-        installments: safeInstallments,
-        includes: safeIncludes,
-      };
+    let allEvents = [];
+    try {
+      const res = await request('/crowd-events');
+      allEvents = res.data;
+    } catch(e) {
+      document.getElementById('eventsGrid').innerHTML = `<div class='card' style='grid-column:1/-1;padding:40px;text-align:center'><p class='muted'>Unable to load events - API unavailable.</p></div>`;
+      return;
     }
 
-    let allEvents = STATIC_EVENTS.map(normalizeEvent);
-
-    // Try to refresh from API silently in background (doesn't block the page)
-    request('/crowd-events').then(res => {
-      if (res?.data?.length) {
-        allEvents = res.data.map(normalizeEvent);
-        allEvents.forEach(ev => { if (!planState[ev.id]) planState[ev.id] = 'full'; });
-        renderEvents(getFiltered());
-      }
-    }).catch(() => { /* static data remains — no error shown */ });
-
+    // State per card: selected plan
     const planState = {};
     allEvents.forEach(ev => { planState[ev.id] = 'full'; });
 
@@ -244,127 +145,58 @@
     }
     function fmtPrice(p) { return '$' + p.toLocaleString(); }
 
-    function updateCrowdMetrics(events) {
-      const visible = events.length;
-      const openSlots = events.reduce((acc, ev) => acc + Math.max(0, ev.slots - ev.claimed), 0);
-      const avgEntry = visible ? Math.round(events.reduce((acc, ev) => acc + ev.pricePerSlot, 0) / visible) : 0;
-      const nextDate = visible
-        ? events
-            .map(ev => new Date(ev.date + 'T00:00:00'))
-            .sort((a, b) => a.getTime() - b.getTime())[0]
-            .toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
-        : 'No upcoming';
-
-      const metrics = document.getElementById('crowdMetrics');
-      if (!metrics) return;
-      metrics.innerHTML = `
-        <div class='cmm-item'><div class='cmm-label'>Visible Events</div><div class='cmm-value'>${visible}</div></div>
-        <div class='cmm-item'><div class='cmm-label'>Open Slots</div><div class='cmm-value'>${openSlots}</div></div>
-        <div class='cmm-item'><div class='cmm-label'>Average Entry</div><div class='cmm-value'>${visible ? fmtPrice(avgEntry) : '—'}</div></div>
-        <div class='cmm-item'><div class='cmm-label'>Next Event Window</div><div class='cmm-value'>${nextDate}</div></div>
-      `;
-    }
-
     function renderEvents(events) {
-      updateCrowdMetrics(events);
       if (!events.length) {
-        const cat = document.getElementById('filterCat')?.value || 'All';
-        const maxP = parseInt(document.getElementById('filterPrice')?.value || '0', 10);
-        const hasAnyCategory = cat !== 'All' && allEvents.some(ev => ev.category === cat);
-        const hasAnyPrice = maxP > 0 && allEvents.some(ev => ev.pricePerSlot <= maxP);
-        const hint = hasAnyCategory && !hasAnyPrice
-          ? 'Your price ceiling is filtering out this category. Try a higher price range.'
-          : !hasAnyCategory && hasAnyPrice
-            ? 'No events in that category right now. Try All Categories or Music.'
-            : 'Try broader filters to reveal active verified events.';
-
-        document.getElementById('eventsGrid').innerHTML = `
-          <div class='card' style='grid-column:1/-1;padding:34px;text-align:center'>
-            <p class='eyebrow'>No Exact Matches</p>
-            <h3 style='margin:8px 0 6px'>No events match your current filters</h3>
-            <p class='small muted' style='margin-bottom:14px'>${hint}</p>
-            <div style='display:flex;gap:8px;justify-content:center;flex-wrap:wrap'>
-              <button class='secondary' id='crowdResetFilters' style='width:auto;padding:10px 16px'>Reset All Filters</button>
-              <button class='secondary' id='crowdKeepCategory' style='width:auto;padding:10px 16px'>Keep Category Only</button>
-              <button class='secondary' id='crowdKeepPrice' style='width:auto;padding:10px 16px'>Keep Price Only</button>
-            </div>
-          </div>
-        `;
-
-        document.getElementById('crowdResetFilters')?.addEventListener('click', () => {
-          document.getElementById('filterCat').value = 'All';
-          document.getElementById('filterPrice').value = '0';
-          renderEvents(getFiltered());
-        });
-        document.getElementById('crowdKeepCategory')?.addEventListener('click', () => {
-          document.getElementById('filterPrice').value = '0';
-          renderEvents(getFiltered());
-        });
-        document.getElementById('crowdKeepPrice')?.addEventListener('click', () => {
-          document.getElementById('filterCat').value = 'All';
-          renderEvents(getFiltered());
-        });
+        document.getElementById('eventsGrid').innerHTML = `<div class='card' style='grid-column:1/-1;padding:40px;text-align:center'><p class='muted'>No events match your filters.</p></div>`;
         return;
       }
       document.getElementById('eventsGrid').innerHTML = events.map(ev => {
-        const avail = Math.max(0, ev.slots - ev.claimed);
-        const pct = ev.slots > 0 ? Math.max(0, Math.min(100, Math.round((ev.claimed / ev.slots) * 100))) : ev.soldPct;
+        const avail = ev.slots - ev.claimed;
+        const pct = ev.soldPct;
         const isFull = avail <= 0;
-        const fullPrice = Math.round(ev.pricePerSlot * 0.95);
-        const plan3 = ev.installments?.find(i => i.months === 3);
-        const plan6 = ev.installments?.find(i => i.months === 6);
+        const fullPrice = Math.round(ev.pricePerSlot * 0.95); // 5% full-pay discount
+        const plan3 = ev.installments.find(i => i.months === 3);
+        const plan6 = ev.installments.find(i => i.months === 6);
         return `
           <div class='crowd-event-card' id='card-${ev.id}'>
-            <div class='ce-topline'>
-              <span class='ce-cat-badge'>${ev.category}</span>
-              <span class='ce-date-badge'>${fmtDate(ev.date)}</span>
-            </div>
             <div class='ce-header'>
               <div class='ce-event-type'>${ev.eventType}</div>
               <div class='ce-title'>${ev.eventTitle}</div>
-              <div class='ce-meta'>${ev.city} · ${ev.name}</div>
+              <div class='ce-meta'> ${ev.city} &nbsp;-&nbsp;  ${fmtDate(ev.date)} &nbsp;-&nbsp; ${ev.name}</div>
             </div>
             <div class='ce-body'>
-              <div class='ce-layout'>
-                <div class='ce-col ce-col-main'>
-                  <div class='ce-slots'>
-                    <div class='ce-slots-top'>
-                      <span class='ce-slots-label'>Capacity Status</span>
-                      <span class='ce-slots-count'>${isFull ? '— SOLD OUT' : `${avail} of ${ev.slots} remaining`}</span>
-                    </div>
-                    <div class='ce-slot-bar'><div class='ce-slot-fill${pct >= 80 ? " sf-critical" : ""}' style='width:${pct}%'></div></div>
-                    <div class='ce-slot-meta'>${ev.claimed} claimed · ${pct}% filled</div>
-                  </div>
-
-                  <div class='ce-includes-wrap'>
-                    <p class='ce-group-label'>Access Includes</p>
-                    <div class='ce-includes'>
-                      ${ev.includes.map(i => `<span>${i}</span>`).join('')}
-                    </div>
-                  </div>
+              <div class='ce-slots'>
+                <div class='ce-slots-top'>
+                  <span class='ce-slots-label'>Slots Claimed</span>
+                  <span class='ce-slots-count'>${isFull ? '- SOLD OUT' : `${avail} of ${ev.slots} remaining`}</span>
                 </div>
+                <div class='ce-slot-bar'><div class='ce-slot-fill${pct >= 80 ? " sf-critical" : ""}' style='width:${pct}%'></div></div>
+              </div>
 
-                <div class='ce-col ce-col-price'>
-                  <div class='ce-pricing-panel'>
-                    <div class='ce-price-row'>
-                      <span class='ce-price-main' id='disp-price-${ev.id}'>${fmtPrice(fullPrice)}</span>
-                      <span class='ce-price-sub' id='disp-sub-${ev.id}'>full pay (5% off)</span>
-                    </div>
-                    <p class='small muted ce-regular'>Regular price ${fmtPrice(ev.pricePerSlot)} per slot</p>
-                    <div class='ce-plans'>
-                      <span class='ce-plan-pill cp-full cp-sel' data-ev='${ev.id}' data-plan='full'>Pay in Full · ${fmtPrice(fullPrice)}</span>
-                      ${plan3 ? `<span class='ce-plan-pill' data-ev='${ev.id}' data-plan='3-pay'>3× ${fmtPrice(plan3.monthly)}/mo</span>` : ''}
-                      ${plan6 ? `<span class='ce-plan-pill' data-ev='${ev.id}' data-plan='6-pay'>6× ${fmtPrice(plan6.monthly)}/mo</span>` : ''}
-                    </div>
-                    <button class='ce-join-btn' data-ev='${ev.id}' ${isFull ? 'disabled' : ''}>${isFull ? '— Fully Claimed' : 'Claim My Slot ?'}</button>
-                  </div>
+              <div style='margin-bottom:10px'>
+                <div class='ce-price-row'>
+                  <span class='ce-price-main' id='disp-price-${ev.id}'>${fmtPrice(fullPrice)}</span>
+                  <span class='ce-price-sub' id='disp-sub-${ev.id}'>full pay (5% off)</span>
+                </div>
+                <p class='small muted' style='margin:3px 0 8px;font-size:10px'>Regular price ${fmtPrice(ev.pricePerSlot)} per slot</p>
+                <div class='ce-plans'>
+                  <span class='ce-plan-pill cp-full cp-sel' data-ev='${ev.id}' data-plan='full'> Pay in Full - ${fmtPrice(fullPrice)}</span>
+                  ${plan3 ? `<span class='ce-plan-pill' data-ev='${ev.id}' data-plan='3-pay'>3  ${fmtPrice(plan3.monthly)}/mo</span>` : ''}
+                  ${plan6 ? `<span class='ce-plan-pill' data-ev='${ev.id}' data-plan='6-pay'>6  ${fmtPrice(plan6.monthly)}/mo</span>` : ''}
                 </div>
               </div>
+
+              <div class='ce-includes'>
+                ${ev.includes.map(i => `<span>${i}</span>`).join('')}
+              </div>
+
+              <button class='ce-join-btn' data-ev='${ev.id}' ${isFull ? 'disabled' : ''}>${isFull ? '- Fully Claimed' : ' &nbsp;Claim My Slot -'}</button>
             </div>
           </div>
         `;
       }).join('');
 
+      // Wire plan pills
       document.querySelectorAll('.ce-plan-pill').forEach(pill => {
         pill.onclick = () => {
           const evId = pill.dataset.ev;
@@ -372,106 +204,117 @@
           planState[evId] = plan;
           document.querySelectorAll(`.ce-plan-pill[data-ev="${evId}"]`).forEach(p => p.classList.remove('cp-sel'));
           pill.classList.add('cp-sel');
+          // Update displayed price
           const ev = allEvents.find(e => e.id === evId);
           if (!ev) return;
           const pp = document.getElementById('disp-price-' + evId);
           const ps = document.getElementById('disp-sub-' + evId);
           if (plan === 'full') { pp.textContent = fmtPrice(Math.round(ev.pricePerSlot * 0.95)); ps.textContent = 'full pay (5% off)'; }
           else {
-            const m = ev.installments?.find(i => i.months === (plan === '3-pay' ? 3 : 6));
+            const m = ev.installments.find(i => i.months === (plan === '3-pay' ? 3 : 6));
             if (m) { pp.textContent = fmtPrice(m.monthly) + '/mo'; ps.textContent = `over ${m.months} months`; }
           }
         };
       });
 
+      // Wire join buttons
       document.querySelectorAll('.ce-join-btn').forEach(btn => {
         btn.onclick = () => {
           const evId = btn.dataset.ev;
           const ev = allEvents.find(e => e.id === evId);
           const plan = planState[evId] || 'full';
-          openConfirmModal(ev, plan);
+          openConfirmModal(ev, plan, btn);
         };
       });
 
+      // Highlight pre-selected celeb if URL param
       if (urlParam) {
-        const found = allEvents.find(e => e.celebId === urlParam);
-        if (found) {
-          const el = document.getElementById('card-' + found.id);
-          if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); el.style.borderColor = 'rgba(196,155,46,.6)'; }
+        const match = document.querySelector(`[data-ev]`);
+        if (match) {
+          const found = allEvents.find(e => e.celebId === urlParam);
+          if (found) {
+            const el = document.getElementById('card-' + found.id);
+            if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); el.style.borderColor = 'rgba(159,230,176,.7)'; el.style.boxShadow = '0 0 0 2px rgba(159,230,176,.25)'; }
+          }
         }
       }
     }
 
-    async function openConfirmModal(ev, plan) {
-      if (!ev) return;
+    async function openConfirmModal(ev, plan, triggerBtn) {
       const isFullPay = plan === 'full';
       const displayAmt = isFullPay
         ? Math.round(ev.pricePerSlot * 0.95)
-        : ev.installments?.find(i => i.months === (plan === '3-pay' ? 3 : 6))?.monthly ?? ev.pricePerSlot;
-      const planLabel = isFullPay ? 'Full Payment (5% discount)' : plan === '3-pay' ? '3-Month Installments' : '6-Month Installments';
+        : ev.installments.find(i => i.months === (plan === '3-pay' ? 3 : 6))?.monthly ?? ev.pricePerSlot;
+      const planLabel = isFullPay ? 'Full Payment (5% discount applied)' : plan === '3-pay' ? '3-Month Installment Plan' : '6-Month Installment Plan';
 
       modalContent.innerHTML = `
-        <button onclick="document.getElementById('crowdModalBack').classList.remove('cm-open')" style='position:absolute;top:14px;right:16px;background:var(--bg-alt);border:1px solid var(--line);color:var(--muted);font-size:11px;padding:6px 14px;border-radius:8px;cursor:pointer;width:auto;letter-spacing:.06em;text-transform:uppercase;z-index:1'>Close</button>
-        <p class='eyebrow'>Claim Your Slot</p>
-        <h3 style='margin:8px 0 4px;font-size:19px;color:var(--text)'>${ev.eventTitle}</h3>
-        <p class='small muted'>${ev.city} · ${new Date(ev.date + 'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})} · ${ev.name}</p>
-        <div style='margin:16px 0;padding:14px;background:var(--accent-soft);border:1px solid rgba(196,155,46,.3);border-radius:10px'>
+        <button onclick="document.getElementById('crowdModalBack').classList.remove('cm-open')" style='position:absolute;top:14px;right:16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:rgba(229,228,226,.5);font-size:11px;padding:6px 14px;border-radius:8px;cursor:pointer;width:auto;letter-spacing:.06em;text-transform:uppercase'>Close -</button>
+        <p class='eyebrow' style='color:#9fe6b0'>Claim Your Slot</p>
+        <h3 style='margin:8px 0 4px;font-size:19px'>${ev.eventTitle}</h3>
+        <p class='small muted'> ${ev.city} &nbsp;-&nbsp;  ${new Date(ev.date + 'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})} &nbsp;-&nbsp; ${ev.name}</p>
+        <div style='margin:16px 0;padding:14px;background:rgba(159,230,176,.05);border:1px solid rgba(159,230,176,.2);border-radius:12px'>
           <div style='display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px'>
             <span class='small muted'>Payment Plan</span>
-            <strong style='color:var(--accent-text);font-size:13px'>${planLabel}</strong>
+            <strong style='color:#9fe6b0;font-size:13px'>${planLabel}</strong>
           </div>
-          <div style='display:flex;justify-content:space-between;align-items:baseline'>
-            <span class='small muted'>${isFullPay ? 'Total Due Today' : 'First Installment'}</span>
-            <strong style='color:var(--text);font-size:22px;font-weight:900'>$${displayAmt.toLocaleString()}</strong>
+          <div style='display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px'>
+            <span class='small muted'>${isFullPay ? 'Total Due Today' : 'First Installment Due'}</span>
+            <strong style='color:#9fe6b0;font-size:20px;font-weight:900'>$${displayAmt.toLocaleString()}</strong>
           </div>
+          ${!isFullPay ? `<p class='small muted' style='font-size:10px;margin-top:4px'>Remaining ${plan === '3-pay' ? 2 : 5} payments of $${displayAmt.toLocaleString()} due monthly. 100% refundable if event is cancelled.</p>` : '<p class=\'small muted\' style=\'font-size:10px;margin-top:4px\'>5% discount applied vs installment price. Full escrow protection.</p>'}
         </div>
         <div style='margin-bottom:16px'>
-          <p class='small muted' style='margin-bottom:8px;font-size:10px;letter-spacing:.08em;text-transform:uppercase'>What's Included</p>
-          <div class='ce-includes' style='background:var(--bg-alt);border-color:var(--line)'>${ev.includes.map(i => `<span style='color:var(--text-2)'>${i}</span>`).join('')}</div>
+          <p class='small muted' style='margin-bottom:8px;font-size:10px;letter-spacing:.08em;text-transform:uppercase'>What\'s Included</p>
+          <div class='ce-includes'>${ev.includes.map(i => `<span>${i}</span>`).join('')}</div>
         </div>
         <div style='margin-bottom:16px'>
           <p class='eyebrow' style='margin-bottom:10px;font-size:10px'>Select Payment Method</p>
           <div id='cm-pay-wrap'></div>
         </div>
-        <p class='small muted' style='font-size:10.5px;line-height:1.55;margin-bottom:14px;padding:10px;background:var(--bg-alt);border-radius:8px;border:1px solid var(--line)'>By claiming this slot you agree to a standard NDA and confirm your registered client identity. Credentials are issued 14 days before the event.</p>
-        <button id='cmConfirmBtn' class='primary' style='border-radius:8px;padding:16px;font-size:12px;font-weight:900;letter-spacing:.1em;text-transform:uppercase'>Confirm & Secure My Slot ?</button>
+        <p class='small muted' style='font-size:10.5px;line-height:1.5;margin-bottom:14px;padding:10px;background:rgba(255,255,255,.03);border-radius:8px'>By claiming this slot you agree to a standard NDA, confirm your identity as a registered client, and acknowledge the escrow payment terms. Credentials are issued 14 days before the event.</p>
+        <button id='cmConfirmBtn' style='width:100%;padding:16px;background:linear-gradient(135deg,rgba(159,230,176,.25),rgba(159,230,176,.1));border:1px solid rgba(159,230,176,.5);color:#9fe6b0;font-size:12px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;border-radius:12px;cursor:pointer'>- &nbsp;Confirm & Secure My Slot</button>
         <p id='cmStatus' class='small muted' style='text-align:center;margin-top:8px'></p>
       `;
       modalBack.classList.add('cm-open');
 
+      // Inject crypto widget after modal is in DOM
       document.getElementById('cm-pay-wrap').innerHTML = buildCryptoPaymentHTML('cm');
       const cmCryptoWidget = initCryptoWidget('cm');
 
       document.getElementById('cmConfirmBtn').onclick = async () => {
         const btn = document.getElementById('cmConfirmBtn');
         const status = document.getElementById('cmStatus');
-        btn.disabled = true; btn.textContent = 'Securing slot…';
+        btn.disabled = true; btn.textContent = 'Securing slot...';
         const payMethod = cmCryptoWidget.getMethod();
+        if (!requireAuth(`crowdbooking.html?celeb=${ev.celebId}`)) { btn.disabled = false; btn.textContent = '- Confirm & Secure My Slot'; return; }
         try {
           const res = await request(`/crowd-events/${ev.id}/join`, { method: 'POST', body: JSON.stringify({ plan, paymentMethod: payMethod }) });
+          trackEvent('crowd_join', { eventId: ev.id, celebId: ev.celebId });
           const payLabel = payMethod === 'wire' ? 'Wire Transfer' : payMethod.toUpperCase();
           modalContent.innerHTML = `
             <div style='text-align:center;padding:10px 0'>
-              <div style='font-size:48px;margin-bottom:12px'>&#10003;</div>
-              <p class='eyebrow' style='color:var(--success)'>Slot Secured</p>
-              <h3 style='margin:8px 0 4px;color:var(--text)'>${ev.eventTitle}</h3>
-              <p class='small muted' style='margin-bottom:14px'>${ev.city} · ${ev.name}</p>
+              <div style='font-size:48px;margin-bottom:12px'></div>
+              <p class='eyebrow' style='color:#9fe6b0'>Slot Secured</p>
+              <h3 style='margin:8px 0 4px'>${ev.eventTitle}</h3>
+              <p class='small muted' style='margin-bottom:14px'>${ev.city} &nbsp;-&nbsp; ${ev.name}</p>
               <div class='crowd-slot-code'>${res.booking.slotCode}</div>
               <p class='small muted' style='font-size:11px;margin-bottom:6px'>${res.message}</p>
-              <div style='display:inline-block;margin:8px 0 10px;padding:7px 18px;background:var(--accent-soft);border:1px solid rgba(196,155,46,.3);border-radius:8px;font-size:11px;color:var(--accent-text);font-weight:700'>
+              <div style='display:inline-block;margin:8px 0 10px;padding:7px 18px;background:rgba(247,147,26,.08);border:1px solid rgba(247,147,26,.25);border-radius:8px;font-size:11px;color:#f7931a;font-weight:700'>
                 Payment via ${payLabel}
               </div>
-              <p class='small muted' style='font-size:10px;opacity:.7'>Event credentials will be delivered 14 days before the event. Keep your slot code safe.</p>
-              <button onclick="document.getElementById('crowdModalBack').classList.remove('cm-open')" class='secondary' style='margin-top:18px;width:auto;padding:10px 24px;font-size:11px'>Done</button>
+              <p class='small muted' style='font-size:10px;opacity:.65'>Event credentials will be delivered 14 days before the event date. Keep your slot code safe.</p>
+              <a href='booking.html?id=${ev.celebId}' style='display:inline-block;margin-top:14px'><button class='primary' style='width:auto;padding:12px 28px;font-size:11px'>Upgrade to private access with ${ev.name} â†’</button></a>
+              <br><button onclick="document.getElementById('crowdModalBack').classList.remove('cm-open')" style='margin-top:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:rgba(229,228,226,.7);font-size:11px;padding:10px 24px;border-radius:8px;cursor:pointer;width:auto;letter-spacing:.06em;text-transform:uppercase'>Done</button>
             </div>
           `;
+          // Update allEvents count live
           const idx = allEvents.findIndex(e => e.id === ev.id);
           if (idx >= 0) allEvents[idx].claimed++;
           renderEvents(getFiltered());
         } catch(err) {
-          btn.disabled = false; btn.textContent = 'Confirm & Secure My Slot ?';
-          status.textContent = err.message || 'Error — please log in first.';
-          status.style.color = 'var(--danger)';
+          btn.disabled = false; btn.textContent = '- Confirm & Secure My Slot';
+          status.textContent = err.message + ' - please login first.';
+          status.style.color = '#f08080';
         }
       };
     }
@@ -487,25 +330,12 @@
     }
 
     renderEvents(allEvents);
+
     document.getElementById('filterCat').onchange = () => renderEvents(getFiltered());
     document.getElementById('filterPrice').onchange = () => renderEvents(getFiltered());
 
     })(); // end async IIFE
   </script>
-
-<!-- Smartsupp Live Chat -->
-<script type="text/javascript">
-var _smartsupp = _smartsupp || {};
-_smartsupp.key = '6e6f3dc1f0339246c6154810bc08ac75d4aeddda';
-window.smartsupp||(function(d) {
-  var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
-  s=d.getElementsByTagName('script')[0];c=d.createElement('script');
-  c.type='text/javascript';c.charset='utf-8';c.async=true;
-  c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
-})(document);
-</script>
-<noscript>Powered by <a href="https://www.smartsupp.com" target="_blank">Smartsupp</a></noscript>
 </body>
 </html>
-
 
