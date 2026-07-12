@@ -10,7 +10,7 @@
     "dev:frontend": "npm run dev --prefix frontend",
     "dev:backend": "npm run dev --prefix backend",
     "demo": "npm run website",
-    "build": "npm run app:build",
+    "build": "echo 'static site - no build needed'",
     "start": "concurrently \"npm run start --prefix backend\" \"npm run start --prefix frontend\"",
     "static": "http-server static -p 5500 -c-1",
     "smoke": "node scripts/smoke-test.mjs"
