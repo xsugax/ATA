@@ -9,20 +9,59 @@
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" },
-        { "key": "X-Content-Type-Options", "value": "nosniff" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        }
       ]
     }
   ],
   "rewrites": [
-    { "source": "/", "destination": "/index.html" },
-    { "source": "/explorer", "destination": "/explorer.html" },
-    { "source": "/booking", "destination": "/booking.html" },
-    { "source": "/crowdbooking", "destination": "/crowdbooking.html" },
-    { "source": "/portal", "destination": "/portal.html" },
-    { "source": "/login", "destination": "/login.html" },
-    { "source": "/admin", "destination": "/admin.html" },
-    { "source": "/admin-logs", "destination": "/admin-logs.html" },
-    { "source": "/crowdfund", "destination": "/crowdfund.html" }
-  ]
+    {
+      "source": "/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/explorer",
+      "destination": "/explorer.html"
+    },
+    {
+      "source": "/booking",
+      "destination": "/booking.html"
+    },
+    {
+      "source": "/crowdbooking",
+      "destination": "/crowdbooking.html"
+    },
+    {
+      "source": "/portal",
+      "destination": "/portal.html"
+    },
+    {
+      "source": "/login",
+      "destination": "/login.html"
+    },
+    {
+      "source": "/admin",
+      "destination": "/admin.html"
+    },
+    {
+      "source": "/admin-logs",
+      "destination": "/admin-logs.html"
+    },
+    {
+      "source": "/crowdfund",
+      "destination": "/crowdfund.html"
+    }
+  ],
+  "experimentalServices": {
+    "backend": {
+      "entrypoint": "backend",
+      "routePrefix": "/"
+    }
+  }
 }

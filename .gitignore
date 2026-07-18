@@ -33,3 +33,4 @@ Thumbs.db
 *.pem
 
 push_result.txt
+.vercel
