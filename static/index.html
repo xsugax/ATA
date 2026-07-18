@@ -3,7 +3,7 @@
 <head>
 	<meta charset='UTF-8'>
 	<meta name='viewport' content='width=device-width,initial-scale=1'>
-	<meta http-equiv='Content-Security-Policy' content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://i.pravatar.cc https://upload.wikimedia.org; connect-src 'self' http://localhost:4000 https://ata-h0yo.onrender.com; font-src 'self' https://fonts.gstatic.com; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
+	<meta http-equiv='Content-Security-Policy' content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.smartsuppchat.com https://*.smartsuppchat.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://i.pravatar.cc https://upload.wikimedia.org https://*.smartsuppchat.com; connect-src 'self' http://localhost:4000 https://ata-h0yo.onrender.com https://*.smartsuppchat.com https://*.smartsupp.com wss://*.smartsuppchat.com; font-src 'self' https://fonts.gstatic.com; object-src 'none'; frame-src https://*.smartsuppchat.com; base-uri 'self'; form-action 'self'">
 	<meta name='referrer' content='no-referrer'>
 	<title>All Talents Agency (ATA) | Sovereign Celebrity Booking</title>
 	<meta name="application-name" content="All Talents Agency">
@@ -70,57 +70,16 @@
 </head>
 <body>
 	<div class='container' id='app'></div>
-	<button id='floatMsgBtn' class='floating-msg-btn' title='Open Concierge Desk' style='position:relative'>
-		<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' width='22' height='22'>
-			<path d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z'/>
-		</svg>
-		<span class='fmb-badge'></span>
-	</button>
-	<div id='floatMsgPanel' class='floating-msg-panel'>
-		<div class='fmp-header'>
-			<div class='fmp-avatar'>AT</div>
-			<div class='fmp-agent-info'>
-				<div class='fmp-agent-name'>Concierge Desk</div>
-				<div class='fmp-agent-status'><span class='fmp-online-dot'></span>Live Representation Desk</div>
-			</div>
-			<button class='fmp-close' id='fmpClose' aria-label='Close'>&#x2715;</button>
-		</div>
-		<div class='fmp-body'>
-			<div id='chatThread' class='chat-thread' style='margin-bottom:14px'></div>
-			<div class='floating-msg-grid'>
-				<div><span class='fmp-label'>Featured Profile</span><input id='homeTarget' readonly placeholder='Loads automatically\u2026'></div>
-				<div class='floating-msg-row'>
-					<div><span class='fmp-label'>Full Name</span><input id='homeName' placeholder='Your name'></div>
-					<div><span class='fmp-label'>Organization</span><input id='homeOrg' placeholder='Company'></div>
-				</div>
-				<div><span class='fmp-label'>Request Type</span>
-					<select id='homeType'>
-						<option value='meet'>How to Meet</option>
-						<option value='msg'>Representative Message</option>
-					</select>
-				</div>
-				<div><span class='fmp-label'>Message</span><textarea id='homeBody' rows='3' placeholder='Describe your request\u2026'></textarea></div>
-				<button id='homeSend' class='primary'>Send via Secure Channel &#x2192;</button>
-				<p id='homeStatus' class='small muted' style='text-align:center'></p>
-			</div>
-		</div>
-		<div class='fmp-footer'>Encrypted &middot; NDA-default &middot; All Talents Agency</div>
-	</div>
+	<!-- Smartsupp live chat -->
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-XXXXXXX');</script>
+	<script>var _smartsupp=_smartsupp||{};_smartsupp.key='3bff12f9c83e80a2bc79bca7b3ea84b34022be41';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script>
 	<script type='module'>
-		import { request, nav, initNav, initTheme, initScrollReveal, initDynamicTheme, bindShortlistTray, trackEvent, formatPrice, initCommandPalette, setCategoryTint, getLocalDemandPulse, demandPulseHTML, renderDemandPulse, renderProtocolSpine, renderThreePathBait, renderAccessPathSimulator, bindAccessPathSimulator, displayPrice, initAccessProtocol, initConciergeTriggers, openAccessPortal, bindPathBaitHandlers, getAccessProgress, openQualifyModal, initSmartSearch, getMeetingPlaybook } from './assets/app.js?v=20260718';
+		import { request, nav, initNav, initTheme, initScrollReveal, initDynamicTheme, bindShortlistTray, trackEvent, formatPrice, initCommandPalette, setCategoryTint, getLocalDemandPulse, demandPulseHTML, renderDemandPulse, renderProtocolSpine, renderThreePathBait, renderAccessPathSimulator, bindAccessPathSimulator, displayPrice, initAccessProtocol, //initConciergeTriggers, openAccessPortal, bindPathBaitHandlers, getAccessProgress, openQualifyModal, initSmartSearch, getMeetingPlaybook } from './assets/app.js?v=20260718';
 		import { CELEBRITIES } from './assets/celebrities-data.js';
 
 		let featuredCelebrity = { id: '', name: '' };
 
-		// -- Typewriter utility --------------------------
-		async function typeText(el, text, speed = 22) {
-			el.textContent = '';
-			for (let i = 0; i < text.length; i++) {
-				el.textContent += text[i];
-				await new Promise(r => setTimeout(r, speed));
-			}
-		}
-		function addBubble(thread, role, text, isTyping = false) {
+function addBubble(thread, role, text, isTyping = false) {
 			const wrap = document.createElement('div');
 			wrap.className = `chat-bubble ${role}`;
 			const lbl = document.createElement('div');
@@ -221,11 +180,6 @@
 			<div id='accessSimMount'></div>
 		`;
 
-		const panel = document.getElementById('floatMsgPanel');
-		const btn = document.getElementById('floatMsgBtn');
-		btn.onclick = () => panel.classList.toggle('open');
-		document.getElementById('fmpClose').onclick = () => panel.classList.remove('open');
-
 		function setHomeTemplate(mode, celebRef) {
 			const textarea = document.getElementById('homeBody');
 			const celeb = typeof celebRef === 'object' && celebRef?.id
@@ -306,7 +260,7 @@
 				<div class='hero-cinematic-content'>
 					<form class='hero-search-mega' id='heroSearchForm' onsubmit='event.preventDefault();const q=document.getElementById("heroSearchInput").value.trim();if(q)location.href="explorer.html?search="+encodeURIComponent(q);'>
 						<div class='search-wrap hero-search-wrap' style='flex:1;position:relative;min-width:0'>
-							<input id='heroSearchInput' type='search' placeholder='Search any celebrity — Beyoncé, BTS, Messi, Taylor Swift…' autocomplete='off'>
+							<input id='heroSearchInput' class='hero-search-input' type='search' placeholder='search talent…' autocomplete='off'>
 						</div>
 						<button type='submit' class='primary'>Search →</button>
 					</form>
@@ -325,7 +279,7 @@
 		bindPathBaitHandlers(hero);
 		setCategoryTint(featured[0].category);
 		trackEvent('home_view', { id: featured[0].id, name: featured[0].name });
-		initConciergeTriggers({ dwellMs: 20000, celebName: featured[0].name, addBubble });
+		// concierge handled by Smartsupp
 
 		const simId = new URLSearchParams(location.search).get('sim');
 		if (simId) {
@@ -387,7 +341,7 @@
 			totalGlobalBookings: 4820,
 			managedPortfolioValue: 8400000000,
 			activeNegotiations: 73,
-			verifiedCelebrities: CELEBRITIES.length,
+			verifiedCelebrities: String(CELEBRITIES.length),
 		};
 		const renderKPIs = (m) => {
 			const items = [
@@ -400,7 +354,7 @@
 				<div class='card stack'>
 					${i === 0 ? `<p class='eyebrow'>Live Vitals</p>` : ''}
 					<div class='small muted'>${name}</div>
-					<div class='kpi num-mono' data-kpi-target='${value.replace(/[^0-9.]/g,'')}' style='color:${i === 3 ? 'var(--vital-nerve)' : 'var(--vital-heart)'}'>${value}</div>
+					<div class='kpi num-mono' data-kpi-target='${String(value).replace(/[^0-9.]/g,"")}' style='color:${i === 3 ? 'var(--vital-nerve)' : 'var(--vital-heart)'}'>${value}</div>
 				</div>
 			`).join('');
 		};
