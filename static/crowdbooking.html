@@ -132,13 +132,43 @@
       const res = await request('/crowd-events');
       allEvents = res.data;
     } catch(e) {
-      // Generate fallback events from local roster data
-      const { CELEBRITIES, generateFallbackEvents } = await import('./assets/celebrities-data.js');
-      allEvents = generateFallbackEvents(CELEBRITIES);
-      if (!allEvents.length) {
-        document.getElementById('eventsGrid').innerHTML = `<div class='card' style='grid-column:1/-1;padding:40px;text-align:center'><p class='muted'>Unable to load events - API unavailable.</p></div>`;
-        return;
-      }
+      // Generate fallback events from local roster - inline so no import needed
+      const eventTypes = ['Private Concert', 'VIP Gala Dinner', 'Exclusive Meet & Greet', 'Brand Launch Event', 'Charity Gala', 'Award Show Afterparty', 'Fashion Week Front Row', 'Sports VIP Suite'];
+      const cities = ['Monaco', 'Dubai', 'New York', 'London', 'Paris', 'Los Angeles', 'Milan', 'Tokyo', 'Sydney', 'Barcelona'];
+      const includesByType = {
+        'Private Concert': ['VIP seating within 15m of stage', 'Signed tour memorabilia', 'Complimentary champagne & canapés', 'Professional photo with the artist'],
+        'VIP Gala Dinner': ['Seated at celebrity table', 'Five-course gourmet dinner', 'Welcome champagne reception', 'Professional photo with the guest of honour'],
+        'Exclusive Meet & Greet': ['Private 1-on-1 photo opportunity', 'Signed collectible item', 'Personalized dedication', 'Dedicated concierge host'],
+        'Brand Launch Event': ['Front-row seating at presentation', 'Exclusive gift bag', 'Networking reception access', 'Photo with brand ambassador'],
+        'Charity Gala': ['Red carpet entry', 'Gala dinner + drinks', 'Photography with attending celebrities', 'Charity auction participation'],
+        'Award Show Afterparty': ['VIP club access', 'Open bar', 'Official afterparty pass', 'Photo opportunities with talent'],
+        'Fashion Week Front Row': ['Front row runway seat', 'Backstage pass', 'Designer gift bag', 'After-show reception'],
+        'Sports VIP Suite': ['Private suite access', 'Pre-match hospitality', 'Player meet & greet pass', 'Commemorative signed item'],
+      };
+      const now = new Date();
+      const featured = CELEBRITIES.slice(0, 30);
+      featured.forEach((cel, idx) => {
+        const typeIdx = idx % eventTypes.length;
+        const cityIdx = idx % cities.length;
+        const evDate = new Date(now);
+        evDate.setDate(evDate.getDate() + 14 + idx * 12);
+        const slots = 20 + (idx % 5) * 10;
+        const claimed = Math.floor(slots * (0.3 + (idx % 7) * 0.08));
+        const basePrice = Math.round(cel.startingPrice * 0.0015);
+        const pps = Math.max(1800, Math.min(12000, basePrice));
+        allEvents.push({
+          id: 'crowd-' + cel.id, celebId: cel.id, name: cel.name, category: cel.category,
+          eventType: eventTypes[typeIdx],
+          eventTitle: `${eventTypes[typeIdx]} with ${cel.name}`,
+          city: cities[cityIdx],
+          date: evDate.toISOString().split('T')[0], slots, claimed,
+          available: slots - claimed, soldPct: Math.round((claimed / slots) * 100),
+          pricePerSlot: pps,
+          installments: [{ months: 3, monthly: Math.round(pps * 0.38) }, { months: 6, monthly: Math.round(pps * 0.20) }],
+          includes: includesByType[eventTypes[typeIdx]] || includesByType['VIP Gala Dinner'],
+          portrait: cel.portrait,
+        });
+      });
     }
 
     // State per card: selected plan
