@@ -251,28 +251,3 @@ export default function BookingPage() {
     </main>
   );
 }
-
-  const { id } = useParams();
-  const [celebrity, setCelebrity] = useState(null);
-  const [result, setResult] = useState(null);
-  const [form, setForm] = useState({
-    eventType: "Gala",
-    date: "",
-    location: "Dubai",
-    ndaRequired: true,
-    securityLevel: "Executive",
-    riderRequirements: "Private lounge + fortified arrival corridor",
-    pricingAdjustmentPercent: 0,
-    paymentMethod: "wire",
-    cryptoCurrency: "BTC",
-  });
-
-  useEffect(() => {
-    fetchJson(`/celebrities/${id}`).then(setCelebrity).catch(console.error);
-  }, [id]);
-
-  const pricing = useMemo(() => {
-    if (!celebrity) return { quote: 0, escrow: 0 };
-    const quote = Math.round(celebrity.startingPrice * (1 + form.pricingAdjustmentPercent / 100));
-    return { quote, escrow: Math.round(quote * 0.3) };
-  }, [celebrity, form.pricingAdjustmentPercent]);

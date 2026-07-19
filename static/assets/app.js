@@ -364,11 +364,14 @@ const CRYPTO_WALLETS = {
   xrp:  { name:'XRP',      symbol:'XRP',  icon:'✦',  network:'XRP Ledger (XRPL)',           addr:'rATAxK7V9nL3Pm5qW4yBc1zTg8H6oEFdJuS' },
 };
 
-// Cosmetic QR grid pattern (11×11)
-const QR_P = [1,1,1,1,1,1,1,0,1,0,1, 1,0,0,0,0,0,1,0,0,1,0, 1,0,1,1,1,0,1,0,1,1,1,
+// Cosmetic QR grid pattern (11×11) — pre-built HTML string
+const QR_PATTERN = (function(){
+  const p = [1,1,1,1,1,1,1,0,1,0,1, 1,0,0,0,0,0,1,0,0,1,0, 1,0,1,1,1,0,1,0,1,1,1,
               1,0,1,1,1,0,1,0,0,0,1, 1,0,1,1,1,0,1,0,1,0,0, 1,0,0,0,0,0,1,0,0,1,1,
               1,1,1,1,1,1,1,0,1,0,1, 0,0,0,0,0,0,0,0,1,1,0, 1,1,0,1,0,1,1,0,0,1,1,
               0,1,1,0,0,1,0,0,1,0,1, 1,0,1,1,1,1,1,0,1,1,0];
+  return p.map(b => `<div class='qr-cell${b?' qr-b':''}'></div>`).join('');
+})();
 
 export function buildCryptoPaymentHTML(uid = 'cp') {
   const coins = Object.entries(CRYPTO_WALLETS).map(([key, w]) =>
@@ -377,38 +380,48 @@ export function buildCryptoPaymentHTML(uid = 'cp') {
       <span class='coin-name'>${w.symbol}</span>
       <span class='coin-label'>${w.name}</span>
     </div>`).join('');
-  const qr = QR_P.map(b => `<div class='qr-cell${b?' qr-b':''}'></div>`).join('');
   return `
     <div class='pay-method-tabs' id='${uid}-tabs'>
       <div class='pay-tab pt-active' data-tab='wire' data-uid='${uid}'>🏦 Wire / Bank</div>
       <div class='pay-tab pt-crypto' data-tab='crypto' data-uid='${uid}'>₿ Cryptocurrency</div>
     </div>
-    <div id='${uid}-wire' style='padding:12px 14px;background:rgba(148,180,216,.04);border:1px solid rgba(148,180,216,.15);border-radius:10px;margin-bottom:14px'>
-      <p class='small' style='font-weight:700;color:var(--gold);margin-bottom:4px'>Wire Transfer / Bank Escrow</p>
-      <p class='small muted' style='font-size:10.5px;line-height:1.6'>Payment details issued after booking confirmation via encrypted portal. SWIFT/IBAN and routing numbers released under NDA. Escrow cleared within 2 banking days.</p>
-    </div>
-    <div id='${uid}-crypto' class='crypto-section'>
-      <div class='coin-grid'>${coins}</div>
-      <div class='crypto-wallet-wrap'>
-        <div class='cw-network' id='${uid}-network'>Bitcoin Network (BTC)</div>
-        <div class='cw-label' style='font-size:10px;color:rgba(229,228,226,.45);margin-bottom:6px'>Send exact amount to this address only — verify network before sending.</div>
-        <div class='crypto-addr-row'>
-          <div class='crypto-addr' id='${uid}-addr'>bc1qata9xv7k2mnp4z3wl8rdf6sd2xemvs3c8qkm7</div>
-          <button class='crypto-copy-btn' id='${uid}-copy'>Copy</button>
-        </div>
-        <div style='margin-top:14px;display:flex;justify-content:center'>
-          <div class='crypto-qr'>${qr}</div>
-        </div>
-        <p style='text-align:center;font-size:9px;color:rgba(247,147,26,.45);margin-top:4px;letter-spacing:.06em'>SCAN TO VERIFY ADDRESS</p>
+    <div id='${uid}-wire' class='pay-detail-panel' data-uid='${uid}'>
+      <div style='display:flex;align-items:center;justify-content:space-between;cursor:pointer' id='${uid}-wire-toggle'>
+        <p class='small' style='font-weight:700;color:var(--gold);margin:0'>Wire Transfer / Bank Escrow</p>
+        <span class='small muted' id='${uid}-wire-chevron' style='font-size:11px;transition:transform .2s ease'>▼</span>
       </div>
-      <div class='crypto-confirm-note'>⚠ Send only the selected cryptocurrency on the correct network. Wrong coin or network = permanent loss. Transactions are final after 3 on-chain confirmations.</div>
-      <div class='buy-crypto-strip'>
-        <div class='bcs-label'>Don't have crypto yet? Buy from a trusted agent</div>
-        <div class='exchange-grid'>
-          <a class='exchange-btn' href='https://www.binance.com/en/buy-sell-crypto' target='_blank' rel='noopener noreferrer'><span class='ex-flag'>🔶</span>Binance</a>
-          <a class='exchange-btn' href='https://www.coinbase.com/buy' target='_blank' rel='noopener noreferrer'><span class='ex-flag'>🔵</span>Coinbase</a>
-          <a class='exchange-btn' href='https://www.kraken.com/buy-crypto' target='_blank' rel='noopener noreferrer'><span class='ex-flag'>🔷</span>Kraken</a>
-          <a class='exchange-btn' href='https://www.bybit.com/en/buy-crypto/' target='_blank' rel='noopener noreferrer'><span class='ex-flag'>⚡</span>Bybit</a>
+      <div id='${uid}-wire-body' style='margin-top:8px'>
+        <p class='small muted' style='font-size:10.5px;line-height:1.6;margin:0'>Payment details issued after booking confirmation via encrypted portal. SWIFT/IBAN and routing numbers released under NDA. Escrow cleared within 2 banking days.</p>
+      </div>
+    </div>
+    <div id='${uid}-crypto' class='crypto-section cs-visible'>
+      <div class='coin-grid'>${coins}</div>
+      <div style='display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:10px 12px;background:var(--bg-alt);border:1px solid var(--line);border-radius:8px;margin-bottom:10px' id='${uid}-crypto-toggle'>
+        <span class='small' style='font-weight:700;color:var(--gold);margin:0'>Wallet Details</span>
+        <span class='small muted' id='${uid}-crypto-chevron' style='font-size:11px;transition:transform .2s ease'>▼</span>
+      </div>
+      <div id='${uid}-crypto-body'>
+        <div class='crypto-wallet-wrap'>
+          <div class='cw-network' id='${uid}-network'>Bitcoin Network (BTC)</div>
+          <div class='cw-label' style='font-size:10px;color:rgba(229,228,226,.45);margin-bottom:6px'>Send exact amount to this address only — verify network before sending.</div>
+          <div class='crypto-addr-row'>
+            <div class='crypto-addr' id='${uid}-addr'>bc1qata9xv7k2mnp4z3wl8rdf6sd2xemvs3c8qkm7</div>
+            <button class='crypto-copy-btn' id='${uid}-copy'>Copy</button>
+          </div>
+          <div style='margin-top:12px;display:flex;justify-content:center'>
+            <div class='crypto-qr' style='width:80px;height:80px'>${QR_PATTERN}</div>
+          </div>
+          <p style='text-align:center;font-size:9px;color:rgba(247,147,26,.45);margin-top:4px;letter-spacing:.06em'>SCAN TO VERIFY ADDRESS</p>
+        </div>
+        <div class='crypto-confirm-note'>⚠ Send only the selected cryptocurrency on the correct network. Wrong coin or network = permanent loss.</div>
+        <div class='buy-crypto-strip'>
+          <div class='bcs-label'>Don't have crypto? Buy from a trusted agent</div>
+          <div class='exchange-grid'>
+            <a class='exchange-btn' href='https://www.binance.com/en/buy-sell-crypto' target='_blank' rel='noopener noreferrer'><span class='ex-flag'>🔶</span>Binance</a>
+            <a class='exchange-btn' href='https://www.coinbase.com/buy' target='_blank' rel='noopener noreferrer'><span class='ex-flag'>🔵</span>Coinbase</a>
+            <a class='exchange-btn' href='https://www.kraken.com/buy-crypto' target='_blank' rel='noopener noreferrer'><span class='ex-flag'>🔷</span>Kraken</a>
+            <a class='exchange-btn' href='https://www.bybit.com/en/buy-crypto/' target='_blank' rel='noopener noreferrer'><span class='ex-flag'>⚡</span>Bybit</a>
+          </div>
         </div>
       </div>
     </div>`;
@@ -417,12 +430,38 @@ export function buildCryptoPaymentHTML(uid = 'cp') {
 export function initCryptoWidget(uid = 'cp', onMethodChange) {
   let activeCoin = 'btc';
   let activeTab  = 'wire';
+  let wireCollapsed = false;
+  let cryptoCollapsed = false;
 
   const wirePanel   = document.getElementById(`${uid}-wire`);
   const cryptoPanel = document.getElementById(`${uid}-crypto`);
   const addrEl      = document.getElementById(`${uid}-addr`);
   const networkEl   = document.getElementById(`${uid}-network`);
   const copyBtn     = document.getElementById(`${uid}-copy`);
+
+  // Wire toggle (collapsible)
+  const wireToggle = document.getElementById(`${uid}-wire-toggle`);
+  const wireBody = document.getElementById(`${uid}-wire-body`);
+  const wireChevron = document.getElementById(`${uid}-wire-chevron`);
+  if (wireToggle && wireBody) {
+    wireToggle.addEventListener('click', () => {
+      wireCollapsed = !wireCollapsed;
+      wireBody.style.display = wireCollapsed ? 'none' : '';
+      if (wireChevron) wireChevron.style.transform = wireCollapsed ? 'rotate(-90deg)' : '';
+    });
+  }
+
+  // Crypto toggle (collapsible)
+  const cryptoToggle = document.getElementById(`${uid}-crypto-toggle`);
+  const cryptoBody = document.getElementById(`${uid}-crypto-body`);
+  const cryptoChevron = document.getElementById(`${uid}-crypto-chevron`);
+  if (cryptoToggle && cryptoBody) {
+    cryptoToggle.addEventListener('click', () => {
+      cryptoCollapsed = !cryptoCollapsed;
+      cryptoBody.style.display = cryptoCollapsed ? 'none' : '';
+      if (cryptoChevron) cryptoChevron.style.transform = cryptoCollapsed ? 'rotate(-90deg)' : '';
+    });
+  }
 
   // Tab switching
   document.querySelectorAll(`#${uid}-tabs .pay-tab`).forEach(tab => {
@@ -829,4 +868,3 @@ export function triggerConfirmPulse(el) {
 export function initScrollProgress() {
   initScrollMotion();
 }
-
