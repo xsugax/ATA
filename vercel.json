@@ -58,10 +58,10 @@
       "destination": "/crowdfund.html"
     }
   ],
-  "experimentalServices": {
-    "backend": {
-      "entrypoint": "backend",
-      "routePrefix": "/"
+  "functions": {
+    "api/**/*": {
+      "memory": 256,
+      "maxDuration": 10
     }
   }
 }
