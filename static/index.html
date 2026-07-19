@@ -74,7 +74,7 @@
 	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-XXXXXXX');</script>
 	<script>var _smartsupp=_smartsupp||{};_smartsupp.key='3bff12f9c83e80a2bc79bca7b3ea84b34022be41';window.smartsupp||(function(d){var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];s=d.getElementsByTagName('script')[0];c=d.createElement('script');c.type='text/javascript';c.charset='utf-8';c.async=true;c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);})(document);</script>
 	<script type='module'>
-		import { request, nav, initNav, initTheme, initScrollReveal, initDynamicTheme, bindShortlistTray, trackEvent, formatPrice, initCommandPalette, setCategoryTint, getLocalDemandPulse, demandPulseHTML, renderDemandPulse, renderProtocolSpine, renderThreePathBait, renderAccessPathSimulator, bindAccessPathSimulator, displayPrice, initAccessProtocol, //initConciergeTriggers, openAccessPortal, bindPathBaitHandlers, getAccessProgress, openQualifyModal, initSmartSearch, getMeetingPlaybook } from './assets/app.js?v=20260718';
+		import { request, nav, initNav, initTheme, initScrollReveal, initDynamicTheme, bindShortlistTray, trackEvent, formatPrice, initCommandPalette, setCategoryTint, getLocalDemandPulse, demandPulseHTML, renderDemandPulse, renderProtocolSpine, renderThreePathBait, renderAccessPathSimulator, bindAccessPathSimulator, displayPrice, initAccessProtocol, openAccessPortal, bindPathBaitHandlers, getAccessProgress, openQualifyModal, initSmartSearch, getMeetingPlaybook } from './assets/app.js?v=20260718';
 		import { CELEBRITIES } from './assets/celebrities-data.js';
 
 		let featuredCelebrity = { id: '', name: '' };
@@ -182,11 +182,12 @@ function addBubble(thread, role, text, isTyping = false) {
 
 		function setHomeTemplate(mode, celebRef) {
 			const textarea = document.getElementById('homeBody');
+			if (!textarea) return;
 			const celeb = typeof celebRef === 'object' && celebRef?.id
 				? (CELEBRITIES.find(c => c.id === celebRef.id) || celebRef)
 				: CELEBRITIES.find(c => c.name === celebRef) || { name: String(celebRef || '') };
 			const pb = getMeetingPlaybook(celeb);
-			textarea.value = mode === 'meet' ? pb.messageStarter : (pb.messageRep || pb.messageStarter);
+			if (textarea) textarea.value = mode === 'meet' ? pb.messageStarter : (pb.messageRep || pb.messageStarter);
 		}
 
 		initTheme();
@@ -207,9 +208,12 @@ function addBubble(thread, role, text, isTyping = false) {
 		const hero = document.getElementById('hero');
 		const featured = CELEBRITIES.slice(0, 6);
 		featuredCelebrity = { id: featured[0].id, name: featured[0].name };
-		document.getElementById('homeTarget').value = `${featured[0].name} (${featured[0].id})`;
-		document.getElementById('homeType').value = 'meet';
-		setHomeTemplate('meet', featured[0]);
+		const homeTarget = document.getElementById('homeTarget');
+		const homeType = document.getElementById('homeType');
+		const homeBody = document.getElementById('homeBody');
+		if (homeTarget) homeTarget.value = `${featured[0].name} (${featured[0].id})`;
+		if (homeType) homeType.value = 'meet';
+		if (typeof setHomeTemplate === 'function') setHomeTemplate('meet', featured[0]);
 
 		// -- Cinematic Rotating Hero --------------------------
 		let heroIdx = 0;
@@ -300,8 +304,10 @@ function addBubble(thread, role, text, isTyping = false) {
 			slides[heroIdx].classList.add('hs-active');
 			dots.forEach((d, i) => d.classList.toggle('hd-active', i === heroIdx));
 			featuredCelebrity = { id: featured[heroIdx].id, name: featured[heroIdx].name };
-			document.getElementById('homeTarget').value = `${featured[heroIdx].name} (${featured[heroIdx].id})`;
-			setHomeTemplate(document.getElementById('homeType').value, featured[heroIdx]);
+			const hTarget = document.getElementById('homeTarget');
+			const hType = document.getElementById('homeType');
+			if (hTarget) hTarget.value = `${featured[heroIdx].name} (${featured[heroIdx].id})`;
+			if (hType) setHomeTemplate(hType.value, featured[heroIdx]);
 			const bg = document.getElementById('heroBg');
 			if (bg) bg.style.backgroundImage = `url('${featured[heroIdx].portrait}')`;
 			setCategoryTint(featured[heroIdx].category);
@@ -450,45 +456,53 @@ function addBubble(thread, role, text, isTyping = false) {
 			document.getElementById('pulseBody').innerHTML = `<p class='small muted'>Market pulse offline — showing local demand signals above.</p>`;
 		}
 
-		document.getElementById('homeType').addEventListener('change', (e) => {
-			if (!featuredCelebrity.name) return;
-			setHomeTemplate(e.target.value, featuredCelebrity);
-		});
+		const homeTypeEl = document.getElementById('homeType');
+		if (homeTypeEl) {
+			homeTypeEl.addEventListener('change', (e) => {
+				if (!featuredCelebrity.name) return;
+				setHomeTemplate(e.target.value, featuredCelebrity);
+			});
+		}
 
-		document.getElementById('homeSend').onclick = async () => {
-			const thread = document.getElementById('chatThread');
-			const status = document.getElementById('homeStatus');
-			const fullName = document.getElementById('homeName').value.trim();
-			const org = document.getElementById('homeOrg').value.trim();
-			const body = document.getElementById('homeBody').value.trim();
-			const mode = document.getElementById('homeType').value;
+		const homeSendEl = document.getElementById('homeSend');
+		if (homeSendEl) {
+			homeSendEl.onclick = async () => {
+				const thread = document.getElementById('chatThread');
+				const status = document.getElementById('homeStatus');
+				const fullName = document.getElementById('homeName')?.value?.trim() || '';
+				const org = document.getElementById('homeOrg')?.value?.trim() || '';
+				const body = document.getElementById('homeBody')?.value?.trim() || '';
+				const mode = document.getElementById('homeType')?.value || 'meet';
 
-			if (!featuredCelebrity.id) { status.textContent = 'Profile not ready. Refresh.'; return; }
-			if (!fullName || !org || !body) { status.textContent = 'Fill name, organization, and message.'; return; }
+				if (!thread || !status) return;
+				if (!featuredCelebrity.id) { status.textContent = 'Profile not ready. Refresh.'; return; }
+				if (!fullName || !org || !body) { status.textContent = 'Fill name, organization, and message.'; return; }
 
-			addBubble(thread, 'user', body);
-			document.getElementById('homeBody').value = '';
-			status.textContent = '';
-			const typingBubble = addBubble(thread, 'desk', '', true);
+				addBubble(thread, 'user', body);
+				const homeBodyEl = document.getElementById('homeBody');
+				if (homeBodyEl) homeBodyEl.value = '';
+				status.textContent = '';
+				const typingBubble = addBubble(thread, 'desk', '', true);
 
-			try {
-				const result = await request('/messages/send', {
-					method: 'POST',
-					body: JSON.stringify({
-						celebrityId: featuredCelebrity.id,
-						priority: mode === 'meet' ? 'Urgent' : 'Priority',
-						body: `[${mode === 'meet' ? 'How to Meet Request' : 'Representative Message'}]\nClient: ${fullName}\nOrganization: ${org}\nCelebrity: ${featuredCelebrity.name}\n\n${body}`,
-					}),
-				});
-				await new Promise(r => setTimeout(r, 1100));
-				typingBubble.remove();
-				const replyBubble = addBubble(thread, 'desk', '');
-				await typeText(replyBubble.querySelector('.cb-msg'), result.acknowledgement.body, 20);
-			} catch (error) {
-				typingBubble.remove();
-				addBubble(thread, 'desk', error.message + ' - login first to send.');
-			}
-		};
+				try {
+					const result = await request('/messages/send', {
+						method: 'POST',
+						body: JSON.stringify({
+							celebrityId: featuredCelebrity.id,
+							priority: mode === 'meet' ? 'Urgent' : 'Priority',
+							body: `[${mode === 'meet' ? 'How to Meet Request' : 'Representative Message'}]\nClient: ${fullName}\nOrganization: ${org}\nCelebrity: ${featuredCelebrity.name}\n\n${body}`,
+						}),
+					});
+					await new Promise(r => setTimeout(r, 1100));
+					typingBubble.remove();
+					const replyBubble = addBubble(thread, 'desk', '');
+					await typeText(replyBubble.querySelector('.cb-msg'), result.acknowledgement.body, 20);
+				} catch (error) {
+					typingBubble.remove();
+					addBubble(thread, 'desk', error.message + ' - login first to send.');
+				}
+			};
+		}
 	</script>
 </body>
 </html>
