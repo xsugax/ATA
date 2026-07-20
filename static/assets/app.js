@@ -382,47 +382,34 @@ export function buildCryptoPaymentHTML(uid = 'cp') {
     </div>`).join('');
   return `
     <div class='pay-method-tabs' id='${uid}-tabs'>
-      <div class='pay-tab pt-active' data-tab='wire' data-uid='${uid}'>🏦 Wire / Bank</div>
-      <div class='pay-tab pt-crypto' data-tab='crypto' data-uid='${uid}'>₿ Cryptocurrency</div>
+      <div class='pay-tab pt-active' data-tab='wire' data-uid='${uid}'>Wire / Bank Transfer</div>
+      <div class='pay-tab pt-crypto' data-tab='crypto' data-uid='${uid}'>Cryptocurrency</div>
     </div>
     <div id='${uid}-wire' class='pay-detail-panel' data-uid='${uid}'>
-      <div style='display:flex;align-items:center;justify-content:space-between;cursor:pointer' id='${uid}-wire-toggle'>
-        <p class='small' style='font-weight:700;color:var(--gold);margin:0'>Wire Transfer / Bank Escrow</p>
-        <span class='small muted' id='${uid}-wire-chevron' style='font-size:11px;transition:transform .2s ease'>▼</span>
-      </div>
-      <div id='${uid}-wire-body' style='margin-top:8px'>
-        <p class='small muted' style='font-size:10.5px;line-height:1.6;margin:0'>Payment details issued after booking confirmation via encrypted portal. SWIFT/IBAN and routing numbers released under NDA. Escrow cleared within 2 banking days.</p>
+      <div id='${uid}-wire-body' style='padding:14px;background:var(--bg-alt);border:1px solid var(--line);border-radius:8px'>
+        <p style='font-weight:700;font-size:12px;color:var(--accent);margin:0 0 6px'>Wire Transfer Instructions</p>
+        <p style='font-size:11px;color:var(--text-2);line-height:1.6;margin:0'>Bank details (SWIFT/IBAN) are issued after booking confirmation via the encrypted client portal. Funds are held in escrow and released upon milestone verification. Typical clearance: 2 banking days.</p>
       </div>
     </div>
     <div id='${uid}-crypto' class='crypto-section cs-visible'>
-      <div class='coin-grid'>${coins}</div>
-      <div style='display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:10px 12px;background:var(--bg-alt);border:1px solid var(--line);border-radius:8px;margin-bottom:10px' id='${uid}-crypto-toggle'>
-        <span class='small' style='font-weight:700;color:var(--gold);margin:0'>Wallet Details</span>
-        <span class='small muted' id='${uid}-crypto-chevron' style='font-size:11px;transition:transform .2s ease'>▼</span>
-      </div>
-      <div id='${uid}-crypto-body'>
-        <div class='crypto-wallet-wrap'>
-          <div class='cw-network' id='${uid}-network'>Bitcoin Network (BTC)</div>
-          <div class='cw-label' style='font-size:10px;color:rgba(229,228,226,.45);margin-bottom:6px'>Send exact amount to this address only — verify network before sending.</div>
-          <div class='crypto-addr-row'>
-            <div class='crypto-addr' id='${uid}-addr'>bc1qata9xv7k2mnp4z3wl8rdf6sd2xemvs3c8qkm7</div>
-            <button class='crypto-copy-btn' id='${uid}-copy'>Copy</button>
+      <div class='coin-grid' style='display:grid;grid-template-columns:repeat(3,1fr)'>${coins}</div>
+      <div id='${uid}-crypto-body' style='margin-top:12px'>
+        <div class='crypto-wallet-wrap' style='padding:18px;background:rgba(247,147,26,.04);border:1px solid rgba(247,147,26,.2);border-radius:10px'>
+          <div style='display:flex;justify-content:space-between;align-items:center;margin-bottom:8px'>
+            <div class='cw-network' id='${uid}-network' style='font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#f7931a;font-weight:700'>Bitcoin Network (BTC)</div>
           </div>
-          <div style='margin-top:12px;display:flex;justify-content:center'>
-            <div class='crypto-qr' style='width:80px;height:80px'>${QR_PATTERN}</div>
+          <p style='font-size:10px;color:var(--muted);margin:0 0 10px;line-height:1.5'>Send the exact amount to the address below. Verify the network matches the selected coin before sending.</p>
+          <div style='background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:14px;margin-bottom:10px'>
+            <div style='font-size:9px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px;font-weight:600'>Deposit Address</div>
+            <div style='font-family:Courier New,monospace;font-size:13px;color:#f7931a;word-break:break-all;line-height:1.5' id='${uid}-addr'>bc1qata9xv7k2mnp4z3wl8rdf6sd2xemvs3c8qkm7</div>
+            <button class='crypto-copy-btn' id='${uid}-copy' style='margin-top:10px;width:100%;padding:10px;background:rgba(247,147,26,.08);border:1px solid rgba(247,147,26,.3);color:#f7931a;border-radius:6px;cursor:pointer;font-size:11px;font-weight:700;letter-spacing:.05em;transition:all .2s'>Copy Address</button>
           </div>
-          <p style='text-align:center;font-size:9px;color:rgba(247,147,26,.45);margin-top:4px;letter-spacing:.06em'>SCAN TO VERIFY ADDRESS</p>
+          <div style='display:flex;justify-content:center;margin-bottom:8px'>
+            <div class='crypto-qr' style='width:120px;height:120px'>${QR_PATTERN}</div>
+          </div>
+          <p style='text-align:center;font-size:9px;color:rgba(247,147,26,.4);margin:0 0 12px;letter-spacing:.06em'>SCAN TO VERIFY ADDRESS</p>
         </div>
-        <div class='crypto-confirm-note'>⚠ Send only the selected cryptocurrency on the correct network. Wrong coin or network = permanent loss.</div>
-        <div class='buy-crypto-strip'>
-          <div class='bcs-label'>Don't have crypto? Buy from a trusted agent</div>
-          <div class='exchange-grid'>
-            <a class='exchange-btn' href='https://www.binance.com/en/buy-sell-crypto' target='_blank' rel='noopener noreferrer'><span class='ex-flag'>🔶</span>Binance</a>
-            <a class='exchange-btn' href='https://www.coinbase.com/buy' target='_blank' rel='noopener noreferrer'><span class='ex-flag'>🔵</span>Coinbase</a>
-            <a class='exchange-btn' href='https://www.kraken.com/buy-crypto' target='_blank' rel='noopener noreferrer'><span class='ex-flag'>🔷</span>Kraken</a>
-            <a class='exchange-btn' href='https://www.bybit.com/en/buy-crypto/' target='_blank' rel='noopener noreferrer'><span class='ex-flag'>⚡</span>Bybit</a>
-          </div>
-        </div>
+        <div class='crypto-confirm-note' style='font-size:11px;color:var(--text-2);line-height:1.6;padding:12px 14px;background:var(--bg-alt);border-radius:8px;border-left:2px solid rgba(247,147,26,.45);margin-bottom:12px'>Send only the selected cryptocurrency on the correct network. Transactions on the wrong network may result in permanent loss of funds.</div>
       </div>
     </div>`;
 }

@@ -505,9 +505,14 @@ img[src=""].loaded,img[src="#"].loaded{display:none}
 .crypto-wallet-wrap{background:rgba(247,147,26,.04);border:1px solid rgba(247,147,26,.2);border-radius:8px;padding:14px;margin-bottom:12px}
 .crypto-wallet-wrap .cw-network{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#f7931a;margin-bottom:6px;font-weight:700}
 .crypto-wallet-wrap .cw-label{font-size:10px;color:var(--muted);margin-bottom:4px}
-.crypto-addr-row{display:flex;align-items:center;gap:8px}
-.crypto-addr{font-family:"Courier New",monospace;font-size:11px;color:#f7931a;word-break:break-all;flex:1;background:rgba(247,147,26,.04);padding:8px 10px;border-radius:6px;border:1px solid rgba(247,147,26,.18)}
-.crypto-copy-btn{font-size:10px;padding:7px 12px;background:rgba(247,147,26,.08);border:1px solid rgba(247,147,26,.3);color:#f7931a;border-radius:6px;cursor:pointer;white-space:nowrap;font-weight:700;letter-spacing:.05em;flex-shrink:0;transition:all .2s}
+.crypto-addr-row{display:flex;flex-direction:column;align-items:stretch;gap:10px}
+.crypto-addr{font-family:"Courier New",monospace;font-size:13px;color:#f7931a;word-break:break-all;background:var(--bg);padding:14px;border-radius:8px;border:1px solid var(--line);line-height:1.5}
+.crypto-copy-btn{font-size:11px;padding:10px;background:rgba(247,147,26,.08);border:1px solid rgba(247,147,26,.3);color:#f7931a;border-radius:6px;cursor:pointer;width:100%;font-weight:700;letter-spacing:.05em;transition:all .2s}
+.crypto-copy-btn:hover{background:rgba(247,147,26,.18)}
+.crypto-copy-btn.copied{background:rgba(30,112,64,.08);border-color:rgba(30,112,64,.3);color:#1E7040}
+.coin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.crypto-wallet-wrap{background:rgba(247,147,26,.04);border:1px solid rgba(247,147,26,.2);border-radius:10px;padding:18px;margin-bottom:12px}
+.crypto-qr{width:120px;height:120px;display:grid;grid-template-columns:repeat(11,1fr);gap:2px;padding:8px;background:var(--bg-alt);border:1px solid var(--line);border-radius:8px;margin:0 auto}
 .crypto-copy-btn:hover{background:rgba(247,147,26,.18);border-color:#f7931a}
 .crypto-copy-btn.copied{background:rgba(30,112,64,.08);border-color:rgba(30,112,64,.3);color:#1E7040}
 .crypto-qr{display:grid;grid-template-columns:repeat(11,1fr);gap:2px;width:110px;height:110px;padding:8px;background:var(--bg-alt);border:1px solid var(--line);border-radius:8px;margin:0 auto 10px}
