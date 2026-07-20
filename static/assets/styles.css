@@ -104,6 +104,11 @@ button.primary{background:linear-gradient(145deg,var(--cta),var(--cta-deep));col
 button.primary:hover{filter:brightness(1.08);transform:translateY(-1px);box-shadow:0 6px 28px var(--cta-glow)}
 button.secondary{background:var(--surface);color:var(--text);border:1px solid var(--line-strong)}
 img{width:100%;height:210px;object-fit:cover;border-radius:8px;border:1px solid var(--line-soft)}
+img[onerror]{min-height:80px;background:var(--bg-alt);display:flex;align-items:center;justify-content:center;position:relative}
+img[onerror]::before{content:'◆';position:absolute;font-size:32px;color:var(--muted)}
+.portrait-fallback{display:none}
+img[src=""],img[src="#"]{display:none !important}
+img[src=""].loaded,img[src="#"].loaded{display:none}
 
 /* ── ELITE CELEBRITY CARD ───────────────────────────────────── */
 .celeb-card{padding:0;overflow:hidden;border-radius:12px;background:var(--surface);border:1px solid var(--line);box-shadow:0 8px 28px rgba(0,0,0,.35);transition:transform .24s cubic-bezier(.4,0,.2,1),box-shadow .24s cubic-bezier(.4,0,.2,1);contain:layout style;content-visibility:auto;contain-intrinsic-size:0 460px}
