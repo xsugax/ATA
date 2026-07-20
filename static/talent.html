@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://i.pravatar.cc https://upload.wikimedia.org; connect-src 'self' http://localhost:4100 https://ata-h0yo.onrender.com; font-src 'self' https://fonts.gstatic.com; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
+	<title>Talent Dossier | All Talents Agency</title>
+	<meta name="robots" content="noindex, nofollow">
+	<link rel="stylesheet" href="assets/styles.css?v=20260619">
+	<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+	<div class="container" id="app"></div>
+	<script type="module">
+		import {
+			request, nav, initNav, initTheme, initScrollReveal,
+			toggleShortlist, getShortlist, renderRelatedRail,
+			bindShortlistTray, trackEvent, getRelatedTalents,
+			initCommandPalette, initDynamicTheme, setCategoryTint,
+			renderProtocolSpine, getAccessProgress, renderRedactedBrief,
+			renderEscrowLedger, displayPrice, triggerWindowHold, bindPathBaitHandlers,
+			initAccessProtocol, initConciergeTriggers, isQualified, renderMeetingPlaybookCard,
+			fetchCelebrity, fetchCelebrityDossier, renderBookingDeskSteps, renderThreePathBait,
+			resolveApiCelebrityId
+		} from './assets/app.js?v=20260619';
+		import { CELEBRITIES } from './assets/celebrities-data.js';
+
+		const params = new URLSearchParams(location.search);
+		const id = params.get('id');
+		const app = document.getElementById('app');
+
+		function addBubble(thread, role, text) {
+			const wrap = document.createElement('div');
+			wrap.className = `chat-bubble ${role}`;
+			const lbl = document.createElement('div');
+			lbl.className = 'cb-label';
+			lbl.textContent = role === 'user' ? 'You' : 'Representation Desk';
+			wrap.appendChild(lbl);
+			const msg = document.createElement('div');
+			msg.className = 'cb-msg';
+			msg.textContent = text;
+			wrap.appendChild(msg);
+			thread?.appendChild(wrap);
+			if (thread) thread.scrollTop = thread.scrollHeight;
+		}
+
+		if (!id) {
+			app.innerHTML = `${nav('explorer')}<section class="card section"><h2>No talent selected</h2><p class="muted"><a href="explorer.html">Return to explorer</a></p></section>`;
+			initTheme(); initNav();
+			initDynamicTheme(); initCommandPalette(CELEBRITIES);
+			throw new Error('no id');
+		}
+
+		app.innerHTML = `${nav('explorer')}<div id="talentRoot"><p class="small muted">Loading dossier…</p></div>`;
+		initTheme(); initNav(); initScrollReveal();
+		initDynamicTheme(); initCommandPalette(CELEBRITIES);
+		bindShortlistTray(CELEBRITIES);
+		initAccessProtocol({ onQualified: () => location.reload() });
+		trackEvent('dossier_view', { id });
+
+		let celeb;
+		try {
+			const c = await fetchCelebrity(id, CELEBRITIES);
+			const [dossierRes, relatedRes] = await Promise.all([
+				fetchCelebrityDossier(id, CELEBRITIES).catch(() => null),
+				request('/celebrities/' + resolveApiCelebrityId(c.id) + '/related').catch(() => ({ data: getRelatedTalents(
+					CELEBRITIES.find(x => x.id === id) || c, CELEBRITIES
+				) })),
+			]);
+			celeb = c;
+			setCategoryTint(c.category);
+			const d = dossierRes?.dossier;
+			const related = relatedRes?.data || [];
+			const listed = getShortlist().includes(id);
+			const localC = CELEBRITIES.find(x => x.id === id) || c;
+
+			document.getElementById('talentRoot').innerHTML = `
+				${renderProtocolSpine(getAccessProgress().step)}
+				<section class="talent-hero reveal-on-scroll">
+					<div class="talent-hero-bg" style="background-image:url('${c.portrait}')"></div>
+					<div class="talent-hero-content">
+						<span class="talent-stamp">${d?.classificationLevel || 'Qualified Access File'}</span>
+						<p class="eyebrow">${c.category} · ${c.region} · ${c.agencyRepresentation}</p>
+						<h1 class="talent-name">${c.name}</h1>
+						<p class="lead" style="max-width:560px">${c.eliteSignal || 'Sovereign representation channel — executive booking desk ready.'}</p>
+						<div style="display:flex;flex-wrap:wrap;gap:14px;margin:16px 0">
+							<span class="badge">${c.availability}</span>
+							<span class="small"><span class="muted">Access</span> <strong style="color:var(--accent-text)">${displayPrice(c.startingPrice)}</strong></span>
+							<span class="small"><span class="muted">Demand</span> <strong>${c.demandIndex}/99</strong></span>
+						</div>
+						<div class="talent-cta-row">
+							<button type="button" class="primary" id="talentHoldBtn" style="width:auto">Hold priority window</button>
+							<a href="booking.html?id=${c.id}"><button class="secondary" type="button">Continue to booking desk →</button></a>
+							<a href="crowdbooking.html?celeb=${c.id}"><button class="secondary" type="button">Crowd access</button></a>
+							<button class="secondary" type="button" id="talentShortlistBtn" style="width:auto">${listed ? 'On engagement board' : '+ Engagement board'}</button>
+						</div>
+					</div>
+				</section>
+				<section class="section reveal-on-scroll">
+					<article class="card stack">
+						<p class="eyebrow">Executive booking desk</p>
+						<p class="small muted" style="margin:0 0 12px">Four-phase mandate — same flow as private booking for every verified talent.</p>
+						${renderBookingDeskSteps(0)}
+						<a href="booking.html?id=${c.id}" style="margin-top:14px;display:inline-block"><button class="primary" type="button" style="width:auto">Open full booking desk →</button></a>
+					</article>
+				</section>
+				<section class="section reveal-on-scroll">
+					${renderMeetingPlaybookCard(localC)}
+				</section>
+				<section class="section reveal-on-scroll">
+					${renderThreePathBait(localC)}
+				</section>
+				<section class="grid g2 section reveal-on-scroll">
+					<article class="card stack" id="intelBrief">
+						<p class="eyebrow">Intelligence brief</p>
+						${d ? renderRedactedBrief(d, c, { qualified: isQualified() }) : '<p class="muted">Brief loading unavailable — proceed via booking.</p>'}
+					</article>
+					<article class="card stack">
+						<p class="eyebrow">Deposit preview</p>
+						<div class="experience-preview">
+							<img src="${c.portrait}" alt="">
+							<div>
+								<h3 style="margin:0 0 8px;font-size:18px">An evening with ${c.name}</h3>
+								<p class="small muted">Deposit, priority window, NDA, and logistics — handled by your rep.</p>
+								${renderEscrowLedger({ quote: c.startingPrice })}
+							</div>
+						</div>
+					</article>
+				</section>
+				<section class="section reveal-on-scroll" id="relatedRailWrap"></section>
+			`;
+
+			renderRelatedRail(document.getElementById('relatedRailWrap'), related);
+			bindPathBaitHandlers(document.getElementById('talentRoot'));
+			document.getElementById('talentHoldBtn')?.addEventListener('click', () => triggerWindowHold(c.id, c.name));
+			document.getElementById('talentShortlistBtn')?.addEventListener('click', () => {
+				const r = toggleShortlist(id);
+				if (!r.ok) alert('Engagement board holds 5 profiles maximum.');
+				else document.getElementById('talentShortlistBtn').textContent =
+					getShortlist().includes(id) ? 'On engagement board' : '+ Engagement board';
+			});
+			initConciergeTriggers({ dwellMs: 20000, celebName: c.name, addBubble });
+		} catch (e) {
+			document.getElementById('talentRoot').innerHTML = `<section class="card"><p>${e.message}</p><a href="explorer.html">Explorer</a></section>`;
+		}
+	</script>
+</body>
+</html>
