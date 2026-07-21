@@ -218,6 +218,14 @@ const PORTRAIT_MAP = {
   "Trace Adkins":        "https://commons.wikimedia.org/wiki/Special:FilePath/Trace_Adkins.jpg?width=640",
   "Alan Jackson":        "https://commons.wikimedia.org/wiki/Special:FilePath/Alan_Jackson_(musician).jpg?width=640",
   "Monica Bellucci":     "https://commons.wikimedia.org/wiki/Special:FilePath/Monica_Bellucci_2024_(cropped).jpg?width=640",
+  // New additions requested by client
+  "Shania Twain":        "/assets/portraits/c275.jpg",
+  "Carrie Underwood":    "/assets/portraits/c276.jpg",
+  "Sommer Halder":       "/assets/portraits/c277.jpg",
+  "Reba McEntire":       "/assets/portraits/c278.jpg",
+  "Gavin Adcock":        "/assets/portraits/c279.jpg",
+  "Ella Langley":        "/assets/portraits/c280.jpg",
+  "Noah Fearnley":       "/assets/portraits/c281.jpg",
 
 };
 
@@ -452,7 +460,14 @@ const seeds = [
       { date: "2026-11-14", place: "Hotel de Russie, Rome", format: "Private cinema evening" },
       { date: "2026-12-05", place: "Hotel de Paris Monte-Carlo, Monaco", format: "Sovereign gala dinner" },
     ] },
-
+  // New talents requested by client
+  { name: "Shania Twain",     cat: "Music",      region: "North America", price:  350000, worth: "$150M",  reach: 10,  agency: "WME",         signal: "Best-selling female country artist in history with 100M+ records sold. CMA and Grammy Award icon with cross-generational global appeal spanning three decades. Private concerts and corporate events via WME Nashville desk with 30-day advance." },
+  { name: "Carrie Underwood", cat: "Music",      region: "North America", price:  400000, worth: "$140M",  reach: 18,  agency: "WME",         signal: "Eight-time Grammy winner, American Idol alum and the most-awarded female artist in CMA history. Stadium-filling country superstar with multi-format radio dominance. Private events via WME Nashville with 30-day advance and full production rider." },
+  { name: "Sommer Halder",    cat: "Music",      region: "Europe",        price:  120000, worth: "$5M",    reach: 8,   agency: "Independent", signal: "Rising German-Croatian pop singer with a rapidly growing European fanbase and cross-border streaming momentum. Private events and brand partnerships via independent representation with 14-day advance booking." },
+  { name: "Reba McEntire",    cat: "Music",      region: "North America", price:  300000, worth: "$95M",   reach: 14,  agency: "WME",         signal: "The Queen of Country — 35+ years of chart-topping hits, 50M+ records sold, and an unmatched legacy across music, television and Broadway. Private concerts and keynotes via WME Nashville with 30-day advance and full rider." },
+  { name: "Gavin Adcock",     cat: "Music",      region: "North America", price:   80000, worth: "$3M",    reach: 4,   agency: "Independent", signal: "Emerging country music artist with a loyal streaming audience and growing tour presence across the Southeast. Private events and performance bookings via independent representation with 14-day advance." },
+  { name: "Ella Langley",     cat: "Music",      region: "North America", price:   70000, worth: "$2M",    reach: 3,   agency: "Independent", signal: "Up-and-coming country vocalist with a distinctive sound blending traditional country and modern pop. Brand collaborations and private performance bookings via independent representation with 14-day advance." },
+  { name: "Noah Fearnley",    cat: "Music",      region: "Europe",        price:   60000, worth: "$2M",    reach: 2,   agency: "Independent", signal: "British singer-songwriter with a growing fanbase in the UK and European indie-folk scene. Private events and acoustic performances available via independent management with 14-day advance." },
 ];
 
 const build = (s, i) => {
