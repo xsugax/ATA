@@ -3,7 +3,7 @@
 <head>
   <meta charset='UTF-8'>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
-  <meta http-equiv='Content-Security-Policy' content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.smartsuppchat.com https://*.smartsupp.com https://*.smartsuppchat.com https://*.smartsuppcdn.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://i.pravatar.cc https://commons.wikimedia.org https://upload.wikimedia.org https://static.smartsupp.com https://image.smartsupp.com https://image.smartsuppchat.com https://*.smartsuppcdn.com; connect-src 'self' http://localhost:4000 https://ata-h0yo.onrender.com https://www.smartsupp.com https://app.smartsupp.com wss://app.smartsupp.com https://www.smartsuppchat.com https://*.smartsuppcdn.com; font-src 'self'; frame-src https://www.smartsupp.com https://app.smartsupp.com https://*.smartsuppcdn.com; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
+  <meta http-equiv='Content-Security-Policy' content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.smartsuppchat.com https://*.smartsupp.com https://*.smartsuppchat.com https://*.smartsuppcdn.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://i.pravatar.cc https://commons.wikimedia.org https://upload.wikimedia.org https://static.smartsupp.com https://image.smartsupp.com https://image.smartsuppchat.com https://*.smartsuppcdn.com; connect-src 'self' http://localhost:4000 https://ata-h0yo.onrender.com https://www.smartsupp.com https://app.smartsupp.com wss://app.smartsupp.com wss://websocket-visitors.smartsupp.com https://www.smartsuppchat.com https://*.smartsuppcdn.com; font-src 'self'; frame-src https://www.smartsupp.com https://app.smartsupp.com https://*.smartsuppcdn.com https://*.smartsuppchat.com; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'">
   <meta name='referrer' content='no-referrer'>
   <title>Sovereign Client Portal | All Talents Agency</title>
   <meta name="robots" content="noindex, nofollow">
@@ -13,6 +13,19 @@
 </head>
 <body>
   <div class='container' id='app'></div>
+
+<!-- Smartsupp Live Chat — loaded BEFORE module script so it always works -->
+<script type="text/javascript">
+var _smartsupp = _smartsupp || {};
+_smartsupp.key = '97229f7ac536a4dc96013560ce8188410b721c28';
+window.smartsupp||(function(d) {
+  var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
+  s=d.getElementsByTagName('script')[0];c=d.createElement('script');
+  c.type='text/javascript';c.charset='utf-8';c.async=true;
+  c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
+})(document);
+</script>
+<noscript>Powered by <a href="https://www.smartsupp.com" target="_blank">Smartsupp</a></noscript>
 
   <script type='module'>
     import { request, nav, currentUser, loadTicker, initTheme, initNav, initScrollReveal, initDynamicTheme, formatPrice, displayPrice } from './assets/app.js';
@@ -47,29 +60,41 @@
         <p class='small muted' style='margin-top:14px'>Your portal session will be active after authentication.</p>
       </div>`;
     } else {
-      // Logged in — render from local data so it always shows
-      const displayBookings = [
-        { contractId: 'ATA-2026-001', celebrityName: 'Beyoncé', status: 'Active Negotiation', eventType: 'Private Gala Performance', date: '2026-09-15', location: 'Monaco Yacht Club' },
-        { contractId: 'ATA-2026-002', celebrityName: 'Taylor Swift', status: 'Qualification Review', eventType: 'Corporate Keynote', date: '2026-10-02', location: 'New York, NY' },
-      ];
-      const displayMessages = [
-        { from: 'Representation Desk', body: 'Your booking request for Beyoncé has been received. A dedicated representative will be assigned within 48 hours.' },
-        { from: 'Client Services', body: 'NDA documents for engagement ATA-2026-001 are ready for your review in the secure document vault.' },
-      ];
+      // Show real roster talents as portal landing content
+      const topTalents = CELEBRITIES.slice(0, 8);
+      const fmtP = p => p >= 1e6 ? `$${(p/1e6).toFixed(1)}M` : `$${Math.round(p/1000)}K`;
 
-      // Try API enrichment but don't block rendering
-      const renderPortal = (bookings, messages, tier) => {
+      const renderPortal = (bookings, messages, tier, talents) => {
         p.innerHTML = `
           <div class='card' style='margin-bottom:18px'>
             <p class='eyebrow'>Sovereign Command Center</p>
             <h2 style='margin:6px 0 4px'>Client Portal</h2>
             <p class='lead'>Welcome, ${user.name || user.email}. Your session is active.</p>
-            <p class='small muted'>Membership Tier: <strong style='color:var(--accent)'>${tier || 'Standard'}</strong> · Client since ${new Date().getFullYear()}</p>
+            <p class='small muted'>Membership Tier: <strong style='color:var(--accent)'>${tier || 'Standard'}</strong> · ${CELEBRITIES.length} verified talents on roster · Client since ${new Date().getFullYear()}</p>
+          </div>
+          <div class='card' style='margin-bottom:18px'>
+            <p class='eyebrow'>Roster Overview</p>
+            <h3 style='margin:6px 0 12px;font-size:18px'>${CELEBRITIES.length} Verified Talents Available</h3>
+            <div style='display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px'>
+              ${(talents || topTalents).map(c => `
+                <a href='talent.html?id=${c.id}' style='text-decoration:none;color:inherit;display:flex;align-items:center;gap:10px;padding:10px;border:1px solid var(--line);border-radius:8px;transition:border-color .2s' onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor=''">
+                  <img src='${c.portrait}' alt='' style='width:44px;height:44px;border-radius:50%;object-fit:cover;border:none;flex-shrink:0'>
+                  <div style='min-width:0'>
+                    <div style='font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis'>${c.name}</div>
+                    <div style='font-size:10px;color:var(--muted)'>${c.category} · ${fmtP(c.startingPrice)}+</div>
+                  </div>
+                </a>
+              `).join('')}
+            </div>
+            <div style='margin-top:12px;text-align:center'>
+              <a href='explorer.html'><button class='secondary' style='width:auto;padding:10px 20px;font-size:11px'>Browse Full Roster →</button></a>
+              <a href='booking.html'><button class='primary' style='width:auto;padding:10px 20px;font-size:11px;margin-left:8px'>Initiate Engagement →</button></a>
+            </div>
           </div>
           <div class='card' style='margin-bottom:18px'>
             <p class='eyebrow'>Active Booking Files</p>
             <h3 style='margin:6px 0 12px;font-size:18px'>Contract & Engagement Tracker</h3>
-            ${bookings.length === 0 ? `<p class='small muted'>No active bookings. <a href='explorer.html' style='color:var(--accent)'>Browse talents</a> to start a booking.</p>` : bookings.map(b => `
+            ${(!bookings || bookings.length === 0) ? `<p class='small muted'>No active bookings yet. <a href='explorer.html' style='color:var(--accent)'>Browse talents</a> to start a booking.</p>` : bookings.map(b => `
               <div class='card' style='padding:14px;margin-bottom:8px'>
                 <div style='display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px'>
                   <div>
@@ -85,7 +110,7 @@
           <div class='card'>
             <p class='eyebrow'>Representative Communications</p>
             <h3 style='margin:6px 0 12px;font-size:18px'>Message Archive</h3>
-            ${messages.length === 0 ? '<p class="small muted">No messages yet. Initiate a booking to begin correspondence.</p>' : messages.map(m => `
+            ${(!messages || messages.length === 0) ? '<p class="small muted">No messages yet. Initiate a booking to begin correspondence.</p>' : messages.map(m => `
               <div style='padding:10px 0;border-bottom:1px solid var(--line-soft)'>
                 <p class='small'><b style='color:var(--accent)'>${m.from}:</b> ${m.body}</p>
               </div>
@@ -94,27 +119,14 @@
         `;
       };
 
-      // Render immediately with local data
-      renderPortal(displayBookings, displayMessages, 'Standard');
+      // Render immediately with local roster data (always visible, no API dependency)
+      renderPortal(null, null, 'Standard', topTalents);
 
-      // Try enriching from API (non-blocking)
+      // Try enriching from API (non-blocking — never blocks the portal UI)
       request('/portal/overview').then(d => {
-        if (d) renderPortal(d.bookings || displayBookings, d.messages || displayMessages, d.membershipTier || 'Standard');
+        if (d) renderPortal(d.bookings || [], d.messages || [], d.membershipTier || 'Standard', topTalents);
       }).catch(() => {});
     }
   </script>
-
-<!-- Smartsupp Live Chat -->
-<script type="text/javascript">
-var _smartsupp = _smartsupp || {};
-_smartsupp.key = '97229f7ac536a4dc96013560ce8188410b721c28';
-window.smartsupp||(function(d) {
-  var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
-  s=d.getElementsByTagName('script')[0];c=d.createElement('script');
-  c.type='text/javascript';c.charset='utf-8';c.async=true;
-  c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
-})(document);
-</script>
-<noscript>Powered by <a href="https://www.smartsupp.com" target="_blank">Smartsupp</a></noscript>
 </body>
 </html>
