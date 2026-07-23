@@ -15,6 +15,7 @@ import portfolioRoutes from "./routes/portfolio.js";
 import { authenticate, requireRole } from "./middleware/auth.js";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
+import { existsSync, mkdirSync } from "fs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -27,6 +28,11 @@ app.use(express.json({ limit: "1mb" }));
 
 // Serve static files (CSS, JS, HTML, images, etc.)
 app.use(express.static(join(__dirname, "../../static")));
+
+// Ensure uploads directory exists and serve it
+const uploadsDir = join(__dirname, "../uploads");
+if (!existsSync(uploadsDir)) mkdirSync(uploadsDir, { recursive: true });
+app.use("/uploads", express.static(uploadsDir));
 
 app.get("/api/health", (_req, res) => {
   res.json({ ok: true, service: "AURELUX Sovereign API", deployMarker });

@@ -6,4 +6,5 @@ export const config = {
   port: Number(process.env.PORT || 4000),
   jwtSecret: process.env.JWT_SECRET || "aurelux-sovereign-local-secret",
   escrowDefault: Number(process.env.ESCROW_DEFAULT || 30),
+  apiUrl: process.env.API_URL || "http://localhost:4000",
 };

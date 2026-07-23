@@ -1,5 +1,9 @@
 import express from "express";
 import { v4 as uuid } from "uuid";
+import multer from "multer";
+import { join, extname } from "path";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 import { celebrities } from "../data/celebrities.js";
 import { db } from "../data/store.js";
 import {
@@ -8,6 +12,30 @@ import {
   closeAdminVerificationTask,
   createDisclosureWorkspace,
 } from "./bookingWorkflow.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// ── Multer: local file uploads for portraits ─────────────────────────────
+const uploadsDest = join(__dirname, "../../uploads");
+const storage = multer.diskStorage({
+  destination: uploadsDest,
+  filename: (_req, file, cb) => {
+    const ext = extname(file.originalname).toLowerCase();
+    const name = `portrait-${Date.now()}-${Math.random().toString(36).slice(2, 8)}${ext}`;
+    cb(null, name);
+  },
+});
+const upload = multer({
+  storage,
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
+  fileFilter: (_req, file, cb) => {
+    const allowed = [".jpg", ".jpeg", ".png", ".webp", ".gif"];
+    const ext = extname(file.originalname).toLowerCase();
+    if (allowed.includes(ext)) cb(null, true);
+    else cb(new Error("Only image files (jpg, jpeg, png, webp, gif) are allowed"));
+  },
+});
 
 const router = express.Router();
 
@@ -357,6 +385,25 @@ router.delete("/celebrities/:id", (req, res) => {
   db.auditLogs.push({ id: uuid(), actor: req.user.email, action: "CELEBRITY_REMOVED", referenceId: removed.id, detail: `${removed.name} removed from roster`, timestamp: new Date().toISOString() });
   emitAdminEvent("CELEBRITY_REMOVED", { id: removed.id, name: removed.name });
   return res.json({ ok: true, removed: removed.name });
+});
+
+// ── Upload portrait image from local device ──────────────────────────────
+router.post("/upload", upload.single("portrait"), (req, res) => {
+  if (!req.file) return res.status(400).json({ error: "No file uploaded" });
+  const url = `/uploads/${req.file.filename}`;
+  db.auditLogs.push({
+    id: uuid(), actor: req.user.email, action: "PORTRAIT_UPLOADED",
+    referenceId: url, timestamp: new Date().toISOString(),
+  });
+  return res.json({ url, filename: req.file.filename });
+});
+
+// ── Multer error handler ─────────────────────────────────────────────────
+router.use((err, _req, res, _next) => {
+  if (err instanceof multer.MulterError || err.message?.startsWith("Only image files")) {
+    return res.status(400).json({ error: err.message });
+  }
+  _next(err);
 });
 
 export default router;

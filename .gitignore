@@ -35,3 +35,7 @@ Thumbs.db
 push_result.txt
 .vercel
 .env*.local
+.env*
+ 
+# Uploaded portraits  
+backend/uploads/ 

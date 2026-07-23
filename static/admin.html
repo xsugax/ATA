@@ -298,8 +298,12 @@
 					<input id='cmAgency' placeholder='CAA, WME, Independent…'>
 				</div>
 				<div class='cm-field cm-full'>
-					<label class='cm-label'>Portrait URL</label>
-					<input id='cmPortrait' placeholder='https://...' oninput='previewPortrait(this.value)'>
+					<label class='cm-label'>Portrait Image</label>
+					<div style='display:flex;gap:10px;align-items:center'>
+						<input type='file' id='cmPortraitFile' accept='image/*' style='flex:1;padding:8px;border-radius:7px;border:1px solid rgba(148,180,216,.22);background:rgba(148,180,216,.07);color:#E6ECF4;font-size:12px;font-family:inherit;outline:none'>
+						<button id='cmUploadBtn' style='padding:8px 16px;background:#4A74A0;border:none;border-radius:7px;color:#fff;font-size:10px;font-weight:700;text-transform:uppercase;cursor:pointer;letter-spacing:.06em;white-space:nowrap' onclick='uploadPortrait()'>Upload</button>
+					</div>
+					<input type='hidden' id='cmPortrait'>
 					<img id='cmPortraitPreview' class='cm-portrait-preview' alt='portrait preview'>
 				</div>
 				<div class='cm-field cm-full'>
@@ -652,9 +656,40 @@
 	window.openCelebModal = openCelebModal;
 	window.closeCelebModal = closeCelebModal;
 
+	// -- Upload portrait from local file ------------------------------------
+	async function uploadPortrait() {
+		const fileInput = $('cmPortraitFile');
+		const file = fileInput?.files?.[0];
+		if (!file) { showToast('Select a file first'); return; }
+		const btn = $('cmUploadBtn');
+		const orig = btn.textContent;
+		btn.textContent = 'Uploading…';
+		btn.disabled = true;
+		try {
+			const fd = new FormData();
+			fd.append('portrait', file);
+			const r = await fetch(`${API}/admin/upload`, {
+				method: 'POST',
+				headers: { Authorization: `Bearer ${_token}` },
+				body: fd,
+			});
+			const j = await r.json();
+			if (!r.ok) throw new Error(j.error || 'Upload failed');
+			$('cmPortrait').value = j.url;
+			previewPortrait(j.url);
+			showToast('✅ Image uploaded successfully');
+		} catch(e) {
+			showToast('❌ ' + e.message);
+		} finally {
+			btn.textContent = orig;
+			btn.disabled = false;
+		}
+	}
+	window.uploadPortrait = uploadPortrait;
+
 	function previewPortrait(url) {
 		const img = $('cmPortraitPreview');
-		if (url && url.startsWith('http')) {
+		if (url) {
 			img.src = url; img.style.display = 'block';
 			img.onerror = () => img.style.display = 'none';
 		} else {
