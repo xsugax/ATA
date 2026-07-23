@@ -231,9 +231,10 @@ const PORTRAIT_MAP = {
   "Gavin Adcock":        "/assets/portraits/c279.jpg",
   "Ella Langley":        "/assets/portraits/c280.jpg",
   "Noah Fearnley":       "/assets/portraits/c281.jpg",
+  "Johnny Depp":         "/assets/portraits/c282.jpg",
+  "Jay Harrington":      "/assets/portraits/c283.jpg",
 
 };
-
 const _parseWorth = w => {
   const n = parseFloat(w.replace(/[$,+]/g,""));
   const m = /[bB]/.test(w) ? n*1000 : n;
@@ -471,6 +472,8 @@ const _seeds = [
   { name: "Gavin Adcock",     cat: "Music",      region: "North America", price:   80000, worth: "$3M",    reach: 4,   agency: "Independent", signal: "Emerging country music artist with a loyal streaming audience and growing tour presence across the Southeast. Private events and performance bookings via independent representation with 14-day advance." },
   { name: "Ella Langley",     cat: "Music",      region: "North America", price:   70000, worth: "$2M",    reach: 3,   agency: "Independent", signal: "Up-and-coming country vocalist with a distinctive sound blending traditional country and modern pop. Brand collaborations and private performance bookings via independent representation with 14-day advance." },
   { name: "Noah Fearnley",    cat: "Music",      region: "Europe",        price:   60000, worth: "$2M",    reach: 2,   agency: "Independent", signal: "British singer-songwriter with a growing fanbase in the UK and European indie-folk scene. Private events and acoustic performances available via independent management with 14-day advance." },
+  { name: "Johnny Depp",      cat: "Film",       region: "North America", price: 1000000, worth: "$150M",  reach: 28,  agency: "UTA",         signal: "Three-time Oscar nominee and Pirates of the Caribbean $4.5B franchise anchor. Depp is a cultural institution — artist, musician and Hollywood's most enigmatic leading man. Private engagements via UTA with confirmed 45-day advance, full NDA stack and enhanced security protocol. All appearances require executive-level event classification and media blackout agreement." },
+  { name: "Jay Harrington",   cat: "Film",       region: "North America", price:  100000, worth: "$5M",    reach: 4,   agency: "CAA",         signal: "SWAT star and veteran television actor with 20+ year career spanning The Inside, Better Off Ted and a leading role in CBS's top-rated action drama. Private appearances and brand events via CAA with 21-day advance booking and confirmed event classification." },
 ];
 
 const _build = (s, i) => {
